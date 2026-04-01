@@ -5,6 +5,7 @@ import { Swords, Skull, ChevronRight } from 'lucide-react'
 type CreatureListProps = {
   creatures: Creature[]
   activeCreatureId: string | null
+  readOnly?: boolean
   onRemove: (id: string) => void
   onRollInitiative: (id: string) => void
   onRollAll: () => void
@@ -68,6 +69,7 @@ function InitiativeInput({
 export function CreatureList({
   creatures,
   activeCreatureId,
+  readOnly = false,
   onRemove,
   onRollInitiative,
   onUpdateInitiative,
@@ -93,30 +95,42 @@ export function CreatureList({
               className={`shrink-0 ${isActive ? 'text-forge-gold' : 'invisible'}`}
               aria-label={isActive ? 'Active turn' : undefined}
             />
-            <InitiativeInput
-              creature={creature}
-              onUpdate={onUpdateInitiative}
-            />
-            <button
-              onClick={() => onRollInitiative(creature.id)}
-              className="btn-ember shrink-0"
-              aria-label={`Roll initiative for ${creature.name}`}
-            >
-              <Swords size={16} />
-            </button>
+            {readOnly ? (
+              <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold">
+                {creature.initiative !== null ? creature.initiative : '—'}
+              </span>
+            ) : (
+              <InitiativeInput
+                creature={creature}
+                onUpdate={onUpdateInitiative}
+              />
+            )}
+            {!readOnly && (
+              <button
+                onClick={() => onRollInitiative(creature.id)}
+                className="btn-ember shrink-0"
+                aria-label={`Roll initiative for ${creature.name}`}
+              >
+                <Swords size={16} />
+              </button>
+            )}
             <span className="text-forge-parchment-light font-heading text-lg font-semibold flex-1">
               {creature.name}
             </span>
-            <span className="text-forge-tan text-sm italic">
-              {formatModifier(creature.initiativeModifier)}
-            </span>
-            <button
-              onClick={() => onRemove(creature.id)}
-              className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0"
-              aria-label={`Remove ${creature.name}`}
-            >
-              <Skull size={16} />
-            </button>
+            {!readOnly && (
+              <span className="text-forge-tan text-sm italic">
+                {formatModifier(creature.initiativeModifier)}
+              </span>
+            )}
+            {!readOnly && (
+              <button
+                onClick={() => onRemove(creature.id)}
+                className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0"
+                aria-label={`Remove ${creature.name}`}
+              >
+                <Skull size={16} />
+              </button>
+            )}
           </li>
           )
         })}
