@@ -29,7 +29,7 @@ export function HealthBar({ hp, maxHp, tempHp }: HealthBarProps) {
           />
         )}
       </div>
-      <span className="text-xs font-heading text-forge-tan whitespace-nowrap tabular-nums">
+      <span className="text-sm font-heading text-forge-tan whitespace-nowrap tabular-nums">
         {hp}
         {tempHp > 0 && <span className="text-forge-ember">+{tempHp}</span>}
         /{maxHp}

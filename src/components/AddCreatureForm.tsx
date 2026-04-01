@@ -6,7 +6,7 @@ import { MonsterAutocomplete } from './MonsterAutocomplete'
 import { abilityModifier } from '../api/open5e'
 
 type AddCreatureFormProps = {
-  onAdd: (name: string, initiativeModifier: number, creatureType: CreatureType, maxHp: number, monsterSlug?: string | null) => void
+  onAdd: (name: string, initiativeModifier: number, creatureType: CreatureType, maxHp: number, ac: number, monsterSlug?: string | null) => void
 }
 
 export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
@@ -14,12 +14,14 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
   const [modifier, setModifier] = useState(0)
   const [creatureType, setCreatureType] = useState<CreatureType>('enemy')
   const [maxHp, setMaxHp] = useState(10)
+  const [ac, setAc] = useState(10)
   const [monsterSlug, setMonsterSlug] = useState<string | null>(null)
 
   const handleMonsterSelect = (monster: MonsterSearchResult) => {
     setName(monster.name)
     setModifier(abilityModifier(monster.dexterity))
     setMaxHp(monster.hit_points)
+    setAc(monster.armor_class)
     setMonsterSlug(monster.slug)
   }
 
@@ -27,10 +29,11 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
     e.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) return
-    onAdd(trimmed, modifier, creatureType, Math.max(1, maxHp), monsterSlug)
+    onAdd(trimmed, modifier, creatureType, Math.max(1, maxHp), Math.max(0, ac), monsterSlug)
     setName('')
     setModifier(0)
     setMaxHp(10)
+    setAc(10)
     setMonsterSlug(null)
   }
 
@@ -112,6 +115,19 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
             min="1"
             value={maxHp}
             onChange={(e) => setMaxHp(Number(e.target.value))}
+            className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="ac" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
+            AC
+          </label>
+          <input
+            id="ac"
+            type="number"
+            min="0"
+            value={ac}
+            onChange={(e) => setAc(Number(e.target.value))}
             className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
           />
         </div>

@@ -9,5 +9,6 @@ export type Creature = {
   maxHp: number
   hp: number
   tempHp: number
+  ac: number
   monsterSlug: string | null
 }

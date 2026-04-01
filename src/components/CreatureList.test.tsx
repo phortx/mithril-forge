@@ -6,7 +6,7 @@ import type { Creature } from '../types/creature'
 const defaultProps = {
   activeCreatureId: null as string | null,
   viewMode: 'dm' as const,
-  hpVisibility: 'all' as const,
+  statVisibility: 'all' as const,
   onRemove: vi.fn(),
   onRollInitiative: vi.fn(),
   onUpdateInitiative: vi.fn(),
@@ -17,9 +17,9 @@ const defaultProps = {
 }
 
 const mockCreatures: Creature[] = [
-  { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
-  { id: '2', name: 'Dragon', initiativeModifier: -1, initiative: null, creatureType: 'enemy', maxHp: 100, hp: 100, tempHp: 0, monsterSlug: null },
-  { id: '3', name: 'Cleric', initiativeModifier: 0, initiative: 10, creatureType: 'party', maxHp: 30, hp: 30, tempHp: 0, monsterSlug: null },
+  { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null, ac: 10 },
+  { id: '2', name: 'Dragon', initiativeModifier: -1, initiative: null, creatureType: 'enemy', maxHp: 100, hp: 100, tempHp: 0, monsterSlug: null, ac: 10 },
+  { id: '3', name: 'Cleric', initiativeModifier: 0, initiative: 10, creatureType: 'party', maxHp: 30, hp: 30, tempHp: 0, monsterSlug: null, ac: 10 },
 ]
 
 describe('CreatureList', () => {
@@ -52,7 +52,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null, ac: 10 },
         ]}
         {...defaultProps}
       />,
@@ -65,7 +65,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null, ac: 10 },
         ]}
         {...defaultProps}
         viewMode="player"
@@ -97,7 +97,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null, ac: 10 },
         ]}
         {...defaultProps}
       />,
@@ -112,7 +112,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null, ac: 10 },
         ]}
         {...defaultProps}
       />,
@@ -141,7 +141,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null, ac: 10 },
         ]}
         {...defaultProps}
         onUpdateInitiative={onUpdateInitiative}
@@ -177,21 +177,21 @@ describe('CreatureList', () => {
 
     // Player view should not have controls
     const { unmount } = render(
-      <CreatureList creatures={mockCreatures} {...defaultProps} viewMode="player" readOnly hpVisibility="all" />,
+      <CreatureList creatures={mockCreatures} {...defaultProps} viewMode="player" readOnly statVisibility="all" />,
     )
 
     // Check that there are still only 3 damage buttons (from the first render)
     unmount()
   })
 
-  it('hides all HP in player view when hpVisibility is none', () => {
+  it('hides all HP in player view when statVisibility is none', () => {
     render(
       <CreatureList
         creatures={mockCreatures}
         {...defaultProps}
         viewMode="player"
         readOnly
-        hpVisibility="none"
+        statVisibility="none"
       />,
     )
 
@@ -200,14 +200,14 @@ describe('CreatureList', () => {
     expect(screen.queryByText(/\/30/)).not.toBeInTheDocument()
   })
 
-  it('shows only party HP in player view when hpVisibility is party-only', () => {
+  it('shows only party HP in player view when statVisibility is party-only', () => {
     render(
       <CreatureList
         creatures={mockCreatures}
         {...defaultProps}
         viewMode="player"
         readOnly
-        hpVisibility="party-only"
+        statVisibility="party-only"
       />,
     )
 

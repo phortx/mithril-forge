@@ -34,7 +34,7 @@ export function TurnControls({
       <Hourglass size={16} className="text-forge-gold-dim" />
       <span className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">Round</span>
       <span className="font-heading text-2xl font-bold text-forge-gold">{round}</span>
-      <span className="text-forge-tan text-xs italic">
+      <span className="text-forge-tan text-sm italic">
         {formatInGameTime(round!)}
       </span>
     </div>

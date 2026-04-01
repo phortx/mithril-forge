@@ -1,15 +1,15 @@
 import { useLocalStorage } from 'usehooks-ts'
-import type { EncounterSettings, HpVisibility } from '../types/encounterSettings'
+import type { EncounterSettings, StatVisibility } from '../types/encounterSettings'
 
 export function useEncounterSettings() {
   const [settings, setSettings] = useLocalStorage<EncounterSettings>(
     'mithril-forge-settings',
-    { hpVisibility: 'party-only' },
+    { statVisibility: 'party-only' },
   )
 
-  const setHpVisibility = (hpVisibility: HpVisibility) => {
-    setSettings((prev) => ({ ...prev, hpVisibility }))
+  const setStatVisibility = (statVisibility: StatVisibility) => {
+    setSettings((prev) => ({ ...prev, statVisibility }))
   }
 
-  return { settings, setHpVisibility }
+  return { settings, setStatVisibility }
 }
