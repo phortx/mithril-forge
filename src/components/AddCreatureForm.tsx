@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Users, Swords } from 'lucide-react'
+import { Plus, Minus, Users, Swords } from 'lucide-react'
 import type { CreatureType } from '../types/creature'
 import type { MonsterSearchResult } from '../types/statBlock'
 import { MonsterAutocomplete } from './MonsterAutocomplete'
@@ -16,6 +16,7 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
   const [maxHp, setMaxHp] = useState(10)
   const [ac, setAc] = useState(10)
   const [monsterSlug, setMonsterSlug] = useState<string | null>(null)
+  const [quantity, setQuantity] = useState(1)
 
   const handleMonsterSelect = (monster: MonsterSearchResult) => {
     setName(monster.name)
@@ -29,12 +30,23 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
     e.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) return
-    onAdd(trimmed, modifier, creatureType, Math.max(1, maxHp), Math.max(0, ac), monsterSlug)
+
+    const count = creatureType === 'enemy' ? quantity : 1
+
+    if (count === 1) {
+      onAdd(trimmed, modifier, creatureType, Math.max(1, maxHp), Math.max(0, ac), monsterSlug)
+    } else {
+      for (let i = 1; i <= count; i++) {
+        onAdd(`${trimmed} ${i}`, modifier, creatureType, Math.max(1, maxHp), Math.max(0, ac), monsterSlug)
+      }
+    }
+
     setName('')
     setModifier(0)
     setMaxHp(10)
     setAc(10)
     setMonsterSlug(null)
+    setQuantity(1)
   }
 
   return (
@@ -67,7 +79,7 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
           <div className="flex h-[42px]">
             <button
               type="button"
-              onClick={() => { setCreatureType('party'); setMonsterSlug(null) }}
+              onClick={() => { setCreatureType('party'); setMonsterSlug(null); setQuantity(1) }}
               className={`rounded-l px-3 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
                 creatureType === 'party'
                   ? 'bg-forge-green text-forge-parchment-light'
@@ -131,12 +143,41 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
             className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
           />
         </div>
+        {creatureType === 'enemy' && (
+          <div className="flex flex-col gap-1.5">
+            <span className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">Qty</span>
+            <div className="flex items-center h-[42px] rounded border border-forge-leather bg-[rgba(13,10,7,0.6)]">
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                disabled={quantity <= 1}
+                className="px-2 h-full flex items-center text-forge-gold hover:text-forge-gold-bright disabled:text-forge-leather disabled:cursor-default transition-colors"
+              >
+                <Minus size={14} strokeWidth={2.5} />
+              </button>
+              <span
+                key={quantity}
+                className="w-7 text-center font-heading text-base text-forge-parchment-light tabular-nums qty-bump"
+              >
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => Math.min(20, q + 1))}
+                disabled={quantity >= 20}
+                className="px-2 h-full flex items-center text-forge-gold hover:text-forge-gold-bright disabled:text-forge-leather disabled:cursor-default transition-colors"
+              >
+                <Plus size={14} strokeWidth={2.5} />
+              </button>
+            </div>
+          </div>
+        )}
         <button
           type="submit"
           className="btn-forge btn-gold rounded px-5 h-[42px] flex items-center gap-2 ml-auto"
         >
           <Plus size={16} strokeWidth={2.5} />
-          Add
+          {quantity > 1 && creatureType === 'enemy' ? `Add x${quantity}` : 'Add'}
         </button>
       </div>
     </form>

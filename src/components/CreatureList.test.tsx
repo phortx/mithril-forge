@@ -48,7 +48,8 @@ describe('CreatureList', () => {
     expect(screen.getByText('Party')).toBeInTheDocument()
   })
 
-  it('shows modifier in DM view', () => {
+  it('shows modifier in DM view when expanded', async () => {
+    const user = userEvent.setup()
     render(
       <CreatureList
         creatures={[
@@ -57,6 +58,9 @@ describe('CreatureList', () => {
         {...defaultProps}
       />,
     )
+
+    // Click the creature card to expand it
+    await user.click(screen.getByText('Goblin'))
 
     expect(screen.getByText('+2')).toBeInTheDocument()
   })
@@ -76,21 +80,27 @@ describe('CreatureList', () => {
     expect(screen.queryByText('+2')).not.toBeInTheDocument()
   })
 
-  it('calls onRemove with correct id', async () => {
+  it('calls onRemove with correct id when creature is dead and expanded', async () => {
     const user = userEvent.setup()
     const onRemove = vi.fn()
+    const deadCreatures: Creature[] = [
+      { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 0, tempHp: 0, monsterSlug: null, ac: 10 },
+    ]
     render(
       <CreatureList
-        creatures={mockCreatures}
+        creatures={deadCreatures}
         {...defaultProps}
         onRemove={onRemove}
       />,
     )
 
-    const removeButtons = screen.getAllByRole('button', { name: /Remove/ })
-    await user.click(removeButtons[1])
+    // Click to expand the dead creature card
+    await user.click(screen.getByText('Goblin'))
 
-    expect(onRemove).toHaveBeenCalledWith('2')
+    const removeButton = screen.getByRole('button', { name: /Remove/ })
+    await user.click(removeButton)
+
+    expect(onRemove).toHaveBeenCalledWith('1')
   })
 
   it('displays initiative value when set', () => {
@@ -170,18 +180,17 @@ describe('CreatureList', () => {
     expect(screen.getByText(/30\/30/)).toBeInTheDocument()
   })
 
-  it('shows HP controls only in DM view', () => {
-    render(<CreatureList creatures={mockCreatures} {...defaultProps} />)
-
-    expect(screen.getAllByLabelText('Apply damage')).toHaveLength(3)
-
-    // Player view should not have controls
-    const { unmount } = render(
-      <CreatureList creatures={mockCreatures} {...defaultProps} viewMode="player" readOnly statVisibility="all" />,
+  it('shows HP controls in DM view when active', () => {
+    render(
+      <CreatureList
+        creatures={mockCreatures}
+        {...defaultProps}
+        activeCreatureId="1"
+      />,
     )
 
-    // Check that there are still only 3 damage buttons (from the first render)
-    unmount()
+    // Active creature should show damage controls
+    expect(screen.getByLabelText('Apply damage')).toBeInTheDocument()
   })
 
   it('hides all HP in player view when statVisibility is none', () => {
