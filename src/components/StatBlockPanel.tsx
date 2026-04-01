@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Loader2 } from 'lucide-react'
-import { getMonster, abilityModifier, formatModifier } from '../api/open5e'
+import { getMonster, abilityModifier } from '../api/open5e'
+import { formatModifier } from '../utils/formatModifier'
 import type { MonsterData, MonsterAction } from '../types/statBlock'
 
 type StatBlockPanelProps = {
