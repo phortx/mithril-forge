@@ -1,1 +1,340 @@
 @import "tailwindcss";
+
+@theme {
+  --font-title: "Cinzel Decorative", serif;
+  --font-heading: "Cinzel", serif;
+  --font-body: "Crimson Pro", serif;
+
+  --color-forge-darkest: #0d0a07;
+  --color-forge-dark: #1a1410;
+  --color-forge-brown: #2a1f16;
+  --color-forge-leather: #3d2e1f;
+  --color-forge-tan: #6b5438;
+  --color-forge-parchment: #d4c4a0;
+  --color-forge-parchment-light: #e8dcc4;
+  --color-forge-gold: #c9a84c;
+  --color-forge-gold-bright: #e4c65a;
+  --color-forge-gold-dim: #8a7235;
+  --color-forge-burgundy: #6b1d1d;
+  --color-forge-burgundy-light: #8b2525;
+  --color-forge-ember: #c45a2d;
+  --color-forge-ember-light: #d97044;
+  --color-forge-green: #2d6b3a;
+  --color-forge-green-light: #3a8a4a;
+}
+
+/* Active creature golden pulse */
+@keyframes active-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(201, 168, 76, 0.4),
+      0 0 20px rgba(201, 168, 76, 0.15),
+      inset 0 1px 0 rgba(201, 168, 76, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 14px rgba(201, 168, 76, 0.6),
+      0 0 35px rgba(201, 168, 76, 0.25),
+      inset 0 1px 0 rgba(201, 168, 76, 0.2);
+  }
+}
+
+/* Subtle float for Start Encounter button */
+@keyframes epic-breathe {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow:
+      0 0 12px rgba(45, 107, 58, 0.5),
+      0 0 30px rgba(45, 107, 58, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 18px rgba(45, 107, 58, 0.7),
+      0 0 45px rgba(45, 107, 58, 0.3),
+      0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Ornamental divider */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-forge-gold-dim);
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-forge-gold-dim),
+    transparent
+  );
+}
+
+/* Parchment-textured panel */
+.panel-parchment {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(42, 31, 22, 0.9) 0%,
+      rgba(26, 20, 16, 0.95) 50%,
+      rgba(42, 31, 22, 0.9) 100%
+    );
+  border: 1px solid var(--color-forge-tan);
+  box-shadow:
+    inset 0 1px 0 rgba(201, 168, 76, 0.05),
+    0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Creature card base */
+.creature-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(42, 31, 22, 0.8) 0%,
+      rgba(26, 20, 16, 0.95) 100%
+    );
+  border: 1px solid var(--color-forge-leather);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(212, 196, 160, 0.04);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.creature-card:hover {
+  border-color: var(--color-forge-tan);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(212, 196, 160, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Active creature card */
+.creature-card-active {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(201, 168, 76, 0.1) 0%,
+      rgba(42, 31, 22, 0.9) 40%,
+      rgba(26, 20, 16, 0.95) 100%
+    );
+  border: 1px solid var(--color-forge-gold);
+  animation: active-pulse 2.5s ease-in-out infinite;
+}
+
+/* Fantasy input fields */
+.input-forge {
+  background: rgba(13, 10, 7, 0.6);
+  border: 1px solid var(--color-forge-leather);
+  color: var(--color-forge-parchment-light);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-forge:focus {
+  outline: none;
+  border-color: var(--color-forge-gold-dim);
+  box-shadow: 0 0 8px rgba(201, 168, 76, 0.2);
+}
+
+.input-forge::placeholder {
+  color: var(--color-forge-tan);
+  font-style: italic;
+}
+
+/* Button base */
+.btn-forge {
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Gold accent button */
+.btn-gold {
+  background: linear-gradient(180deg, var(--color-forge-gold) 0%, #a88a3c 100%);
+  color: var(--color-forge-darkest);
+  border: 1px solid var(--color-forge-gold-bright);
+  box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+  font-weight: 700;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(180deg, var(--color-forge-gold-bright) 0%, var(--color-forge-gold) 100%);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Epic green button */
+.btn-epic {
+  background: linear-gradient(180deg, #3a8a4a 0%, var(--color-forge-green) 100%);
+  color: var(--color-forge-parchment-light);
+  border: 1px solid #4a9a5a;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  animation: epic-breathe 3s ease-in-out infinite;
+}
+
+.btn-epic:hover {
+  background: linear-gradient(180deg, #4a9a5a 0%, #3a8a4a 100%);
+  animation: none;
+  box-shadow:
+    0 0 25px rgba(45, 107, 58, 0.7),
+    0 0 50px rgba(45, 107, 58, 0.3),
+    0 8px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Secondary muted button */
+.btn-secondary {
+  background: rgba(42, 31, 22, 0.8);
+  color: var(--color-forge-tan);
+  border: 1px solid var(--color-forge-leather);
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: rgba(107, 29, 29, 0.3);
+  color: var(--color-forge-burgundy-light);
+  border-color: var(--color-forge-burgundy);
+}
+
+/* Ember roll button */
+.btn-ember {
+  color: var(--color-forge-ember);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.btn-ember:hover {
+  color: var(--color-forge-ember-light);
+  text-shadow: 0 0 8px rgba(196, 90, 45, 0.5);
+}
+
+/* Slow forge glow pulse */
+@keyframes forge-glow {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes forge-glow-alt {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Page background — base layer with forge glow from below */
+.page-texture {
+  background:
+    /* Diamond lattice pattern */
+    url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='none' stroke='%23c9a84c' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E"),
+    /* Deep vignette */
+    radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(0, 0, 0, 0.5) 100%),
+    /* Base color */
+    var(--color-forge-darkest);
+  background-size: 40px 40px, 100% 100%, 100% 100%;
+}
+
+/* Ambient light + forge glow (animated) */
+.page-texture::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* Forge glow from bottom — warm ember light */
+    radial-gradient(ellipse 80% 40% at 50% 105%, rgba(196, 90, 45, 0.2) 0%, rgba(196, 90, 45, 0.08) 40%, transparent 70%),
+    /* Secondary forge warmth */
+    radial-gradient(ellipse 60% 30% at 50% 110%, rgba(201, 168, 76, 0.12) 0%, transparent 60%),
+    /* Top-left burgundy accent */
+    radial-gradient(ellipse at 15% 15%, rgba(107, 29, 29, 0.1) 0%, transparent 50%),
+    /* Top-right gold whisper */
+    radial-gradient(ellipse at 85% 10%, rgba(201, 168, 76, 0.06) 0%, transparent 40%),
+    /* Center subtle warmth */
+    radial-gradient(ellipse at 50% 40%, rgba(61, 46, 31, 0.3) 0%, transparent 60%);
+  animation: forge-glow 8s ease-in-out infinite;
+}
+
+/* Noise grain + secondary glow layer */
+.page-texture::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    /* Noise grain texture */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    /* Drifting side glows */
+    radial-gradient(ellipse at 0% 70%, rgba(196, 90, 45, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 50%, rgba(107, 29, 29, 0.05) 0%, transparent 50%);
+  background-size: 256px 256px, 100% 100%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat;
+  opacity: 0.45;
+  mix-blend-mode: soft-light;
+  animation: forge-glow-alt 12s ease-in-out infinite;
+}
+
+/* Corner ornaments */
+.panel-ornate {
+  position: relative;
+}
+
+.panel-ornate::before,
+.panel-ornate::after {
+  content: "\2726";
+  position: absolute;
+  color: var(--color-forge-gold-dim);
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.panel-ornate::before {
+  top: 6px;
+  left: 8px;
+}
+
+.panel-ornate::after {
+  bottom: 6px;
+  right: 8px;
+}
+
+/* Scroll-like round counter */
+.round-scroll {
+  background: linear-gradient(
+    180deg,
+    rgba(42, 31, 22, 0.95) 0%,
+    rgba(26, 20, 16, 0.9) 100%
+  );
+  border: 1px solid var(--color-forge-gold-dim);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(201, 168, 76, 0.1);
+}
+
+/* Title glow */
+.title-glow {
+  text-shadow: 0 0 20px rgba(201, 168, 76, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Active turn sword icon */
+.sword-icon {
+  filter: drop-shadow(0 0 4px rgba(201, 168, 76, 0.6));
+}

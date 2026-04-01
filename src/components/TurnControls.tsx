@@ -1,4 +1,5 @@
 import { formatInGameTime } from '../utils/formatInGameTime'
+import { Flame, Shield } from 'lucide-react'
 
 type TurnControlsProps = {
   isStarted: boolean
@@ -12,36 +13,30 @@ export function TurnControls({
   isStarted,
   round,
   onStart,
-  onNextTurn,
-  onEndEncounter,
 }: TurnControlsProps) {
   if (!isStarted) {
     return (
-      <button
-        onClick={onStart}
-        className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded transition-colors"
-      >
-        Start Encounter
-      </button>
+      <div className="text-center">
+        <button
+          onClick={onStart}
+          className="btn-forge btn-epic rounded-lg px-10 py-4 flex items-center gap-3 mx-auto"
+        >
+          <Flame size={20} />
+          Start Encounter
+          <Flame size={20} />
+        </button>
+      </div>
     )
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <span className="text-gray-300 font-medium">Round {round}</span>
-      <span className="text-gray-500 text-sm">{formatInGameTime(round!)}</span>
-      <button
-        onClick={onNextTurn}
-        className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded transition-colors"
-      >
-        Next Turn
-      </button>
-      <button
-        onClick={onEndEncounter}
-        className="text-gray-400 hover:text-red-400 text-sm transition-colors"
-      >
-        End Encounter
-      </button>
+    <div className="round-scroll px-4 py-2 flex items-center gap-3 self-start">
+      <Shield size={16} className="text-forge-gold-dim" />
+      <span className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">Round</span>
+      <span className="font-heading text-2xl font-bold text-forge-gold">{round}</span>
+      <span className="text-forge-tan text-xs italic">
+        {formatInGameTime(round!)}
+      </span>
     </div>
   )
 }
