@@ -26,6 +26,7 @@ function App() {
     applyDamage,
     applyHealing,
     setTempHp,
+    resetEncounter,
   } = useEncounter()
 
   const { settings, setStatVisibility } = useEncounterSettings()
@@ -119,6 +120,10 @@ function App() {
           onNextTurn={nextTurn}
           onEndEncounter={endEncounter}
           onRollAll={rollAllInitiative}
+          onReset={() => {
+            resetEncounter()
+            endEncounter()
+          }}
         />
 
         <CreatureList

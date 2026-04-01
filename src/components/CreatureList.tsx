@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Creature } from '../types/creature'
 import type { StatVisibility } from '../types/encounterSettings'
 import type { ViewMode } from '../types/viewMode'
-import { Skull, ChevronRight, BookOpen, Shield } from 'lucide-react'
+import { Skull, ChevronRight, BookOpen, Shield, Trash2, Cross } from 'lucide-react'
 import { HealthBar } from './HealthBar'
 import { HpControls } from './HpControls'
 import { formatModifier } from '../utils/formatModifier'
@@ -99,6 +99,7 @@ export function CreatureList({
   onShowStatBlock,
 }: CreatureListProps) {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
+  const [hoveredDeadId, setHoveredDeadId] = useState<string | null>(null)
 
   const toggleExpanded = (id: string) => {
     setExpandedIds((prev) => {
@@ -118,6 +119,8 @@ export function CreatureList({
       <ul className="flex flex-col gap-4">
         {creatures.map((creature) => {
           const isActive = creature.id === activeCreatureId
+          const isDead = creature.hp <= 0 && creature.maxHp > 0
+          const isReviveHover = isDead && hoveredDeadId === creature.id
           const showStats = shouldShowStats(viewMode, statVisibility, creature)
           const isExpanded = isActive || expandedIds.has(creature.id)
           return (
@@ -131,16 +134,23 @@ export function CreatureList({
               aria-label={isActive ? 'Active turn' : undefined}
             />
             <div
-              className={`flex flex-col gap-2 rounded-lg px-5 py-4 ${
+              className={`relative overflow-hidden flex flex-col gap-2 rounded-lg px-5 py-4 ${
                 isActive ? 'creature-card-active' : 'creature-card'
-              } ${!isActive ? 'cursor-pointer' : ''}`}
+              } ${!isActive ? 'cursor-pointer' : ''} ${isDead && !isReviveHover ? 'opacity-60' : ''} ${isReviveHover ? 'revive-pulse' : ''}`}
               onClick={(e) => {
                 if (isActive) return
                 if ((e.target as HTMLElement).closest('button, input')) return
                 toggleExpanded(creature.id)
               }}
             >
-              <div className="flex items-center gap-3">
+              {isDead && (
+                <Skull
+                  size={140}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-forge-burgundy/30 pointer-events-none"
+                  strokeWidth={1.5}
+                />
+              )}
+              <div className="relative flex items-center gap-3">
                 {readOnly ? (
                   <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold shrink-0">
                     {creature.initiative !== null ? creature.initiative : '—'}
@@ -157,9 +167,43 @@ export function CreatureList({
                     {creature.ac}
                   </span>
                 )}
-                <span className="text-forge-parchment-light font-heading text-lg font-semibold truncate flex-1 min-w-0">
+                <span className={`font-heading text-lg font-semibold truncate flex-1 min-w-0 ${isDead ? 'text-forge-tan/60 line-through' : 'text-forge-parchment-light'}`}>
                   {creature.name}
                 </span>
+                {isDead && !readOnly && (
+                  <button
+                    className={`text-xs font-heading uppercase tracking-wider px-2 py-1 rounded shrink-0 flex items-center gap-1 transition-all cursor-pointer ${
+                      isReviveHover
+                        ? 'bg-forge-green/50 text-forge-green-light'
+                        : 'bg-forge-burgundy/40 text-forge-burgundy-light'
+                    }`}
+                    onMouseEnter={() => setHoveredDeadId(creature.id)}
+                    onMouseLeave={() => setHoveredDeadId(null)}
+                    onClick={() => {
+                      onHeal(creature.id, 1)
+                      setHoveredDeadId(null)
+                    }}
+                    aria-label={`Revive ${creature.name}`}
+                  >
+                    {isReviveHover ? (
+                      <>
+                        <Cross size={12} />
+                        Revive
+                      </>
+                    ) : (
+                      <>
+                        <Skull size={12} />
+                        Dead
+                      </>
+                    )}
+                  </button>
+                )}
+                {isDead && readOnly && (
+                  <span className="text-xs font-heading uppercase tracking-wider px-2 py-1 rounded shrink-0 flex items-center gap-1 bg-forge-burgundy/40 text-forge-burgundy-light">
+                    <Skull size={12} />
+                    Dead
+                  </span>
+                )}
                 {!readOnly && creature.monsterSlug && onShowStatBlock && (
                   <button
                     onClick={() => onShowStatBlock(creature.monsterSlug!)}
@@ -168,11 +212,6 @@ export function CreatureList({
                   >
                     <BookOpen size={16} />
                   </button>
-                )}
-                {!readOnly && (
-                  <span className="text-forge-tan text-sm italic shrink-0">
-                    {formatModifier(creature.initiativeModifier)}
-                  </span>
                 )}
                 {readOnly ? (
                   <span
@@ -203,20 +242,37 @@ export function CreatureList({
                 <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} />
               )}
               {isExpanded && !readOnly && showStats && (
-                <div className="flex items-center gap-1.5">
-                  <HpControls
-                    creatureId={creature.id}
-                    onDamage={onDamage}
-                    onHeal={onHeal}
-                    onSetTempHp={onSetTempHp}
-                  />
-                  <button
-                    onClick={() => onRemove(creature.id)}
-                    className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0 ml-auto"
-                    aria-label={`Remove ${creature.name}`}
-                  >
-                    <Skull size={16} />
-                  </button>
+                <div className="relative flex items-center gap-1.5">
+                  {!isDead && (
+                    <HpControls
+                      creatureId={creature.id}
+                      onDamage={onDamage}
+                      onHeal={onHeal}
+                      onSetTempHp={onSetTempHp}
+                    />
+                  )}
+                  <span className="text-forge-tan text-sm italic shrink-0">
+                    {formatModifier(creature.initiativeModifier)}
+                  </span>
+                  {isDead ? (
+                    <button
+                      onClick={() => onRemove(creature.id)}
+                      className="btn-forge btn-secondary rounded px-3 py-1.5 text-xs flex items-center gap-1.5 shrink-0 ml-auto"
+                      aria-label={`Remove ${creature.name}`}
+                    >
+                      <Trash2 size={14} />
+                      Remove
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => onDamage(creature.id, creature.hp + creature.tempHp)}
+                      className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0 ml-auto flex items-center gap-1 text-xs font-heading uppercase tracking-wider"
+                      aria-label={`Kill ${creature.name}`}
+                    >
+                      <Skull size={14} />
+                      Kill
+                    </button>
+                  )}
                 </div>
               )}
             </div>

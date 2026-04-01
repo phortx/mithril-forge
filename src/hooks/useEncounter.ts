@@ -132,6 +132,10 @@ export function useEncounter() {
     )
   }
 
+  const resetEncounter = () => {
+    setCreatures([])
+  }
+
   return {
     creatures: sortedCreatures,
     addCreature,
@@ -142,5 +146,6 @@ export function useEncounter() {
     applyDamage,
     applyHealing,
     setTempHp,
+    resetEncounter,
   }
 }

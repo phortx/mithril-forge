@@ -1,5 +1,5 @@
 import { TurnControls } from './TurnControls'
-import { Dices, SkipForward, Flag, UserPlus } from 'lucide-react'
+import { Dices, SkipForward, Flag, UserPlus, RotateCcw } from 'lucide-react'
 import type { TurnState } from '../types/turnState'
 
 type EncounterToolbarProps = {
@@ -13,6 +13,7 @@ type EncounterToolbarProps = {
   onNextTurn: () => void
   onEndEncounter: () => void
   onRollAll: () => void
+  onReset: () => void
 }
 
 export function EncounterToolbar({
@@ -26,6 +27,7 @@ export function EncounterToolbar({
   onNextTurn,
   onEndEncounter,
   onRollAll,
+  onReset,
 }: EncounterToolbarProps) {
   if (isDM) {
     if (isStarted) {
@@ -71,6 +73,13 @@ export function EncounterToolbar({
               <Flag size={14} />
               End
             </button>
+            <button
+              onClick={onReset}
+              className="btn-forge btn-secondary rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
+            >
+              <RotateCcw size={14} />
+              Reset
+            </button>
           </div>
         </div>
       )
@@ -102,6 +111,13 @@ export function EncounterToolbar({
             >
               <Dices size={14} />
               Roll All Initiative
+            </button>
+            <button
+              onClick={onReset}
+              className="btn-forge btn-secondary rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
+            >
+              <RotateCcw size={14} />
+              Reset
             </button>
           </div>
         )}
