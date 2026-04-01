@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { Plus, Users, Swords } from 'lucide-react'
 import type { CreatureType } from '../types/creature'
+import type { MonsterSearchResult } from '../types/statBlock'
+import { MonsterAutocomplete } from './MonsterAutocomplete'
+import { abilityModifier } from '../api/open5e'
 
 type AddCreatureFormProps = {
-  onAdd: (name: string, initiativeModifier: number, creatureType: CreatureType, maxHp: number) => void
+  onAdd: (name: string, initiativeModifier: number, creatureType: CreatureType, maxHp: number, monsterSlug?: string | null) => void
 }
 
 export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
@@ -11,15 +14,24 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
   const [modifier, setModifier] = useState(0)
   const [creatureType, setCreatureType] = useState<CreatureType>('enemy')
   const [maxHp, setMaxHp] = useState(10)
+  const [monsterSlug, setMonsterSlug] = useState<string | null>(null)
+
+  const handleMonsterSelect = (monster: MonsterSearchResult) => {
+    setName(monster.name)
+    setModifier(abilityModifier(monster.dexterity))
+    setMaxHp(monster.hit_points)
+    setMonsterSlug(monster.slug)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) return
-    onAdd(trimmed, modifier, creatureType, Math.max(1, maxHp))
+    onAdd(trimmed, modifier, creatureType, Math.max(1, maxHp), monsterSlug)
     setName('')
     setModifier(0)
     setMaxHp(10)
+    setMonsterSlug(null)
   }
 
   return (
@@ -29,14 +41,22 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
           <label htmlFor="creature-name" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
             Name
           </label>
-          <input
-            id="creature-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter creature name..."
-            className="input-forge rounded px-3 py-[9px] font-body text-base"
-          />
+          {creatureType === 'enemy' ? (
+            <MonsterAutocomplete
+              value={name}
+              onChange={(v) => { setName(v); setMonsterSlug(null) }}
+              onSelect={handleMonsterSelect}
+            />
+          ) : (
+            <input
+              id="creature-name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter creature name..."
+              className="input-forge rounded px-3 py-[9px] font-body text-base"
+            />
+          )}
         </div>
         <div className="flex flex-col gap-1.5">
           <span className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">Type</span>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Creature } from '../types/creature'
 import type { HpVisibility } from '../types/encounterSettings'
 import type { ViewMode } from '../types/viewMode'
-import { Swords, Skull, ChevronRight } from 'lucide-react'
+import { Swords, Skull, ChevronRight, BookOpen } from 'lucide-react'
 import { HealthBar } from './HealthBar'
 import { HpControls } from './HpControls'
 
@@ -20,6 +20,7 @@ type CreatureListProps = {
   onDamage: (id: string, amount: number) => void
   onHeal: (id: string, amount: number) => void
   onSetTempHp: (id: string, amount: number) => void
+  onShowStatBlock?: (monsterSlug: string) => void
 }
 
 function formatModifier(mod: number): string {
@@ -100,6 +101,7 @@ export function CreatureList({
   onDamage,
   onHeal,
   onSetTempHp,
+  onShowStatBlock,
 }: CreatureListProps) {
   if (creatures.length === 0) {
     return <p className="text-forge-tan italic text-center">No creatures have entered the fray...</p>
@@ -163,6 +165,15 @@ export function CreatureList({
                     {creature.creatureType === 'party' ? 'Party' : 'Enemy'}
                   </button>
                 </div>
+                {!readOnly && creature.monsterSlug && onShowStatBlock && (
+                  <button
+                    onClick={() => onShowStatBlock(creature.monsterSlug!)}
+                    className="text-forge-tan hover:text-forge-gold transition-colors shrink-0"
+                    aria-label={`Show stat block for ${creature.name}`}
+                  >
+                    <BookOpen size={16} />
+                  </button>
+                )}
                 {!readOnly && (
                   <span className="text-forge-tan text-sm italic shrink-0">
                     {formatModifier(creature.initiativeModifier)}

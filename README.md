@@ -4,7 +4,7 @@
 
 **D&D Encounter Tracker — Right in Your Browser**
 
-Track initiative, HP, conditions, and more across two screens.\
+Track initiative, HP, and more across two screens.\
 One for the DM. One for the players. No install. No account. No cost.
 
 [**Open Mithril Forge**](https://phortx.github.io/mithril-forge/) · [Report a Bug](https://github.com/phortx/mithril-forge/issues)
@@ -23,8 +23,8 @@ Managing initiative with paper cards gets unwieldy fast — especially in larger
 
 Open two browser windows on the same machine:
 
-- **DM view** on your laptop — full stat blocks, HP, AC, all controls
-- **Player view** on the TV — initiative order, names, conditions, active turn
+- **DM view** on your laptop — full stat blocks, HP, all controls
+- **Player view** on the TV — initiative order, names, active turn
 
 State syncs between the windows automatically via localStorage. No backend, no server, no cloud.
 
@@ -33,41 +33,43 @@ State syncs between the windows automatically via localStorage. No backend, no s
 ## Features
 
 ### Initiative & Turns
-- Add creatures manually (name, initiative modifier)
-- Roll initiative or set it manually
+- Add creatures manually (name, initiative modifier, max HP)
+- Roll initiative individually or all at once
+- Set initiative manually via inline editing
 - Sorted initiative order with the active turn highlighted
-- Next Turn / Previous Turn, round counter, and round timer
+- Next Turn, round counter, and in-game elapsed time (6s per round)
+- Start / End encounter controls
 
 ### HP & Combat Tracking
-- Current / Max HP with visual health bars
-- Deal damage, heal, temporary HP
-- Kill & Revive
-- AC display (DM only)
+- Current / Max HP with color-coded health bars (green → gold → red)
+- Deal damage (absorbed by temp HP first), heal, set temporary HP
+- HP visibility toggle: All HP, Party HP only, or No HP (controls what the Player view shows)
 
 ### Creature Types
-- **Player Characters** — full manual entry
-- **Enemies** — full manual entry with stat block
-- **Pets & Summons** — linked to an owner; configurable to share the owner's initiative or roll independently
+- **Party** — manual entry
+- **Enemy** — manual entry or SRD monster autocomplete
+- Inline creature type toggle (switch between Party/Enemy per creature)
 
-### Conditions & Status
-- Standard D&D condition tags (Blinded, Charmed, Frightened, ...)
-- Concentration toggle with visual indicator
-- Death status visible in Player view
-- Token label field for miniature identification
+### SRD Monster Database
+- Autocomplete search powered by the Open5e API when adding enemies
+- Auto-fills name, initiative modifier (from DEX), and max HP
+- All auto-filled values are overridable before adding
+- Full stat block side panel in DM view (AC, abilities, saves, actions, traits, and more)
 
 ### DM vs. Player View
 
 | Feature | Player View | DM View |
 |---|:---:|:---:|
 | Initiative order | yes | yes |
-| Names & Token labels | yes | yes |
-| Conditions | yes | yes |
+| Names | yes | yes |
 | Active turn / Round / Timer | yes | yes |
-| Death status | yes | yes |
-| HP & Health bars | — | yes |
-| AC | — | yes |
-| Stat blocks & Notes | — | yes |
-| All controls | — | yes |
+| Creature type badges | yes | yes |
+| HP & Health bars | configurable | yes |
+| Stat block side panel | — | yes |
+| HP controls (damage/heal/temp) | — | yes |
+| Add/remove creatures | — | yes |
+| Roll initiative | — | yes |
+| Encounter controls | — | yes |
 
 ---
 
@@ -84,25 +86,30 @@ State syncs between the windows automatically via localStorage. No backend, no s
 - [x] Fantasy design (dark tones, parchment, thematic fonts)
 - [x] DM / Player view toggle
 - [x] HP tracking (current/max, damage, heal, temp HP)
+- [x] HP visibility toggle (all / party-only / none)
+- [x] In-game elapsed time display
+- [x] Creature type toggle (Party/Enemy inline)
 - [ ] AC display for DM
-- [ ] Stat block input
 - [ ] Kill / Revive
 - [ ] Encounter reset / New encounter
 
-### v0.3 — Conditions & Tracking
+### v0.3 — SRD & Stat Blocks
+- [x] SRD monster autocomplete via Open5e API
+- [x] Auto-fill creature stats from SRD data
+- [x] Stat block side panel (DM only)
+
+### v0.4 — Conditions & Tracking
 - [ ] Condition tags
 - [ ] Concentration toggle with visual indicator
 - [ ] Death status in Player view
 - [ ] Token label field
 
-### v0.4 — Pets, Summons & Polish
+### v0.5 — Pets, Summons & Polish
 - [ ] Pets/Summons with owner linkage and shared initiative
-- [ ] In-game elapsed time
 - [ ] Notes field per creature (DM only)
 - [ ] Keyboard shortcuts
 
-### v0.5 — Extensions
-- [ ] SRD monster database
+### v0.6 — Extensions
 - [ ] D&D Beyond integration
 
 ---
