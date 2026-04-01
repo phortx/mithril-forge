@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useReducer } from 'react'
 import { X, Loader2 } from 'lucide-react'
 import { getMonster, abilityModifier, formatModifier } from '../api/open5e'
 import type { MonsterData, MonsterAction } from '../types/statBlock'
@@ -99,27 +99,43 @@ function xpByCr(cr: string): string {
 }
 
 export function StatBlockPanel({ monsterSlug, onClose }: StatBlockPanelProps) {
-  const [monster, setMonster] = useState<MonsterData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  type FetchState = {
+    monster: MonsterData | null
+    loading: boolean
+    error: string | null
+  }
+
+  type FetchAction =
+    | { type: 'fetch' }
+    | { type: 'success'; data: MonsterData }
+    | { type: 'failure'; error: string }
+
+  const [state, dispatch] = useReducer(
+    (_prev: FetchState, action: FetchAction): FetchState => {
+      switch (action.type) {
+        case 'fetch':
+          return { monster: null, loading: true, error: null }
+        case 'success':
+          return { monster: action.data, loading: false, error: null }
+        case 'failure':
+          return { monster: null, loading: false, error: action.error }
+      }
+    },
+    { monster: null, loading: true, error: null },
+  )
+
+  const { monster, loading, error } = state
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
-    setError(null)
+    dispatch({ type: 'fetch' })
 
     getMonster(monsterSlug)
       .then((data) => {
-        if (!cancelled) {
-          setMonster(data)
-          setLoading(false)
-        }
+        if (!cancelled) dispatch({ type: 'success', data })
       })
       .catch((err) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load monster')
-          setLoading(false)
-        }
+        if (!cancelled) dispatch({ type: 'failure', error: err instanceof Error ? err.message : 'Failed to load monster' })
       })
 
     return () => { cancelled = true }
