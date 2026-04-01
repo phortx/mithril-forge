@@ -18,9 +18,9 @@ const defaultProps = {
 }
 
 const mockCreatures: Creature[] = [
-  { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
-  { id: '2', name: 'Dragon', initiativeModifier: -1, initiative: null, creatureType: 'enemy', maxHp: 100, hp: 100, tempHp: 0 },
-  { id: '3', name: 'Cleric', initiativeModifier: 0, initiative: 10, creatureType: 'party', maxHp: 30, hp: 30, tempHp: 0 },
+  { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
+  { id: '2', name: 'Dragon', initiativeModifier: -1, initiative: null, creatureType: 'enemy', maxHp: 100, hp: 100, tempHp: 0, monsterSlug: null },
+  { id: '3', name: 'Cleric', initiativeModifier: 0, initiative: 10, creatureType: 'party', maxHp: 30, hp: 30, tempHp: 0, monsterSlug: null },
 ]
 
 describe('CreatureList', () => {
@@ -53,7 +53,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
         ]}
         {...defaultProps}
       />,
@@ -66,7 +66,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
         ]}
         {...defaultProps}
         viewMode="player"
@@ -98,7 +98,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
         ]}
         {...defaultProps}
       />,
@@ -113,7 +113,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
         ]}
         {...defaultProps}
       />,
@@ -142,7 +142,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0, monsterSlug: null },
         ]}
         {...defaultProps}
         onUpdateInitiative={onUpdateInitiative}

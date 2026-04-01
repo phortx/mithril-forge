@@ -5,12 +5,14 @@ import { useTurnTracker } from './hooks/useTurnTracker'
 import { AddCreatureForm } from './components/AddCreatureForm'
 import { CreatureList } from './components/CreatureList'
 import { TurnControls } from './components/TurnControls'
+import { StatBlockPanel } from './components/StatBlockPanel'
 import { Dices, SkipForward, Flag, Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
 import type { ViewMode } from './types/viewMode'
 import type { HpVisibility } from './types/encounterSettings'
 
 function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('dm')
+  const [statBlockSlug, setStatBlockSlug] = useState<string | null>(null)
   const isDM = viewMode === 'dm'
 
   const {
@@ -191,8 +193,16 @@ function App() {
           onDamage={applyDamage}
           onHeal={applyHealing}
           onSetTempHp={setTempHp}
+          onShowStatBlock={isDM ? setStatBlockSlug : undefined}
         />
       </div>
+
+      {isDM && statBlockSlug && (
+        <StatBlockPanel
+          monsterSlug={statBlockSlug}
+          onClose={() => setStatBlockSlug(null)}
+        />
+      )}
     </div>
   )
 }

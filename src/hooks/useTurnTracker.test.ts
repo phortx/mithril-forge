@@ -16,6 +16,7 @@ const makeCreatures = (...names: string[]): Creature[] =>
     maxHp: 20,
     hp: 20,
     tempHp: 0,
+    monsterSlug: null,
   }))
 
 describe('useTurnTracker', () => {
