@@ -1,5 +1,5 @@
 import { TurnControls } from './TurnControls'
-import { Dices, SkipForward, Flag, UserPlus, RotateCcw } from 'lucide-react'
+import { Dices, SkipForward, Flag, Plus, RotateCcw } from 'lucide-react'
 import type { TurnState } from '../types/turnState'
 
 type EncounterToolbarProps = {
@@ -7,6 +7,7 @@ type EncounterToolbarProps = {
   isStarted: boolean
   turnState: TurnState
   hasCreatures: boolean
+  hasCreaturesWithoutInitiative: boolean
   showAddForm: boolean
   onToggleAddForm: () => void
   onStart: () => void
@@ -21,6 +22,7 @@ export function EncounterToolbar({
   isStarted,
   turnState,
   hasCreatures,
+  hasCreaturesWithoutInitiative,
   showAddForm,
   onToggleAddForm,
   onStart,
@@ -48,17 +50,19 @@ export function EncounterToolbar({
                   showAddForm ? 'btn-secondary' : 'btn-gold'
                 }`}
               >
-                <UserPlus size={14} />
-                Add Creature
+                <Plus size={14} />
+                Add
               </button>
             )}
-            <button
-              onClick={onRollAll}
-              className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
-            >
-              <Dices size={14} />
-              Roll All
-            </button>
+            {hasCreaturesWithoutInitiative && (
+              <button
+                onClick={onRollAll}
+                className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
+              >
+                <Dices size={14} />
+                Roll All
+              </button>
+            )}
             <button
               onClick={onNextTurn}
               className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
@@ -102,16 +106,18 @@ export function EncounterToolbar({
                 showAddForm ? 'btn-gold' : 'btn-secondary'
               }`}
             >
-              <UserPlus size={14} />
-              Add Creature
+              <Plus size={14} />
+              Add
             </button>
-            <button
-              onClick={onRollAll}
-              className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
-            >
-              <Dices size={14} />
-              Roll All Initiative
-            </button>
+            {hasCreaturesWithoutInitiative && (
+              <button
+                onClick={onRollAll}
+                className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
+              >
+                <Dices size={14} />
+                Roll All Initiative
+              </button>
+            )}
             <button
               onClick={onReset}
               className="btn-forge btn-secondary rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
