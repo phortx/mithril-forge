@@ -4,6 +4,7 @@ import { CreatureList } from './CreatureList'
 import type { Creature } from '../types/creature'
 
 const defaultProps = {
+  activeCreatureId: null as string | null,
   onRemove: vi.fn(),
   onRollInitiative: vi.fn(),
   onRollAll: vi.fn(),
@@ -175,6 +176,46 @@ describe('CreatureList', () => {
     expect(
       screen.queryByRole('button', { name: 'Roll All Initiative' }),
     ).not.toBeInTheDocument()
+  })
+
+  it('highlights the active creature row', () => {
+    render(
+      <CreatureList
+        creatures={mockCreatures}
+        {...defaultProps}
+        activeCreatureId="1"
+      />,
+    )
+
+    const goblinRow = screen.getByText('Goblin').closest('li')!
+    expect(goblinRow.className).toContain('bg-yellow-900/30')
+    expect(goblinRow.className).toContain('border-yellow-600')
+  })
+
+  it('does not highlight inactive creature rows', () => {
+    render(
+      <CreatureList
+        creatures={mockCreatures}
+        {...defaultProps}
+        activeCreatureId="1"
+      />,
+    )
+
+    const dragonRow = screen.getByText('Dragon').closest('li')!
+    expect(dragonRow.className).toContain('bg-gray-800')
+    expect(dragonRow.className).not.toContain('bg-yellow-900/30')
+  })
+
+  it('shows turn indicator for active creature', () => {
+    render(
+      <CreatureList
+        creatures={mockCreatures}
+        {...defaultProps}
+        activeCreatureId="1"
+      />,
+    )
+
+    expect(screen.getByLabelText('Active turn')).toBeInTheDocument()
   })
 
   it('allows manual initiative editing', async () => {

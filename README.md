@@ -58,9 +58,9 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 - [x] Add creatures (name + initiative modifier)
 - [x] Roll or manually set initiative
 - [x] Sorted initiative order
-- [ ] Active turn highlight + Next Turn button
-- [ ] Round counter
-- [ ] LocalStorage persistence & cross-tab sync
+- [x] Active turn highlight + Next Turn button
+- [x] Round counter
+- [x] LocalStorage persistence & cross-tab sync
 
 ### v0.2 — MVP
 - [ ] Fantasy design (dark tones, parchment, thematic fonts)

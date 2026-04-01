@@ -3,6 +3,7 @@ import type { Creature } from '../types/creature'
 
 type CreatureListProps = {
   creatures: Creature[]
+  activeCreatureId: string | null
   onRemove: (id: string) => void
   onRollInitiative: (id: string) => void
   onRollAll: () => void
@@ -65,6 +66,7 @@ function InitiativeInput({
 
 export function CreatureList({
   creatures,
+  activeCreatureId,
   onRemove,
   onRollInitiative,
   onRollAll,
@@ -85,11 +87,20 @@ export function CreatureList({
         </button>
       </div>
       <ul className="flex flex-col gap-2">
-        {creatures.map((creature) => (
+        {creatures.map((creature) => {
+          const isActive = creature.id === activeCreatureId
+          return (
           <li
             key={creature.id}
-            className="flex items-center gap-3 bg-gray-800 border border-gray-700 rounded px-4 py-3"
+            className={
+              isActive
+                ? 'flex items-center gap-3 bg-yellow-900/30 border border-yellow-600 ring-1 ring-yellow-600/50 rounded px-4 py-3'
+                : 'flex items-center gap-3 bg-gray-800 border border-gray-700 rounded px-4 py-3'
+            }
           >
+            {isActive && (
+              <span className="text-yellow-500 text-sm" aria-label="Active turn">&#9654;</span>
+            )}
             <InitiativeInput
               creature={creature}
               onUpdate={onUpdateInitiative}
@@ -113,7 +124,8 @@ export function CreatureList({
               Remove
             </button>
           </li>
-        ))}
+          )
+        })}
       </ul>
     </div>
   )
