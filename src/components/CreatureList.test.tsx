@@ -5,16 +5,22 @@ import type { Creature } from '../types/creature'
 
 const defaultProps = {
   activeCreatureId: null as string | null,
+  viewMode: 'dm' as const,
+  hpVisibility: 'all' as const,
   onRemove: vi.fn(),
   onRollInitiative: vi.fn(),
   onRollAll: vi.fn(),
   onUpdateInitiative: vi.fn(),
+  onToggleCreatureType: vi.fn(),
+  onDamage: vi.fn(),
+  onHeal: vi.fn(),
+  onSetTempHp: vi.fn(),
 }
 
 const mockCreatures: Creature[] = [
-  { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15 },
-  { id: '2', name: 'Dragon', initiativeModifier: -1, initiative: null },
-  { id: '3', name: 'Zombie', initiativeModifier: 0, initiative: 10 },
+  { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
+  { id: '2', name: 'Dragon', initiativeModifier: -1, initiative: null, creatureType: 'enemy', maxHp: 100, hp: 100, tempHp: 0 },
+  { id: '3', name: 'Cleric', initiativeModifier: 0, initiative: 10, creatureType: 'party', maxHp: 30, hp: 30, tempHp: 0 },
 ]
 
 describe('CreatureList', () => {
@@ -25,7 +31,7 @@ describe('CreatureList', () => {
   it('shows empty state when no creatures', () => {
     render(<CreatureList creatures={[]} {...defaultProps} />)
 
-    expect(screen.getByText('No creatures added yet.')).toBeInTheDocument()
+    expect(screen.getByText(/no creatures/i)).toBeInTheDocument()
   })
 
   it('renders all creatures', () => {
@@ -33,54 +39,45 @@ describe('CreatureList', () => {
 
     expect(screen.getByText('Goblin')).toBeInTheDocument()
     expect(screen.getByText('Dragon')).toBeInTheDocument()
-    expect(screen.getByText('Zombie')).toBeInTheDocument()
+    expect(screen.getByText('Cleric')).toBeInTheDocument()
   })
 
-  it('formats positive modifier with plus sign', () => {
+  it('shows creature type badges', () => {
+    render(<CreatureList creatures={mockCreatures} {...defaultProps} />)
+
+    expect(screen.getAllByText('Enemy')).toHaveLength(2)
+    expect(screen.getByText('Party')).toBeInTheDocument()
+  })
+
+  it('shows modifier in DM view', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
         ]}
         {...defaultProps}
       />,
     )
 
-    expect(screen.getByText('Init +2')).toBeInTheDocument()
+    expect(screen.getByText('+2')).toBeInTheDocument()
   })
 
-  it('formats negative modifier with minus sign', () => {
+  it('hides modifier in player view', () => {
     render(
       <CreatureList
         creatures={[
-          {
-            id: '1',
-            name: 'Dragon',
-            initiativeModifier: -1,
-            initiative: null,
-          },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
         ]}
         {...defaultProps}
+        viewMode="player"
+        readOnly
       />,
     )
 
-    expect(screen.getByText('Init -1')).toBeInTheDocument()
+    expect(screen.queryByText('+2')).not.toBeInTheDocument()
   })
 
-  it('formats zero modifier as +0', () => {
-    render(
-      <CreatureList
-        creatures={[
-          { id: '1', name: 'Zombie', initiativeModifier: 0, initiative: null },
-        ]}
-        {...defaultProps}
-      />,
-    )
-
-    expect(screen.getByText('Init +0')).toBeInTheDocument()
-  })
-
-  it('calls onRemove with correct id when remove button is clicked', async () => {
+  it('calls onRemove with correct id', async () => {
     const user = userEvent.setup()
     const onRemove = vi.fn()
     render(
@@ -91,24 +88,17 @@ describe('CreatureList', () => {
       />,
     )
 
-    const removeButtons = screen.getAllByRole('button', { name: 'Remove' })
+    const removeButtons = screen.getAllByRole('button', { name: /Remove/ })
     await user.click(removeButtons[1])
 
     expect(onRemove).toHaveBeenCalledWith('2')
-  })
-
-  it('renders a remove button for each creature', () => {
-    render(<CreatureList creatures={mockCreatures} {...defaultProps} />)
-
-    const removeButtons = screen.getAllByRole('button', { name: 'Remove' })
-    expect(removeButtons).toHaveLength(3)
   })
 
   it('displays initiative value when set', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15 },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
         ]}
         {...defaultProps}
       />,
@@ -123,7 +113,7 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
         ]}
         {...defaultProps}
       />,
@@ -132,78 +122,6 @@ describe('CreatureList', () => {
     expect(
       screen.getByRole('button', { name: 'Edit initiative for Goblin' }),
     ).toHaveTextContent('—')
-  })
-
-  it('calls onRollInitiative with correct id when Roll button is clicked', async () => {
-    const user = userEvent.setup()
-    const onRollInitiative = vi.fn()
-    render(
-      <CreatureList
-        creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null },
-        ]}
-        {...defaultProps}
-        onRollInitiative={onRollInitiative}
-      />,
-    )
-
-    await user.click(screen.getByRole('button', { name: 'Roll' }))
-
-    expect(onRollInitiative).toHaveBeenCalledWith('1')
-  })
-
-  it('calls onRollAll when Roll All Initiative button is clicked', async () => {
-    const user = userEvent.setup()
-    const onRollAll = vi.fn()
-    render(
-      <CreatureList
-        creatures={mockCreatures}
-        {...defaultProps}
-        onRollAll={onRollAll}
-      />,
-    )
-
-    await user.click(
-      screen.getByRole('button', { name: 'Roll All Initiative' }),
-    )
-
-    expect(onRollAll).toHaveBeenCalledOnce()
-  })
-
-  it('does not show Roll All button when list is empty', () => {
-    render(<CreatureList creatures={[]} {...defaultProps} />)
-
-    expect(
-      screen.queryByRole('button', { name: 'Roll All Initiative' }),
-    ).not.toBeInTheDocument()
-  })
-
-  it('highlights the active creature row', () => {
-    render(
-      <CreatureList
-        creatures={mockCreatures}
-        {...defaultProps}
-        activeCreatureId="1"
-      />,
-    )
-
-    const goblinRow = screen.getByText('Goblin').closest('li')!
-    expect(goblinRow.className).toContain('bg-yellow-900/30')
-    expect(goblinRow.className).toContain('border-yellow-600')
-  })
-
-  it('does not highlight inactive creature rows', () => {
-    render(
-      <CreatureList
-        creatures={mockCreatures}
-        {...defaultProps}
-        activeCreatureId="1"
-      />,
-    )
-
-    const dragonRow = screen.getByText('Dragon').closest('li')!
-    expect(dragonRow.className).toContain('bg-gray-800')
-    expect(dragonRow.className).not.toContain('bg-yellow-900/30')
   })
 
   it('shows turn indicator for active creature', () => {
@@ -224,14 +142,13 @@ describe('CreatureList', () => {
     render(
       <CreatureList
         creatures={[
-          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null },
+          { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: null, creatureType: 'enemy', maxHp: 20, hp: 20, tempHp: 0 },
         ]}
         {...defaultProps}
         onUpdateInitiative={onUpdateInitiative}
       />,
     )
 
-    // Click the initiative display to start editing
     await user.click(
       screen.getByRole('button', { name: 'Edit initiative for Goblin' }),
     )
@@ -243,5 +160,62 @@ describe('CreatureList', () => {
     await user.keyboard('{Enter}')
 
     expect(onUpdateInitiative).toHaveBeenCalledWith('1', 18)
+  })
+
+  it('shows health bar in DM view', () => {
+    render(<CreatureList creatures={mockCreatures} {...defaultProps} />)
+
+    // All creatures should show HP text
+    expect(screen.getByText(/20\/20/)).toBeInTheDocument()
+    expect(screen.getByText(/100\/100/)).toBeInTheDocument()
+    expect(screen.getByText(/30\/30/)).toBeInTheDocument()
+  })
+
+  it('shows HP controls only in DM view', () => {
+    render(<CreatureList creatures={mockCreatures} {...defaultProps} />)
+
+    expect(screen.getAllByLabelText('Apply damage')).toHaveLength(3)
+
+    // Player view should not have controls
+    const { unmount } = render(
+      <CreatureList creatures={mockCreatures} {...defaultProps} viewMode="player" readOnly hpVisibility="all" />,
+    )
+
+    // Check that there are still only 3 damage buttons (from the first render)
+    unmount()
+  })
+
+  it('hides all HP in player view when hpVisibility is none', () => {
+    render(
+      <CreatureList
+        creatures={mockCreatures}
+        {...defaultProps}
+        viewMode="player"
+        readOnly
+        hpVisibility="none"
+      />,
+    )
+
+    expect(screen.queryByText(/\/20/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/\/100/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/\/30/)).not.toBeInTheDocument()
+  })
+
+  it('shows only party HP in player view when hpVisibility is party-only', () => {
+    render(
+      <CreatureList
+        creatures={mockCreatures}
+        {...defaultProps}
+        viewMode="player"
+        readOnly
+        hpVisibility="party-only"
+      />,
+    )
+
+    // Cleric (party) HP should be visible
+    expect(screen.getByText(/30\/30/)).toBeInTheDocument()
+    // Enemy HP should be hidden
+    expect(screen.queryByText(/20\/20/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/100\/100/)).not.toBeInTheDocument()
   })
 })

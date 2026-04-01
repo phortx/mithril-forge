@@ -63,9 +63,9 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 - [x] LocalStorage persistence & cross-tab sync
 
 ### v0.2 — MVP
-- [ ] Fantasy design (dark tones, parchment, thematic fonts)
-- [ ] DM / Player view toggle
-- [ ] HP tracking (current/max, damage, heal, temp HP)
+- [x] Fantasy design (dark tones, parchment, thematic fonts)
+- [x] DM / Player view toggle
+- [x] HP tracking (current/max, damage, heal, temp HP)
 - [ ] AC display for DM
 - [ ] Stat block input
 - [ ] Kill / Revive

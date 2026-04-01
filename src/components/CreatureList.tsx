@@ -1,15 +1,25 @@
 import { useState } from 'react'
 import type { Creature } from '../types/creature'
+import type { HpVisibility } from '../types/encounterSettings'
+import type { ViewMode } from '../types/viewMode'
 import { Swords, Skull, ChevronRight } from 'lucide-react'
+import { HealthBar } from './HealthBar'
+import { HpControls } from './HpControls'
 
 type CreatureListProps = {
   creatures: Creature[]
   activeCreatureId: string | null
   readOnly?: boolean
+  viewMode: ViewMode
+  hpVisibility: HpVisibility
   onRemove: (id: string) => void
   onRollInitiative: (id: string) => void
   onRollAll: () => void
   onUpdateInitiative: (id: string, initiative: number | null) => void
+  onToggleCreatureType: (id: string) => void
+  onDamage: (id: string, amount: number) => void
+  onHeal: (id: string, amount: number) => void
+  onSetTempHp: (id: string, amount: number) => void
 }
 
 function formatModifier(mod: number): string {
@@ -66,13 +76,30 @@ function InitiativeInput({
   )
 }
 
+function shouldShowHp(
+  viewMode: ViewMode,
+  hpVisibility: HpVisibility,
+  creature: Creature,
+): boolean {
+  if (viewMode === 'dm') return true
+  if (hpVisibility === 'all') return true
+  if (hpVisibility === 'party-only') return creature.creatureType === 'party'
+  return false
+}
+
 export function CreatureList({
   creatures,
   activeCreatureId,
   readOnly = false,
+  viewMode,
+  hpVisibility,
   onRemove,
   onRollInitiative,
   onUpdateInitiative,
+  onToggleCreatureType,
+  onDamage,
+  onHeal,
+  onSetTempHp,
 }: CreatureListProps) {
   if (creatures.length === 0) {
     return <p className="text-forge-tan italic text-center">No creatures have entered the fray...</p>
@@ -83,54 +110,88 @@ export function CreatureList({
       <ul className="flex flex-col gap-2">
         {creatures.map((creature) => {
           const isActive = creature.id === activeCreatureId
+          const showHp = shouldShowHp(viewMode, hpVisibility, creature)
           return (
           <li
             key={creature.id}
-            className={`flex items-center gap-4 rounded-lg px-5 py-4 ${
-              isActive ? 'creature-card-active' : 'creature-card'
-            }`}
+            className="relative"
           >
             <ChevronRight
               size={20}
-              className={`shrink-0 ${isActive ? 'text-forge-gold' : 'invisible'}`}
+              className={`absolute -left-7 top-5 ${isActive ? 'text-forge-gold' : 'invisible'}`}
               aria-label={isActive ? 'Active turn' : undefined}
             />
-            {readOnly ? (
-              <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold">
-                {creature.initiative !== null ? creature.initiative : '—'}
-              </span>
-            ) : (
-              <InitiativeInput
-                creature={creature}
-                onUpdate={onUpdateInitiative}
-              />
-            )}
-            {!readOnly && (
-              <button
-                onClick={() => onRollInitiative(creature.id)}
-                className="btn-ember shrink-0"
-                aria-label={`Roll initiative for ${creature.name}`}
-              >
-                <Swords size={16} />
-              </button>
-            )}
-            <span className="text-forge-parchment-light font-heading text-lg font-semibold flex-1">
-              {creature.name}
-            </span>
-            {!readOnly && (
-              <span className="text-forge-tan text-sm italic">
-                {formatModifier(creature.initiativeModifier)}
-              </span>
-            )}
-            {!readOnly && (
-              <button
-                onClick={() => onRemove(creature.id)}
-                className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0"
-                aria-label={`Remove ${creature.name}`}
-              >
-                <Skull size={16} />
-              </button>
-            )}
+            <div
+              className={`flex flex-col gap-2 rounded-lg px-5 py-4 ${
+                isActive ? 'creature-card-active' : 'creature-card'
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                {readOnly ? (
+                  <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold">
+                    {creature.initiative !== null ? creature.initiative : '—'}
+                  </span>
+                ) : (
+                  <InitiativeInput
+                    creature={creature}
+                    onUpdate={onUpdateInitiative}
+                  />
+                )}
+                {!readOnly && (
+                  <button
+                    onClick={() => onRollInitiative(creature.id)}
+                    className="btn-ember shrink-0"
+                    aria-label={`Roll initiative for ${creature.name}`}
+                  >
+                    <Swords size={16} />
+                  </button>
+                )}
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <span className="text-forge-parchment-light font-heading text-lg font-semibold truncate">
+                    {creature.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onToggleCreatureType(creature.id)}
+                    className={`text-[10px] font-heading uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 transition-colors cursor-pointer ${
+                      creature.creatureType === 'party'
+                        ? 'bg-forge-green/30 text-forge-green-light hover:bg-forge-green/50'
+                        : 'bg-forge-burgundy/30 text-forge-burgundy-light hover:bg-forge-burgundy/50'
+                    }`}
+                    aria-label={`Toggle creature type for ${creature.name}`}
+                  >
+                    {creature.creatureType === 'party' ? 'Party' : 'Enemy'}
+                  </button>
+                </div>
+                {!readOnly && (
+                  <span className="text-forge-tan text-sm italic shrink-0">
+                    {formatModifier(creature.initiativeModifier)}
+                  </span>
+                )}
+                {!readOnly && (
+                  <button
+                    onClick={() => onRemove(creature.id)}
+                    className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0"
+                    aria-label={`Remove ${creature.name}`}
+                  >
+                    <Skull size={16} />
+                  </button>
+                )}
+              </div>
+              {showHp && (
+                <div className="flex flex-col gap-2">
+                  <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} />
+                  {!readOnly && (
+                    <HpControls
+                      creatureId={creature.id}
+                      onDamage={onDamage}
+                      onHeal={onHeal}
+                      onSetTempHp={onSetTempHp}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
           </li>
           )
         })}

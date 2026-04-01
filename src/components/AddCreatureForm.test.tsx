@@ -3,25 +3,30 @@ import userEvent from '@testing-library/user-event'
 import { AddCreatureForm } from './AddCreatureForm'
 
 describe('AddCreatureForm', () => {
-  it('renders name and modifier inputs with add button', () => {
+  it('renders name, type, modifier and max hp inputs with add button', () => {
     render(<AddCreatureForm onAdd={vi.fn()} />)
 
     expect(screen.getByLabelText('Name')).toBeInTheDocument()
-    expect(screen.getByLabelText('Initiative Modifier')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Init Mod')).toBeInTheDocument()
+    expect(screen.getByLabelText('Max HP')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Add/ })).toBeInTheDocument()
+    expect(screen.getByText('Party')).toBeInTheDocument()
+    expect(screen.getByText('Enemy')).toBeInTheDocument()
   })
 
-  it('calls onAdd with name and modifier on submit', async () => {
+  it('calls onAdd with name, modifier, creature type, and maxHp on submit', async () => {
     const user = userEvent.setup()
     const onAdd = vi.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), 'Goblin')
-    await user.clear(screen.getByLabelText('Initiative Modifier'))
-    await user.type(screen.getByLabelText('Initiative Modifier'), '3')
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.clear(screen.getByLabelText('Init Mod'))
+    await user.type(screen.getByLabelText('Init Mod'), '3')
+    await user.clear(screen.getByLabelText('Max HP'))
+    await user.type(screen.getByLabelText('Max HP'), '25')
+    await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Goblin', 3)
+    expect(onAdd).toHaveBeenCalledWith('Goblin', 3, 'enemy', 25)
   })
 
   it('resets fields after submit', async () => {
@@ -29,12 +34,13 @@ describe('AddCreatureForm', () => {
     render(<AddCreatureForm onAdd={vi.fn()} />)
 
     await user.type(screen.getByLabelText('Name'), 'Goblin')
-    await user.clear(screen.getByLabelText('Initiative Modifier'))
-    await user.type(screen.getByLabelText('Initiative Modifier'), '2')
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.clear(screen.getByLabelText('Init Mod'))
+    await user.type(screen.getByLabelText('Init Mod'), '2')
+    await user.click(screen.getByRole('button', { name: /Add/ }))
 
     expect(screen.getByLabelText('Name')).toHaveValue('')
-    expect(screen.getByLabelText('Initiative Modifier')).toHaveValue(0)
+    expect(screen.getByLabelText('Init Mod')).toHaveValue(0)
+    expect(screen.getByLabelText('Max HP')).toHaveValue(10)
   })
 
   it('does not call onAdd when name is empty', async () => {
@@ -42,7 +48,7 @@ describe('AddCreatureForm', () => {
     const onAdd = vi.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.click(screen.getByRole('button', { name: /Add/ }))
 
     expect(onAdd).not.toHaveBeenCalled()
   })
@@ -53,7 +59,7 @@ describe('AddCreatureForm', () => {
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), '   ')
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.click(screen.getByRole('button', { name: /Add/ }))
 
     expect(onAdd).not.toHaveBeenCalled()
   })
@@ -64,15 +70,16 @@ describe('AddCreatureForm', () => {
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), '  Goblin  ')
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Goblin', 0)
+    expect(onAdd).toHaveBeenCalledWith('Goblin', 0, 'enemy', 10)
   })
 
-  it('defaults modifier to 0', () => {
+  it('defaults modifier to 0 and maxHp to 10', () => {
     render(<AddCreatureForm onAdd={vi.fn()} />)
 
-    expect(screen.getByLabelText('Initiative Modifier')).toHaveValue(0)
+    expect(screen.getByLabelText('Init Mod')).toHaveValue(0)
+    expect(screen.getByLabelText('Max HP')).toHaveValue(10)
   })
 
   it('supports negative modifiers', async () => {
@@ -81,13 +88,23 @@ describe('AddCreatureForm', () => {
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), 'Zombie')
-    // userEvent.type doesn't handle minus sign reliably on number inputs,
-    // so we use fireEvent.change for this case
-    fireEvent.change(screen.getByLabelText('Initiative Modifier'), {
+    fireEvent.change(screen.getByLabelText('Init Mod'), {
       target: { value: '-2' },
     })
-    await user.click(screen.getByRole('button', { name: 'Add' }))
+    await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Zombie', -2)
+    expect(onAdd).toHaveBeenCalledWith('Zombie', -2, 'enemy', 10)
+  })
+
+  it('allows switching creature type to party', async () => {
+    const user = userEvent.setup()
+    const onAdd = vi.fn()
+    render(<AddCreatureForm onAdd={onAdd} />)
+
+    await user.type(screen.getByLabelText('Name'), 'Cleric')
+    await user.click(screen.getByText('Party'))
+    await user.click(screen.getByRole('button', { name: /Add/ }))
+
+    expect(onAdd).toHaveBeenCalledWith('Cleric', 0, 'party', 10)
   })
 })
