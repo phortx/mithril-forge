@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# Mithril Forge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based D&D encounter tracker with two views: a **DM view** for full control and a **Player view** for the TV at the table.
 
-Currently, two official plugins are available:
+## The Idea
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Managing initiative order with paper cards at the DM screen gets unwieldy fast — especially in larger fights where you want to track HP, conditions, and stats properly. Mithril Forge replaces that with a browser-based tracker that runs on two screens simultaneously:
 
-## React Compiler
+- **DM view** on the MacBook: full stat blocks, HP, AC, all controls
+- **Player view** on the TV: initiative order, names, conditions, active turn — no enemy stats
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+State syncs between the two browser windows via localStorage. No backend, no account required. Deployable as a static site.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Initiative & Turns
+- Add creatures manually (name, initiative modifier)
+- Roll initiative or set it manually
+- Sorted initiative order with the active turn highlighted
+- Next Turn button, round counter, and timer
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Creature Types
+- **Player Characters** — full manual entry
+- **Enemies** — full manual entry with stat block
+- **Pets & Summons** — linked to an owner; configurable to share the owner's initiative slot or roll their own
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### HP & Combat Tracking
+- Current / Max HP, deal damage, heal, temporary HP
+- Kill & Revive
+- AC display (DM only)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Conditions & Status
+- Standard condition tags (Blinded, Charmed, Frightened, etc.)
+- Concentration toggle with visual indicator
+- Death status visible in Player view
+- Token label field ("A1", "Red", "Goblin #3")
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Views
+| | Player View | DM View |
+|---|---|---|
+| Initiative order | ✓ | ✓ |
+| Names | ✓ | ✓ |
+| Conditions | ✓ | ✓ |
+| Active turn / Round / Timer | ✓ | ✓ |
+| HP | — | ✓ |
+| AC | — | ✓ |
+| Stat Blocks | — | ✓ |
+| Notes | — | ✓ |
+| All controls | — | ✓ |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Roadmap
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### v0.1 — Proof of Concept
+- [ ] Tech stack setup
+- [ ] GitHub Actions + Pages deployment
+- [ ] Add creatures (name + initiative modifier)
+- [ ] Roll or manually set initiative
+- [ ] Sorted initiative order
+- [ ] Active turn highlight + Next Turn button
+- [ ] Round counter
+- [ ] LocalStorage persistence & cross-tab sync
+
+### v0.2 — MVP
+- [ ] Fantasy design (dark tones, parchment, thematic fonts)
+- [ ] DM / Player view toggle
+- [ ] HP tracking (current/max, damage, heal, temp HP)
+- [ ] AC display for DM
+- [ ] Stat block input
+- [ ] Kill / Revive
+- [ ] Encounter reset / New encounter
+
+### v0.3 — Conditions & Tracking
+- [ ] Condition tags
+- [ ] Conditions visible in Player view
+- [ ] Concentration toggle with visual indicator
+- [ ] Death status in Player view
+- [ ] Token label field
+
+### v0.4 — Pets, Summons & Polish
+- [ ] Pets/Summons with owner linkage
+- [ ] Configurable: shared or own initiative slot
+- [ ] Indented display when sharing owner's slot
+- [ ] In-game elapsed time
+- [ ] Notes field per creature (DM only)
+- [ ] Keyboard shortcuts
+
+### v0.5 — Extensions
+- [ ] SRD monster database
+- [ ] D&D Beyond integration?
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
