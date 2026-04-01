@@ -51,8 +51,8 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 ## Roadmap
 
 ### v0.1 — Proof of Concept
-- [ ] Tech stack setup
-- [ ] GitHub Actions + Pages deployment
+- [x] Tech stack setup
+- [x] GitHub Actions + Pages deployment
 - [ ] Add creatures (name + initiative modifier)
 - [ ] Roll or manually set initiative
 - [ ] Sorted initiative order
