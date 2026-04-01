@@ -1,5 +1,7 @@
 # Mithril Forge
 
+**[▶ Open Mithril Forge](https://phortx.github.io/mithril-forge/)**
+
 A web-based D&D encounter tracker with two views: a **DM view** for full control and a **Player view** for the TV at the table.
 
 ## The Idea
@@ -53,7 +55,7 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 ### v0.1 — Proof of Concept
 - [x] Tech stack setup
 - [x] GitHub Actions + Pages deployment
-- [ ] Add creatures (name + initiative modifier)
+- [x] Add creatures (name + initiative modifier)
 - [ ] Roll or manually set initiative
 - [ ] Sorted initiative order
 - [ ] Active turn highlight + Next Turn button
