@@ -43,6 +43,7 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
           </label>
           {creatureType === 'enemy' ? (
             <MonsterAutocomplete
+              id="creature-name"
               value={name}
               onChange={(v) => { setName(v); setMonsterSlug(null) }}
               onSelect={handleMonsterSelect}
@@ -63,7 +64,7 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
           <div className="flex h-[42px]">
             <button
               type="button"
-              onClick={() => setCreatureType('party')}
+              onClick={() => { setCreatureType('party'); setMonsterSlug(null) }}
               className={`rounded-l px-3 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
                 creatureType === 'party'
                   ? 'bg-forge-green text-forge-parchment-light'

@@ -26,7 +26,7 @@ describe('AddCreatureForm', () => {
     await user.type(screen.getByLabelText('Max HP'), '25')
     await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Goblin', 3, 'enemy', 25)
+    expect(onAdd).toHaveBeenCalledWith('Goblin', 3, 'enemy', 25, null)
   })
 
   it('resets fields after submit', async () => {
@@ -72,7 +72,7 @@ describe('AddCreatureForm', () => {
     await user.type(screen.getByLabelText('Name'), '  Goblin  ')
     await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Goblin', 0, 'enemy', 10)
+    expect(onAdd).toHaveBeenCalledWith('Goblin', 0, 'enemy', 10, null)
   })
 
   it('defaults modifier to 0 and maxHp to 10', () => {
@@ -93,7 +93,7 @@ describe('AddCreatureForm', () => {
     })
     await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Zombie', -2, 'enemy', 10)
+    expect(onAdd).toHaveBeenCalledWith('Zombie', -2, 'enemy', 10, null)
   })
 
   it('allows switching creature type to party', async () => {
@@ -105,6 +105,6 @@ describe('AddCreatureForm', () => {
     await user.click(screen.getByText('Party'))
     await user.click(screen.getByRole('button', { name: /Add/ }))
 
-    expect(onAdd).toHaveBeenCalledWith('Cleric', 0, 'party', 10)
+    expect(onAdd).toHaveBeenCalledWith('Cleric', 0, 'party', 10, null)
   })
 })
