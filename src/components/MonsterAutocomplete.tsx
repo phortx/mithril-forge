@@ -4,12 +4,13 @@ import { searchMonsters } from '../api/open5e'
 import type { MonsterSearchResult } from '../types/statBlock'
 
 type MonsterAutocompleteProps = {
+  id?: string
   value: string
   onChange: (value: string) => void
   onSelect: (monster: MonsterSearchResult) => void
 }
 
-export function MonsterAutocomplete({ value, onChange, onSelect }: MonsterAutocompleteProps) {
+export function MonsterAutocomplete({ id, value, onChange, onSelect }: MonsterAutocompleteProps) {
   const [results, setResults] = useState<MonsterSearchResult[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -93,6 +94,7 @@ export function MonsterAutocomplete({ value, onChange, onSelect }: MonsterAutoco
           onKeyDown={handleKeyDown}
           onFocus={() => { if (results.length > 0) setIsOpen(true) }}
           placeholder="Search SRD monsters or enter custom name..."
+          id={id}
           className="input-forge rounded px-3 py-[9px] pl-9 font-body text-base w-full"
           aria-label="Monster name"
           aria-autocomplete="list"
