@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Creature } from '../types/creature'
 import type { StatVisibility } from '../types/encounterSettings'
 import type { ViewMode } from '../types/viewMode'
-import { Skull, ChevronRight, BookOpen, Shield, Trash2, Cross } from 'lucide-react'
+import { Skull, ChevronRight, BookOpen, Shield, Trash2, Cross, Dices } from 'lucide-react'
 import { HealthBar } from './HealthBar'
 import { HpControls } from './HpControls'
 import { formatModifier } from '../utils/formatModifier'
@@ -65,6 +65,7 @@ function InitiativeInput({
   return (
     <button
       onClick={startEdit}
+      title="Initiative"
       className="w-14 text-center text-xl font-bold font-heading text-forge-gold hover:bg-forge-brown rounded px-1 py-0.5 transition-colors"
       aria-label={`Edit initiative for ${creature.name}`}
     >
@@ -152,7 +153,7 @@ export function CreatureList({
               )}
               <div className="relative flex items-center gap-3">
                 {readOnly ? (
-                  <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold shrink-0">
+                  <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold shrink-0" title="Initiative">
                     {creature.initiative !== null ? creature.initiative : '—'}
                   </span>
                 ) : (
@@ -162,7 +163,7 @@ export function CreatureList({
                   />
                 )}
                 {showStats && (
-                  <span className="flex items-center gap-1 text-lg font-heading font-semibold text-forge-tan shrink-0">
+                  <span className="flex items-center gap-1 text-lg font-heading font-semibold text-forge-tan shrink-0" title="Armor Class">
                     <Shield size={16} />
                     {creature.ac}
                   </span>
@@ -251,7 +252,8 @@ export function CreatureList({
                       onSetTempHp={onSetTempHp}
                     />
                   )}
-                  <span className="text-forge-tan text-sm italic shrink-0">
+                  <span className="flex items-center gap-1 text-forge-tan text-sm italic shrink-0" title="Initiative Modifier">
+                    <Dices size={14} />
                     {formatModifier(creature.initiativeModifier)}
                   </span>
                   {isDead ? (
