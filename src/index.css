@@ -388,6 +388,16 @@
 }
 
 /* Floating Next Turn FAB */
+@keyframes qty-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.qty-bump {
+  animation: qty-bump 0.2s ease-out;
+}
+
 @keyframes fab-glow {
   0%, 100% {
     box-shadow:

@@ -12,7 +12,6 @@ export function FloatingNextTurn({ toolbarRef, visible, onNextTurn }: FloatingNe
 
   useEffect(() => {
     if (!visible || !toolbarRef.current) {
-      setToolbarHidden(false)
       return
     }
 
