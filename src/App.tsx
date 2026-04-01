@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useEncounter } from './hooks/useEncounter'
 import { useEncounterSettings } from './hooks/useEncounterSettings'
 import { useTurnTracker } from './hooks/useTurnTracker'
@@ -6,6 +6,7 @@ import { AddCreatureForm } from './components/AddCreatureForm'
 import { CreatureList } from './components/CreatureList'
 import { EncounterToolbar } from './components/EncounterToolbar'
 import { StatBlockPanel } from './components/StatBlockPanel'
+import { FloatingNextTurn } from './components/FloatingNextTurn'
 import { Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
 import type { ViewMode } from './types/viewMode'
 import type { StatVisibility } from './types/encounterSettings'
@@ -14,6 +15,7 @@ function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('dm')
   const [statBlockSlug, setStatBlockSlug] = useState<string | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
+  const toolbarRef = useRef<HTMLDivElement>(null)
   const isDM = viewMode === 'dm'
 
   const {
@@ -109,22 +111,25 @@ function App() {
           </div>
         )}
 
-        <EncounterToolbar
-          isDM={isDM}
-          isStarted={isStarted}
-          turnState={turnState}
-          hasCreatures={creatures.length > 0}
-          showAddForm={showAddForm}
-          onToggleAddForm={() => setShowAddForm((v) => !v)}
-          onStart={startEncounter}
-          onNextTurn={nextTurn}
-          onEndEncounter={endEncounter}
-          onRollAll={rollAllInitiative}
-          onReset={() => {
-            resetEncounter()
-            endEncounter()
-          }}
-        />
+        <div ref={toolbarRef}>
+          <EncounterToolbar
+            isDM={isDM}
+            isStarted={isStarted}
+            turnState={turnState}
+            hasCreatures={creatures.length > 0}
+            hasCreaturesWithoutInitiative={creatures.some(c => c.initiative === null)}
+            showAddForm={showAddForm}
+            onToggleAddForm={() => setShowAddForm((v) => !v)}
+            onStart={startEncounter}
+            onNextTurn={nextTurn}
+            onEndEncounter={endEncounter}
+            onRollAll={rollAllInitiative}
+            onReset={() => {
+              resetEncounter()
+              endEncounter()
+            }}
+          />
+        </div>
 
         <CreatureList
           creatures={creatures}
@@ -151,6 +156,8 @@ function App() {
           onShowStatBlock={isDM ? setStatBlockSlug : undefined}
         />
       </div>
+
+      <FloatingNextTurn toolbarRef={toolbarRef} visible={isDM && isStarted} onNextTurn={nextTurn} />
 
       {isDM && statBlockSlug && (
         <StatBlockPanel

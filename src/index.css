@@ -386,3 +386,54 @@
 .sword-icon {
   filter: drop-shadow(0 0 4px rgba(201, 168, 76, 0.6));
 }
+
+/* Floating Next Turn FAB */
+@keyframes fab-glow {
+  0%, 100% {
+    box-shadow:
+      0 4px 16px rgba(201, 168, 76, 0.4),
+      0 0 24px rgba(201, 168, 76, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 4px 20px rgba(201, 168, 76, 0.6),
+      0 0 36px rgba(201, 168, 76, 0.25);
+  }
+}
+
+.floating-next-turn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 50;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, var(--color-forge-gold) 0%, #a88a3c 100%);
+  color: var(--color-forge-darkest);
+  border: 2px solid var(--color-forge-gold-bright);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.floating-next-turn--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  animation: fab-glow 2.5s ease-in-out infinite;
+}
+
+.floating-next-turn--visible:hover {
+  animation: none;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 24px rgba(201, 168, 76, 0.7),
+    0 0 40px rgba(201, 168, 76, 0.3);
+  background: linear-gradient(180deg, var(--color-forge-gold-bright) 0%, var(--color-forge-gold) 100%);
+}
