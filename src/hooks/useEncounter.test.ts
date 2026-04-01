@@ -16,7 +16,7 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
 
     expect(result.current.creatures).toHaveLength(1)
@@ -32,10 +32,10 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
     act(() => {
-      result.current.addCreature('Dragon', -1)
+      result.current.addCreature('Dragon', -1, 'enemy', 30)
     })
 
     expect(result.current.creatures).toHaveLength(2)
@@ -47,10 +47,10 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
     act(() => {
-      result.current.addCreature('Dragon', -1)
+      result.current.addCreature('Dragon', -1, 'enemy', 30)
     })
 
     const goblinId = result.current.creatures[0].id
@@ -67,10 +67,10 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin A', 0)
+      result.current.addCreature('Goblin A', 0, 'enemy', 10)
     })
     act(() => {
-      result.current.addCreature('Goblin B', 0)
+      result.current.addCreature('Goblin B', 0, 'enemy', 10)
     })
 
     const ids = result.current.creatures.map((c) => c.id)
@@ -81,7 +81,7 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
 
     const stored = JSON.parse(
@@ -95,7 +95,7 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
     act(() => {
       result.current.removeCreature('non-existent-id')
@@ -108,7 +108,7 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
 
     const id = result.current.creatures[0].id
@@ -127,10 +127,10 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
     act(() => {
-      result.current.addCreature('Dragon', -1)
+      result.current.addCreature('Dragon', -1, 'enemy', 30)
     })
 
     // Manually set initiative on one creature
@@ -158,7 +158,7 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Goblin', 2)
+      result.current.addCreature('Goblin', 2, 'enemy', 20)
     })
 
     const id = result.current.creatures[0].id
@@ -174,13 +174,13 @@ describe('useEncounter', () => {
     const { result } = renderHook(() => useEncounter())
 
     act(() => {
-      result.current.addCreature('Low', 0)
+      result.current.addCreature('Low', 0, 'party', 15)
     })
     act(() => {
-      result.current.addCreature('High', 0)
+      result.current.addCreature('High', 0, 'party', 15)
     })
     act(() => {
-      result.current.addCreature('Unrolled', 0)
+      result.current.addCreature('Unrolled', 0, 'enemy', 10)
     })
 
     const lowId = result.current.creatures[0].id

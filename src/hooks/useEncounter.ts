@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
-import type { Creature } from '../types/creature'
+import type { Creature, CreatureType } from '../types/creature'
 import { rollInitiative } from '../utils/rollInitiative'
 
 export function useEncounter() {
@@ -9,11 +9,24 @@ export function useEncounter() {
     [],
   )
 
-  // Migrate legacy data missing the initiative field
+  // Migrate legacy data missing fields
   useEffect(() => {
-    if (creatures.some((c) => c.initiative === undefined)) {
+    const needsMigration = creatures.some(
+      (c) =>
+        c.initiative === undefined ||
+        c.creatureType === undefined ||
+        c.maxHp === undefined,
+    )
+    if (needsMigration) {
       setCreatures((prev) =>
-        prev.map((c) => ({ ...c, initiative: c.initiative ?? null })),
+        prev.map((c) => ({
+          ...c,
+          initiative: c.initiative ?? null,
+          creatureType: c.creatureType ?? 'enemy',
+          maxHp: c.maxHp ?? 10,
+          hp: c.hp ?? c.maxHp ?? 10,
+          tempHp: c.tempHp ?? 0,
+        })),
       )
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -25,10 +38,24 @@ export function useEncounter() {
     return [...withInit, ...withoutInit]
   }, [creatures])
 
-  const addCreature = (name: string, initiativeModifier: number) => {
+  const addCreature = (
+    name: string,
+    initiativeModifier: number,
+    creatureType: CreatureType,
+    maxHp: number,
+  ) => {
     setCreatures((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), name, initiativeModifier, initiative: null },
+      {
+        id: crypto.randomUUID(),
+        name,
+        initiativeModifier,
+        initiative: null,
+        creatureType,
+        maxHp,
+        hp: maxHp,
+        tempHp: 0,
+      },
     ])
   }
 
@@ -38,7 +65,7 @@ export function useEncounter() {
 
   const updateCreature = (
     id: string,
-    updates: Partial<Pick<Creature, 'initiative'>>,
+    updates: Partial<Omit<Creature, 'id'>>,
   ) => {
     setCreatures((prev) =>
       prev.map((c) => (c.id === id ? { ...c, ...updates } : c)),
@@ -65,6 +92,38 @@ export function useEncounter() {
     )
   }
 
+  const applyDamage = (id: string, amount: number) => {
+    setCreatures((prev) =>
+      prev.map((c) => {
+        if (c.id !== id) return c
+        let remaining = amount
+        let newTempHp = c.tempHp
+        if (newTempHp > 0) {
+          const absorbed = Math.min(newTempHp, remaining)
+          newTempHp -= absorbed
+          remaining -= absorbed
+        }
+        return { ...c, tempHp: newTempHp, hp: Math.max(0, c.hp - remaining) }
+      }),
+    )
+  }
+
+  const applyHealing = (id: string, amount: number) => {
+    setCreatures((prev) =>
+      prev.map((c) =>
+        c.id === id ? { ...c, hp: Math.min(c.maxHp, c.hp + amount) } : c,
+      ),
+    )
+  }
+
+  const setTempHp = (id: string, amount: number) => {
+    setCreatures((prev) =>
+      prev.map((c) =>
+        c.id === id ? { ...c, tempHp: Math.max(c.tempHp, amount) } : c,
+      ),
+    )
+  }
+
   return {
     creatures: sortedCreatures,
     addCreature,
@@ -72,5 +131,8 @@ export function useEncounter() {
     updateCreature,
     rollCreatureInitiative,
     rollAllInitiative,
+    applyDamage,
+    applyHealing,
+    setTempHp,
   }
 }

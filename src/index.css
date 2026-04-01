@@ -208,6 +208,32 @@
   border-color: var(--color-forge-burgundy);
 }
 
+/* Damage button */
+.btn-damage {
+  background: rgba(107, 29, 29, 0.5);
+  color: var(--color-forge-burgundy-light);
+  border: 1px solid var(--color-forge-burgundy);
+  font-weight: 600;
+}
+
+.btn-damage:hover {
+  background: rgba(107, 29, 29, 0.8);
+  color: var(--color-forge-parchment-light);
+}
+
+/* Heal button */
+.btn-heal {
+  background: rgba(45, 107, 58, 0.5);
+  color: var(--color-forge-green-light);
+  border: 1px solid var(--color-forge-green);
+  font-weight: 600;
+}
+
+.btn-heal:hover {
+  background: rgba(45, 107, 58, 0.8);
+  color: var(--color-forge-parchment-light);
+}
+
 /* Ember roll button */
 .btn-ember {
   color: var(--color-forge-ember);

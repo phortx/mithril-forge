@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useEncounter } from './hooks/useEncounter'
+import { useEncounterSettings } from './hooks/useEncounterSettings'
 import { useTurnTracker } from './hooks/useTurnTracker'
 import { AddCreatureForm } from './components/AddCreatureForm'
 import { CreatureList } from './components/CreatureList'
 import { TurnControls } from './components/TurnControls'
-import { Dices, SkipForward, Flag, Eye, Crown } from 'lucide-react'
+import { Dices, SkipForward, Flag, Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
 import type { ViewMode } from './types/viewMode'
+import type { HpVisibility } from './types/encounterSettings'
 
 function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('dm')
@@ -18,10 +20,21 @@ function App() {
     updateCreature,
     rollCreatureInitiative,
     rollAllInitiative,
+    applyDamage,
+    applyHealing,
+    setTempHp,
   } = useEncounter()
+
+  const { settings, setHpVisibility } = useEncounterSettings()
 
   const { turnState, isStarted, startEncounter, nextTurn, endEncounter } =
     useTurnTracker(creatures)
+
+  const hpVisibilityOptions: { value: HpVisibility; label: string; icon: React.ReactNode }[] = [
+    { value: 'all', label: 'All HP', icon: <Heart size={12} /> },
+    { value: 'party-only', label: 'Party HP', icon: <Users size={12} /> },
+    { value: 'none', label: 'No HP', icon: <HeartOff size={12} /> },
+  ]
 
   return (
     <div className="page-texture relative min-h-screen bg-forge-darkest text-forge-parchment font-body">
@@ -33,29 +46,51 @@ function App() {
           <p className="text-forge-tan text-sm mt-2 font-heading tracking-[0.2em] uppercase">
             Encounter Tracker
           </p>
-          <div className="flex justify-center gap-1 mt-4">
-            <button
-              onClick={() => setViewMode('dm')}
-              className={`rounded-l px-4 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
-                isDM
-                  ? 'bg-forge-gold text-forge-darkest'
-                  : 'bg-forge-brown text-forge-tan hover:bg-forge-leather'
-              }`}
-            >
-              <Crown size={14} />
-              DM
-            </button>
-            <button
-              onClick={() => setViewMode('player')}
-              className={`rounded-r px-4 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
-                !isDM
-                  ? 'bg-forge-gold text-forge-darkest'
-                  : 'bg-forge-brown text-forge-tan hover:bg-forge-leather'
-              }`}
-            >
-              <Eye size={14} />
-              Player
-            </button>
+          <div className="flex justify-center gap-4 mt-4">
+            <div className="flex gap-0">
+              <button
+                onClick={() => setViewMode('dm')}
+                className={`rounded-l px-4 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
+                  isDM
+                    ? 'bg-forge-gold text-forge-darkest'
+                    : 'bg-forge-brown text-forge-tan hover:bg-forge-leather'
+                }`}
+              >
+                <Crown size={14} />
+                DM
+              </button>
+              <button
+                onClick={() => setViewMode('player')}
+                className={`rounded-r px-4 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
+                  !isDM
+                    ? 'bg-forge-gold text-forge-darkest'
+                    : 'bg-forge-brown text-forge-tan hover:bg-forge-leather'
+                }`}
+              >
+                <Eye size={14} />
+                Player
+              </button>
+            </div>
+            {isDM && (
+              <div className="flex gap-0">
+                {hpVisibilityOptions.map((opt, i) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setHpVisibility(opt.value)}
+                    className={`px-3 py-1.5 text-xs font-heading uppercase tracking-wider flex items-center gap-1 transition-colors ${
+                      i === 0 ? 'rounded-l' : ''
+                    }${i === hpVisibilityOptions.length - 1 ? 'rounded-r' : ''} ${
+                      settings.hpVisibility === opt.value
+                        ? 'bg-forge-gold text-forge-darkest'
+                        : 'bg-forge-brown text-forge-tan hover:bg-forge-leather'
+                    }`}
+                  >
+                    {opt.icon}
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </header>
 
@@ -137,12 +172,25 @@ function App() {
           creatures={creatures}
           activeCreatureId={turnState?.activeCreatureId ?? null}
           readOnly={!isDM}
+          viewMode={viewMode}
+          hpVisibility={settings.hpVisibility}
           onRemove={removeCreature}
           onRollInitiative={rollCreatureInitiative}
           onRollAll={rollAllInitiative}
           onUpdateInitiative={(id, init) =>
             updateCreature(id, { initiative: init })
           }
+          onToggleCreatureType={(id) => {
+            const creature = creatures.find((c) => c.id === id)
+            if (creature) {
+              updateCreature(id, {
+                creatureType: creature.creatureType === 'party' ? 'enemy' : 'party',
+              })
+            }
+          }}
+          onDamage={applyDamage}
+          onHeal={applyHealing}
+          onSetTempHp={setTempHp}
         />
       </div>
     </div>

@@ -12,6 +12,10 @@ const makeCreatures = (...names: string[]): Creature[] =>
     name,
     initiativeModifier: 0,
     initiative: 20 - i,
+    creatureType: 'party' as const,
+    maxHp: 20,
+    hp: 20,
+    tempHp: 0,
   }))
 
 describe('useTurnTracker', () => {
