@@ -13,6 +13,7 @@ import type { StatVisibility } from './types/encounterSettings'
 function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('dm')
   const [statBlockSlug, setStatBlockSlug] = useState<string | null>(null)
+  const [showAddForm, setShowAddForm] = useState(false)
   const isDM = viewMode === 'dm'
 
   const {
@@ -101,7 +102,7 @@ function App() {
 
         <div className="ornament-divider font-heading text-sm">&#x2726;</div>
 
-        {isDM && (
+        {isDM && (creatures.length === 0 || showAddForm) && (
           <div className="panel-parchment panel-ornate rounded-lg p-6">
             <AddCreatureForm onAdd={addCreature} />
           </div>
@@ -112,6 +113,8 @@ function App() {
           isStarted={isStarted}
           turnState={turnState}
           hasCreatures={creatures.length > 0}
+          showAddForm={showAddForm}
+          onToggleAddForm={() => setShowAddForm((v) => !v)}
           onStart={startEncounter}
           onNextTurn={nextTurn}
           onEndEncounter={endEncounter}
