@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
 type AddCreatureFormProps = {
   onAdd: (name: string, initiativeModifier: number) => void
@@ -18,9 +19,9 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 items-end">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="creature-name" className="text-sm text-gray-400">
+    <form onSubmit={handleSubmit} className="flex gap-4 items-end">
+      <div className="flex flex-col gap-1.5 flex-1">
+        <label htmlFor="creature-name" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
           Name
         </label>
         <input
@@ -28,26 +29,27 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Creature name"
-          className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-500"
+          placeholder="Enter creature name..."
+          className="input-forge rounded px-3 py-[9px] font-body text-base"
         />
       </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="initiative-modifier" className="text-sm text-gray-400">
-          Initiative Modifier
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="initiative-modifier" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
+          Init Mod
         </label>
         <input
           id="initiative-modifier"
           type="number"
           value={modifier}
           onChange={(e) => setModifier(Number(e.target.value))}
-          className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-100 w-24 focus:outline-none focus:border-gray-500"
+          className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
         />
       </div>
       <button
         type="submit"
-        className="bg-gray-700 hover:bg-gray-600 text-gray-100 px-4 py-2 rounded transition-colors"
+        className="btn-forge btn-gold rounded px-5 h-[44px] flex items-center gap-2"
       >
+        <Plus size={16} strokeWidth={2.5} />
         Add
       </button>
     </form>

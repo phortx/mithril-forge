@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Creature } from '../types/creature'
+import { Swords, Skull, ChevronRight } from 'lucide-react'
 
 type CreatureListProps = {
   creatures: Creature[]
@@ -47,7 +48,7 @@ function InitiativeInput({
           if (e.key === 'Escape') setEditing(false)
         }}
         autoFocus
-        className="w-12 bg-gray-700 border border-gray-500 rounded px-1 py-0.5 text-center text-lg font-bold text-gray-100"
+        className="input-forge w-14 rounded px-1 py-0.5 text-center text-xl font-heading font-bold"
         aria-label={`Initiative for ${creature.name}`}
       />
     )
@@ -56,7 +57,7 @@ function InitiativeInput({
   return (
     <button
       onClick={startEdit}
-      className="w-12 text-center text-lg font-bold text-gray-100 hover:bg-gray-700 rounded px-1 py-0.5"
+      className="w-14 text-center text-xl font-bold font-heading text-forge-gold hover:bg-forge-brown rounded px-1 py-0.5 transition-colors"
       aria-label={`Edit initiative for ${creature.name}`}
     >
       {creature.initiative !== null ? creature.initiative : '—'}
@@ -69,59 +70,52 @@ export function CreatureList({
   activeCreatureId,
   onRemove,
   onRollInitiative,
-  onRollAll,
   onUpdateInitiative,
 }: CreatureListProps) {
   if (creatures.length === 0) {
-    return <p className="text-gray-500 italic">No creatures added yet.</p>
+    return <p className="text-forge-tan italic text-center">No creatures have entered the fray...</p>
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify-end">
-        <button
-          onClick={onRollAll}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-3 py-1.5 rounded transition-colors"
-        >
-          Roll All Initiative
-        </button>
-      </div>
+    <div className="flex flex-col gap-3">
       <ul className="flex flex-col gap-2">
         {creatures.map((creature) => {
           const isActive = creature.id === activeCreatureId
           return (
           <li
             key={creature.id}
-            className={
-              isActive
-                ? 'flex items-center gap-3 bg-yellow-900/30 border border-yellow-600 ring-1 ring-yellow-600/50 rounded px-4 py-3'
-                : 'flex items-center gap-3 bg-gray-800 border border-gray-700 rounded px-4 py-3'
-            }
+            className={`flex items-center gap-4 rounded-lg px-5 py-4 ${
+              isActive ? 'creature-card-active' : 'creature-card'
+            }`}
           >
-            {isActive && (
-              <span className="text-yellow-500 text-sm" aria-label="Active turn">&#9654;</span>
-            )}
+            <ChevronRight
+              size={20}
+              className={`shrink-0 ${isActive ? 'text-forge-gold' : 'invisible'}`}
+              aria-label={isActive ? 'Active turn' : undefined}
+            />
             <InitiativeInput
               creature={creature}
               onUpdate={onUpdateInitiative}
             />
             <button
               onClick={() => onRollInitiative(creature.id)}
-              className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm"
+              className="btn-ember shrink-0"
+              aria-label={`Roll initiative for ${creature.name}`}
             >
-              Roll
+              <Swords size={16} />
             </button>
-            <span className="text-gray-100 font-medium flex-1">
+            <span className="text-forge-parchment-light font-heading text-lg font-semibold flex-1">
               {creature.name}
             </span>
-            <span className="text-gray-400 text-sm">
-              Init {formatModifier(creature.initiativeModifier)}
+            <span className="text-forge-tan text-sm italic">
+              {formatModifier(creature.initiativeModifier)}
             </span>
             <button
               onClick={() => onRemove(creature.id)}
-              className="text-gray-500 hover:text-red-400 transition-colors text-sm"
+              className="text-forge-tan hover:text-forge-burgundy-light transition-colors shrink-0"
+              aria-label={`Remove ${creature.name}`}
             >
-              Remove
+              <Skull size={16} />
             </button>
           </li>
           )
