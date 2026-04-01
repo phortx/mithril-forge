@@ -5,6 +5,7 @@ import type { ViewMode } from '../types/viewMode'
 import { Swords, Skull, ChevronRight, BookOpen } from 'lucide-react'
 import { HealthBar } from './HealthBar'
 import { HpControls } from './HpControls'
+import { formatModifier } from '../utils/formatModifier'
 
 type CreatureListProps = {
   creatures: Creature[]
@@ -14,17 +15,12 @@ type CreatureListProps = {
   hpVisibility: HpVisibility
   onRemove: (id: string) => void
   onRollInitiative: (id: string) => void
-  onRollAll: () => void
   onUpdateInitiative: (id: string, initiative: number | null) => void
   onToggleCreatureType: (id: string) => void
   onDamage: (id: string, amount: number) => void
   onHeal: (id: string, amount: number) => void
   onSetTempHp: (id: string, amount: number) => void
   onShowStatBlock?: (monsterSlug: string) => void
-}
-
-function formatModifier(mod: number): string {
-  return mod >= 0 ? `+${mod}` : `${mod}`
 }
 
 function InitiativeInput({
@@ -152,18 +148,30 @@ export function CreatureList({
                   <span className="text-forge-parchment-light font-heading text-lg font-semibold truncate">
                     {creature.name}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => onToggleCreatureType(creature.id)}
-                    className={`text-[10px] font-heading uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 transition-colors cursor-pointer ${
-                      creature.creatureType === 'party'
-                        ? 'bg-forge-green/30 text-forge-green-light hover:bg-forge-green/50'
-                        : 'bg-forge-burgundy/30 text-forge-burgundy-light hover:bg-forge-burgundy/50'
-                    }`}
-                    aria-label={`Toggle creature type for ${creature.name}`}
-                  >
-                    {creature.creatureType === 'party' ? 'Party' : 'Enemy'}
-                  </button>
+                  {readOnly ? (
+                    <span
+                      className={`text-[10px] font-heading uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 ${
+                        creature.creatureType === 'party'
+                          ? 'bg-forge-green/30 text-forge-green-light'
+                          : 'bg-forge-burgundy/30 text-forge-burgundy-light'
+                      }`}
+                    >
+                      {creature.creatureType === 'party' ? 'Party' : 'Enemy'}
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onToggleCreatureType(creature.id)}
+                      className={`text-[10px] font-heading uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 transition-colors cursor-pointer ${
+                        creature.creatureType === 'party'
+                          ? 'bg-forge-green/30 text-forge-green-light hover:bg-forge-green/50'
+                          : 'bg-forge-burgundy/30 text-forge-burgundy-light hover:bg-forge-burgundy/50'
+                      }`}
+                      aria-label={`Toggle creature type for ${creature.name}`}
+                    >
+                      {creature.creatureType === 'party' ? 'Party' : 'Enemy'}
+                    </button>
+                  )}
                 </div>
                 {!readOnly && creature.monsterSlug && onShowStatBlock && (
                   <button

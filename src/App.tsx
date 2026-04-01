@@ -178,7 +178,6 @@ function App() {
           hpVisibility={settings.hpVisibility}
           onRemove={removeCreature}
           onRollInitiative={rollCreatureInitiative}
-          onRollAll={rollAllInitiative}
           onUpdateInitiative={(id, init) =>
             updateCreature(id, { initiative: init })
           }

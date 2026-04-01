@@ -9,7 +9,6 @@ const defaultProps = {
   hpVisibility: 'all' as const,
   onRemove: vi.fn(),
   onRollInitiative: vi.fn(),
-  onRollAll: vi.fn(),
   onUpdateInitiative: vi.fn(),
   onToggleCreatureType: vi.fn(),
   onDamage: vi.fn(),
