@@ -56,8 +56,8 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 - [x] Tech stack setup
 - [x] GitHub Actions + Pages deployment
 - [x] Add creatures (name + initiative modifier)
-- [ ] Roll or manually set initiative
-- [ ] Sorted initiative order
+- [x] Roll or manually set initiative
+- [x] Sorted initiative order
 - [ ] Active turn highlight + Next Turn button
 - [ ] Round counter
 - [ ] LocalStorage persistence & cross-tab sync
