@@ -1,5 +1,5 @@
-export type HpVisibility = 'all' | 'party-only' | 'none'
+export type StatVisibility = 'all' | 'party-only' | 'none'
 
 export type EncounterSettings = {
-  hpVisibility: HpVisibility
+  statVisibility: StatVisibility
 }

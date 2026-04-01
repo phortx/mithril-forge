@@ -16,6 +16,7 @@ export function useEncounter() {
         c.initiative === undefined ||
         c.creatureType === undefined ||
         c.maxHp === undefined ||
+        c.ac === undefined ||
         c.monsterSlug === undefined,
     )
     if (needsMigration) {
@@ -27,6 +28,7 @@ export function useEncounter() {
           maxHp: c.maxHp ?? 10,
           hp: c.hp ?? c.maxHp ?? 10,
           tempHp: c.tempHp ?? 0,
+          ac: c.ac ?? 10,
           monsterSlug: c.monsterSlug ?? null,
         })),
       )
@@ -45,6 +47,7 @@ export function useEncounter() {
     initiativeModifier: number,
     creatureType: CreatureType,
     maxHp: number,
+    ac: number = 10,
     monsterSlug: string | null = null,
   ) => {
     setCreatures((prev) => [
@@ -58,6 +61,7 @@ export function useEncounter() {
         maxHp,
         hp: maxHp,
         tempHp: 0,
+        ac,
         monsterSlug,
       },
     ])
