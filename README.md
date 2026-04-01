@@ -1,17 +1,34 @@
+<div align="center">
+
 # Mithril Forge
 
-**[▶ Open Mithril Forge](https://phortx.github.io/mithril-forge/)**
+**D&D Encounter Tracker — Right in Your Browser**
 
-A web-based D&D encounter tracker with two views: a **DM view** for full control and a **Player view** for the TV at the table.
+Track initiative, HP, conditions, and more across two screens.\
+One for the DM. One for the players. No install. No account. No cost.
 
-## The Idea
+[**Open Mithril Forge**](https://phortx.github.io/mithril-forge/) · [Report a Bug](https://github.com/phortx/mithril-forge/issues)
 
-Managing initiative order with paper cards at the DM screen gets unwieldy fast — especially in larger fights where you want to track HP, conditions, and stats properly. Mithril Forge replaces that with a browser-based tracker that runs on two screens simultaneously:
+</div>
 
-- **DM view** on the MacBook: full stat blocks, HP, AC, all controls
-- **Player view** on the TV: initiative order, names, conditions, active turn — no enemy stats
+---
 
-State syncs between the two browser windows via localStorage. No backend, no account required. Deployable as a static site.
+## Why Mithril Forge?
+
+Managing initiative with paper cards gets unwieldy fast — especially in larger fights where you want to track HP, conditions, and stats properly. Mithril Forge replaces that with a browser-based tracker designed for the tabletop.
+
+**Just open it and go.** There is nothing to install, no account to create, and no subscription to pay for. All data stays in your browser's local storage — private, instant, and entirely yours.
+
+### How It Works
+
+Open two browser windows on the same machine:
+
+- **DM view** on your laptop — full stat blocks, HP, AC, all controls
+- **Player view** on the TV — initiative order, names, conditions, active turn
+
+State syncs between the windows automatically via localStorage. No backend, no server, no cloud.
+
+---
 
 ## Features
 
@@ -19,48 +36,49 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 - Add creatures manually (name, initiative modifier)
 - Roll initiative or set it manually
 - Sorted initiative order with the active turn highlighted
-- Next Turn button, round counter, and timer
+- Next Turn / Previous Turn, round counter, and round timer
+
+### HP & Combat Tracking
+- Current / Max HP with visual health bars
+- Deal damage, heal, temporary HP
+- Kill & Revive
+- AC display (DM only)
 
 ### Creature Types
 - **Player Characters** — full manual entry
 - **Enemies** — full manual entry with stat block
-- **Pets & Summons** — linked to an owner; configurable to share the owner's initiative slot or roll their own
-
-### HP & Combat Tracking
-- Current / Max HP, deal damage, heal, temporary HP
-- Kill & Revive
-- AC display (DM only)
+- **Pets & Summons** — linked to an owner; configurable to share the owner's initiative or roll independently
 
 ### Conditions & Status
-- Standard condition tags (Blinded, Charmed, Frightened, etc.)
+- Standard D&D condition tags (Blinded, Charmed, Frightened, ...)
 - Concentration toggle with visual indicator
 - Death status visible in Player view
-- Token label field ("A1", "Red", "Goblin #3")
+- Token label field for miniature identification
 
-### Views
-| | Player View | DM View |
-|---|---|---|
-| Initiative order | ✓ | ✓ |
-| Names | ✓ | ✓ |
-| Conditions | ✓ | ✓ |
-| Active turn / Round / Timer | ✓ | ✓ |
-| HP | — | ✓ |
-| AC | — | ✓ |
-| Stat Blocks | — | ✓ |
-| Notes | — | ✓ |
-| All controls | — | ✓ |
+### DM vs. Player View
+
+| Feature | Player View | DM View |
+|---|:---:|:---:|
+| Initiative order | yes | yes |
+| Names & Token labels | yes | yes |
+| Conditions | yes | yes |
+| Active turn / Round / Timer | yes | yes |
+| Death status | yes | yes |
+| HP & Health bars | — | yes |
+| AC | — | yes |
+| Stat blocks & Notes | — | yes |
+| All controls | — | yes |
+
+---
 
 ## Roadmap
 
 ### v0.1 — Proof of Concept
-- [x] Tech stack setup
+- [x] Tech stack setup (Bun, React, TypeScript, Vite)
 - [x] GitHub Actions + Pages deployment
-- [x] Add creatures (name + initiative modifier)
-- [x] Roll or manually set initiative
-- [x] Sorted initiative order
-- [x] Active turn highlight + Next Turn button
-- [x] Round counter
-- [x] LocalStorage persistence & cross-tab sync
+- [x] Add creatures, roll/set initiative, sorted order
+- [x] Active turn highlight, Next Turn, round counter
+- [x] localStorage persistence & cross-tab sync
 
 ### v0.2 — MVP
 - [x] Fantasy design (dark tones, parchment, thematic fonts)
@@ -73,28 +91,27 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 
 ### v0.3 — Conditions & Tracking
 - [ ] Condition tags
-- [ ] Conditions visible in Player view
 - [ ] Concentration toggle with visual indicator
 - [ ] Death status in Player view
 - [ ] Token label field
 
 ### v0.4 — Pets, Summons & Polish
-- [ ] Pets/Summons with owner linkage
-- [ ] Configurable: shared or own initiative slot
-- [ ] Indented display when sharing owner's slot
+- [ ] Pets/Summons with owner linkage and shared initiative
 - [ ] In-game elapsed time
 - [ ] Notes field per creature (DM only)
 - [ ] Keyboard shortcuts
 
 ### v0.5 — Extensions
 - [ ] SRD monster database
-- [ ] D&D Beyond integration?
+- [ ] D&D Beyond integration
+
+---
 
 ## Development
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) ≥ 1.0
+- [Bun](https://bun.sh) >= 1.0
 
 ### Setup
 
@@ -102,26 +119,28 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 bun install
 ```
 
-### Common tasks
+### Commands
 
 | Command | Description |
 |---|---|
 | `bun run dev` | Start local dev server with HMR |
-| `bun run build` | Type-check + production build into `dist/` |
+| `bun run build` | Type-check + production build |
 | `bun run preview` | Serve the production build locally |
-| `bun run lint` | Run ESLint across the whole project |
-| `bun run typecheck` | Run TypeScript compiler without emitting files |
+| `bun run lint` | Run ESLint |
+| `bun run typecheck` | Run TypeScript type checker |
 
 ### Tech Stack
 
 | | |
 |---|---|
-| Runtime / Package manager | Bun |
+| Runtime | Bun |
 | Framework | React 19 + TypeScript 5 |
 | Bundler | Vite 8 |
 | Styling | Tailwind CSS v4 |
-| State persistence & sync | usehooks-ts `useLocalStorage` |
+| State sync | `useLocalStorage` from usehooks-ts |
+
+---
 
 ## License
 
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
+Licensed under the [GNU General Public License v3.0](LICENSE).
