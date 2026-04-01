@@ -32,27 +32,28 @@ State syncs between the windows automatically via localStorage. No backend, no s
 
 ## Features
 
+### Creature Management
+- Add creatures manually (name, initiative modifier, max HP, AC)
+- Add multiple creatures of the same type at once (e.g. 4 goblins)
+- Inline creature type toggle (switch between Party/Enemy per creature)
+- Kill and revive creatures
+
 ### Initiative & Turns
-- Add creatures manually (name, initiative modifier, max HP)
 - Roll initiative individually or all at once
 - Set initiative manually via inline editing
 - Sorted initiative order with the active turn highlighted
-- Next Turn, round counter, and in-game elapsed time (6s per round)
-- Start / End encounter controls
+- Floating Next Turn button, round counter, and in-game elapsed time (6s per round)
+- Start / Reset / End encounter controls
 
 ### HP & Combat Tracking
-- Current / Max HP with color-coded health bars (green → gold → red)
+- Current / Max HP with AC display
+- Color-coded health bars (green → gold → red)
 - Deal damage (absorbed by temp HP first), heal, set temporary HP
 - HP visibility toggle: All HP, Party HP only, or No HP (controls what the Player view shows)
 
-### Creature Types
-- **Party** — manual entry
-- **Enemy** — manual entry or SRD monster autocomplete
-- Inline creature type toggle (switch between Party/Enemy per creature)
-
 ### SRD Monster Database
 - Autocomplete search powered by the Open5e API when adding enemies
-- Auto-fills name, initiative modifier (from DEX), and max HP
+- Auto-fills name, initiative modifier (from DEX), max HP, and AC
 - All auto-filled values are overridable before adding
 - Full stat block side panel in DM view (AC, abilities, saves, actions, traits, and more)
 
@@ -64,9 +65,12 @@ State syncs between the windows automatically via localStorage. No backend, no s
 | Names | yes | yes |
 | Active turn / Round / Timer | yes | yes |
 | Creature type badges | yes | yes |
+| Death status | yes | yes |
 | HP & Health bars | configurable | yes |
+| AC | — | yes |
 | Stat block side panel | — | yes |
 | HP controls (damage/heal/temp) | — | yes |
+| Kill / Revive | — | yes |
 | Add/remove creatures | — | yes |
 | Roll initiative | — | yes |
 | Encounter controls | — | yes |
@@ -83,33 +87,29 @@ State syncs between the windows automatically via localStorage. No backend, no s
 - [x] localStorage persistence & cross-tab sync
 
 ### v0.2 — MVP
-- [x] Fantasy design (dark tones, parchment, thematic fonts)
+- [x] Fantasy design (dark tones, parchment, thematic fonts, animations, icons)
 - [x] DM / Player view toggle
 - [x] HP tracking (current/max, damage, heal, temp HP)
 - [x] HP visibility toggle (all / party-only / none)
 - [x] In-game elapsed time display
 - [x] Creature type toggle (Party/Enemy inline)
-- [ ] AC display for DM
-- [ ] Kill / Revive
-- [ ] Encounter reset / New encounter
+- [x] AC tracking & display for DM
+- [x] Kill / Revive with death status in Player view
+- [x] Encounter reset / End encounter
+- [x] Add multiple creatures of the same type at once
+- [x] Test coverage
 
 ### v0.3 — SRD & Stat Blocks
 - [x] SRD monster autocomplete via Open5e API
 - [x] Auto-fill creature stats from SRD data
 - [x] Stat block side panel (DM only)
 
-### v0.4 — Conditions & Tracking
+### Future
 - [ ] Condition tags
 - [ ] Concentration toggle with visual indicator
-- [ ] Death status in Player view
-- [ ] Token label field
-
-### v0.5 — Pets, Summons & Polish
 - [ ] Pets/Summons with owner linkage and shared initiative
 - [ ] Notes field per creature (DM only)
 - [ ] Keyboard shortcuts
-
-### v0.6 — Extensions
 - [ ] D&D Beyond integration
 
 ---
