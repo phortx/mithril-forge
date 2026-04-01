@@ -4,9 +4,9 @@ import { useEncounterSettings } from './hooks/useEncounterSettings'
 import { useTurnTracker } from './hooks/useTurnTracker'
 import { AddCreatureForm } from './components/AddCreatureForm'
 import { CreatureList } from './components/CreatureList'
-import { TurnControls } from './components/TurnControls'
+import { EncounterToolbar } from './components/EncounterToolbar'
 import { StatBlockPanel } from './components/StatBlockPanel'
-import { Dices, SkipForward, Flag, Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
+import { Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
 import type { ViewMode } from './types/viewMode'
 import type { HpVisibility } from './types/encounterSettings'
 
@@ -104,71 +104,16 @@ function App() {
           </div>
         )}
 
-        {isDM ? (
-          isStarted ? (
-            <div className="flex items-center gap-4">
-              <TurnControls
-                isStarted={isStarted}
-                round={turnState?.round ?? null}
-                onStart={startEncounter}
-                onNextTurn={nextTurn}
-                onEndEncounter={endEncounter}
-              />
-              <div className="flex items-center gap-2 ml-auto">
-                <button
-                  onClick={rollAllInitiative}
-                  className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
-                >
-                  <Dices size={14} />
-                  Roll All
-                </button>
-                <button
-                  onClick={nextTurn}
-                  className="btn-forge btn-gold rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
-                >
-                  <SkipForward size={14} />
-                  Next Turn
-                </button>
-                <button
-                  onClick={endEncounter}
-                  className="btn-forge btn-secondary rounded px-3 py-1.5 text-xs flex items-center gap-1.5"
-                >
-                  <Flag size={14} />
-                  End
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              <TurnControls
-                isStarted={isStarted}
-                round={turnState?.round ?? null}
-                onStart={startEncounter}
-                onNextTurn={nextTurn}
-                onEndEncounter={endEncounter}
-              />
-              {creatures.length > 0 && (
-                <button
-                  onClick={rollAllInitiative}
-                  className="btn-forge btn-gold rounded px-3 py-1.5 text-xs ml-auto flex items-center gap-1.5"
-                >
-                  <Dices size={14} />
-                  Roll All Initiative
-                </button>
-              )}
-            </div>
-          )
-        ) : (
-          isStarted && (
-            <TurnControls
-              isStarted={isStarted}
-              round={turnState?.round ?? null}
-              onStart={startEncounter}
-              onNextTurn={nextTurn}
-              onEndEncounter={endEncounter}
-            />
-          )
-        )}
+        <EncounterToolbar
+          isDM={isDM}
+          isStarted={isStarted}
+          turnState={turnState}
+          hasCreatures={creatures.length > 0}
+          onStart={startEncounter}
+          onNextTurn={nextTurn}
+          onEndEncounter={endEncounter}
+          onRollAll={rollAllInitiative}
+        />
 
         <CreatureList
           creatures={creatures}
