@@ -88,6 +88,38 @@ State syncs between the two browser windows via localStorage. No backend, no acc
 - [ ] SRD monster database
 - [ ] D&D Beyond integration?
 
+## Development
+
+### Prerequisites
+
+- [Bun](https://bun.sh) ≥ 1.0
+
+### Setup
+
+```bash
+bun install
+```
+
+### Common tasks
+
+| Command | Description |
+|---|---|
+| `bun run dev` | Start local dev server with HMR |
+| `bun run build` | Type-check + production build into `dist/` |
+| `bun run preview` | Serve the production build locally |
+| `bun run lint` | Run ESLint across the whole project |
+| `bun run typecheck` | Run TypeScript compiler without emitting files |
+
+### Tech Stack
+
+| | |
+|---|---|
+| Runtime / Package manager | Bun |
+| Framework | React 19 + TypeScript 5 |
+| Bundler | Vite 8 |
+| Styling | Tailwind CSS v4 |
+| State persistence & sync | usehooks-ts `useLocalStorage` |
+
 ## License
 
 This project is licensed under the [GNU General Public License v3.0](LICENSE).
