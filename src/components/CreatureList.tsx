@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Creature } from '../types/creature'
 import type { StatVisibility } from '../types/encounterSettings'
 import type { ViewMode } from '../types/viewMode'
-import { Skull, ChevronRight, BookOpen, Shield, Trash2, Cross, Dices } from 'lucide-react'
+import { Skull, BookOpen, Shield, Trash2, Dices } from 'lucide-react'
 import { HealthBar } from './HealthBar'
 import { HpControls } from './HpControls'
 import { formatModifier } from '../utils/formatModifier'
@@ -117,7 +117,7 @@ export function CreatureList({
 
   return (
     <div className="flex flex-col gap-3">
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-6 ml-10">
         {creatures.map((creature) => {
           const isActive = creature.id === activeCreatureId
           const isDead = creature.hp <= 0 && creature.maxHp > 0
@@ -129,28 +129,38 @@ export function CreatureList({
             key={creature.id}
             className="relative"
           >
-            <ChevronRight
-              size={20}
-              className={`absolute -left-7 top-5 ${isActive ? 'text-forge-gold' : 'invisible'}`}
-              aria-label={isActive ? 'Active turn' : undefined}
-            />
             <div
-              className={`relative overflow-hidden flex flex-col gap-2 rounded-lg px-5 py-4 ${
-                isActive ? 'creature-card-active' : 'creature-card'
-              } ${!isActive ? 'cursor-pointer' : ''} ${isDead && !isReviveHover ? 'opacity-60' : ''} ${isReviveHover ? 'revive-pulse' : ''}`}
+              className={`relative flex flex-row items-stretch ${isDead && !isReviveHover ? 'opacity-60' : ''} ${isReviveHover ? 'revive-pulse' : ''}`}
               onClick={(e) => {
                 if (isActive) return
                 if ((e.target as HTMLElement).closest('button, input')) return
                 toggleExpanded(creature.id)
               }}
             >
-              {isDead && (
-                <Skull
-                  size={140}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-forge-burgundy/30 pointer-events-none"
-                  strokeWidth={1.5}
-                />
+              {/* Health orb — centered on card edge via negative margins */}
+              {showStats && (
+                <div
+                  className="shrink-0 self-stretch w-0 relative z-10 -my-2"
+                  onMouseEnter={() => isDead && !readOnly && setHoveredDeadId(creature.id)}
+                  onMouseLeave={() => isDead && setHoveredDeadId(null)}
+                  onClick={() => {
+                    if (isDead && !readOnly) {
+                      onHeal(creature.id, 1)
+                      setHoveredDeadId(null)
+                    }
+                  }}
+                  style={{ cursor: isDead && !readOnly ? 'pointer' : undefined }}
+                >
+                  <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} id={creature.id} isActive={isActive} isDead={isDead} isReviveHover={isReviveHover} />
+                </div>
               )}
+              {/* Card body */}
+              <div
+                className={`relative overflow-visible flex-1 min-w-0 rounded-lg ${showStats ? 'pl-20' : 'pl-5'} pr-5 py-4 ${
+                  isActive ? 'creature-card-active' : 'creature-card'
+                } ${!isActive ? 'cursor-pointer' : ''}`}
+              >
+              <div className="flex flex-col gap-2 flex-1 min-w-0">
               <div className="relative flex items-center gap-3">
                 {readOnly ? (
                   <span className="w-14 text-center text-xl font-bold font-heading text-forge-gold shrink-0" title="Initiative">
@@ -171,35 +181,7 @@ export function CreatureList({
                 <span className={`font-heading text-lg font-semibold truncate flex-1 min-w-0 ${isDead ? 'text-forge-tan/60 line-through' : 'text-forge-parchment-light'}`}>
                   {creature.name}
                 </span>
-                {isDead && !readOnly && (
-                  <button
-                    className={`text-xs font-heading uppercase tracking-wider px-2 py-1 rounded shrink-0 flex items-center gap-1 transition-all cursor-pointer ${
-                      isReviveHover
-                        ? 'bg-forge-green/50 text-forge-green-light'
-                        : 'bg-forge-burgundy/40 text-forge-burgundy-light'
-                    }`}
-                    onMouseEnter={() => setHoveredDeadId(creature.id)}
-                    onMouseLeave={() => setHoveredDeadId(null)}
-                    onClick={() => {
-                      onHeal(creature.id, 1)
-                      setHoveredDeadId(null)
-                    }}
-                    aria-label={`Revive ${creature.name}`}
-                  >
-                    {isReviveHover ? (
-                      <>
-                        <Cross size={12} />
-                        Revive
-                      </>
-                    ) : (
-                      <>
-                        <Skull size={12} />
-                        Dead
-                      </>
-                    )}
-                  </button>
-                )}
-                {isDead && readOnly && (
+                {isDead && !showStats && (
                   <span className="text-xs font-heading uppercase tracking-wider px-2 py-1 rounded shrink-0 flex items-center gap-1 bg-forge-burgundy/40 text-forge-burgundy-light">
                     <Skull size={12} />
                     Dead
@@ -239,9 +221,6 @@ export function CreatureList({
                   </button>
                 )}
               </div>
-              {showStats && (
-                <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} />
-              )}
               {isExpanded && !readOnly && showStats && (
                 <div className="relative flex items-center gap-1.5">
                   {!isDead && (
@@ -277,6 +256,8 @@ export function CreatureList({
                   )}
                 </div>
               )}
+              </div>
+              </div>
             </div>
           </li>
           )
