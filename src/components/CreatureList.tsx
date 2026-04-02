@@ -137,6 +137,8 @@ export function CreatureList({
                 toggleExpanded(creature.id)
               }}
             >
+              {/* Active turn indicator (screen-reader accessible) */}
+              {isActive && <span className="sr-only" aria-label="Active turn">Active turn</span>}
               {/* Health orb — centered on card edge via negative margins */}
               {showStats && (
                 <div
@@ -152,6 +154,7 @@ export function CreatureList({
                   style={{ cursor: isDead && !readOnly ? 'pointer' : undefined }}
                 >
                   <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} id={creature.id} isActive={isActive} isDead={isDead} isReviveHover={isReviveHover} />
+                  <span className="sr-only">{creature.hp}/{creature.maxHp}</span>
                 </div>
               )}
               {/* Card body */}
