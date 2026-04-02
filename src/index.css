@@ -120,8 +120,8 @@
   background:
     linear-gradient(
       180deg,
-      rgba(42, 31, 22, 0.8) 0%,
-      rgba(26, 20, 16, 0.95) 100%
+      rgb(42, 31, 22) 0%,
+      rgb(26, 20, 16) 100%
     );
   border: 1px solid var(--color-forge-leather);
   box-shadow:
@@ -143,9 +143,9 @@
   background:
     linear-gradient(
       180deg,
-      rgba(201, 168, 76, 0.1) 0%,
-      rgba(42, 31, 22, 0.9) 40%,
-      rgba(26, 20, 16, 0.95) 100%
+      rgb(58, 45, 28) 0%,
+      rgb(42, 31, 22) 40%,
+      rgb(26, 20, 16) 100%
     );
   border: 1px solid var(--color-forge-gold);
   animation: active-pulse 2.5s ease-in-out infinite;
@@ -301,6 +301,24 @@
   animation: surface-wobble 3.5s ease-in-out infinite;
 }
 
+/* Glass dust shimmer — tiny bright particles that catch light */
+@keyframes glass-dust-twinkle {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes glass-dust-twinkle-alt {
+  0%, 100% { opacity: 0.3; }
+  40% { opacity: 0.05; }
+  80% { opacity: 0.45; }
+}
+
+.glass-dust-1 { animation: glass-dust-twinkle 2.5s ease-in-out infinite; }
+.glass-dust-2 { animation: glass-dust-twinkle-alt 3.2s ease-in-out 0.8s infinite; }
+.glass-dust-3 { animation: glass-dust-twinkle 2.8s ease-in-out 1.5s infinite; }
+.glass-dust-4 { animation: glass-dust-twinkle-alt 3.5s ease-in-out 0.3s infinite; }
+.glass-dust-5 { animation: glass-dust-twinkle 2.2s ease-in-out 2s infinite; }
+
 /* Slow forge glow pulse */
 @keyframes forge-glow {
   0%, 100% {
@@ -324,9 +342,9 @@
 .page-texture {
   background:
     /* Diamond lattice pattern */
-    url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='none' stroke='%23c9a84c' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='none' stroke='%23c9a84c' stroke-width='0.5' opacity='0.08'/%3E%3C/svg%3E"),
     /* Deep vignette */
-    radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(0, 0, 0, 0.5) 100%),
+    radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(0, 0, 0, 0.4) 100%),
     /* Base color */
     var(--color-forge-darkest);
   background-size: 40px 40px, 100% 100%, 100% 100%;
@@ -341,15 +359,15 @@
   z-index: 0;
   background:
     /* Forge glow from bottom — warm ember light */
-    radial-gradient(ellipse 80% 40% at 50% 105%, rgba(196, 90, 45, 0.2) 0%, rgba(196, 90, 45, 0.08) 40%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 50% 105%, rgba(196, 90, 45, 0.27) 0%, rgba(196, 90, 45, 0.11) 40%, transparent 70%),
     /* Secondary forge warmth */
-    radial-gradient(ellipse 60% 30% at 50% 110%, rgba(201, 168, 76, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 30% at 50% 110%, rgba(201, 168, 76, 0.16) 0%, transparent 60%),
     /* Top-left burgundy accent */
-    radial-gradient(ellipse at 15% 15%, rgba(107, 29, 29, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 15%, rgba(107, 29, 29, 0.14) 0%, transparent 50%),
     /* Top-right gold whisper */
-    radial-gradient(ellipse at 85% 10%, rgba(201, 168, 76, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 10%, rgba(201, 168, 76, 0.09) 0%, transparent 40%),
     /* Center subtle warmth */
-    radial-gradient(ellipse at 50% 40%, rgba(61, 46, 31, 0.3) 0%, transparent 60%);
+    radial-gradient(ellipse at 50% 40%, rgba(61, 46, 31, 0.37) 0%, transparent 60%);
   animation: forge-glow 8s ease-in-out infinite;
 }
 
@@ -364,11 +382,11 @@
     /* Noise grain texture */
     url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
     /* Drifting side glows */
-    radial-gradient(ellipse at 0% 70%, rgba(196, 90, 45, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 100% 50%, rgba(107, 29, 29, 0.05) 0%, transparent 50%);
+    radial-gradient(ellipse at 0% 70%, rgba(196, 90, 45, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 50%, rgba(107, 29, 29, 0.07) 0%, transparent 50%);
   background-size: 256px 256px, 100% 100%, 100% 100%;
   background-repeat: repeat, no-repeat, no-repeat;
-  opacity: 0.45;
+  opacity: 0.52;
   mix-blend-mode: soft-light;
   animation: forge-glow-alt 12s ease-in-out infinite;
 }

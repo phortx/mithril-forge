@@ -50,6 +50,9 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
   const glassGradId = `glass-grad-${id}`
   const innerShadowId = `inner-shadow-${id}`
   const liquidGlowId = `liquid-glow-${id}`
+  const crackFilterId = `crack-filter-${id}`
+  const crackDispId = `crack-disp-${id}`
+  const shardGradId = `shard-grad-${id}`
 
   const liquidY = FILL_BOTTOM - (FILL_HEIGHT * totalFill) / 100
   const tempBoundaryY = FILL_BOTTOM - (FILL_HEIGHT * hpPercent) / 100
@@ -243,99 +246,21 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
         )}
 
 
-        {/* Shattered glass cracks for dead creatures */}
+        {/* Dark overlay for dead creatures — renders UNDER skull */}
         {isDead && (
-          <g>
-            {/* Impact point — upper right area */}
-            {/* Radial crack 1 — down-left from impact (main crack) */}
-            <path
-              d="M34,22 Q32,25 31,27 Q29,30 27,33 Q25,36 22,40 Q20,43 17,47"
-              fill="none" stroke="rgba(180,165,130,0.7)" strokeWidth={1.1} strokeLinecap="round"
-            />
-            {/* Refraction highlight along main crack */}
-            <path
-              d="M34.5,22.5 Q32.5,25.5 31.5,27.5 Q29.5,30.5 27.5,33.5"
-              fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={0.4} strokeLinecap="round"
-            />
-            {/* Radial crack 2 — upper-left from impact */}
-            <path
-              d="M34,22 Q30,20 27,18 Q24,16.5 20,15 Q17,14 13,14"
-              fill="none" stroke="rgba(180,165,130,0.6)" strokeWidth={0.9} strokeLinecap="round"
-            />
-            {/* Radial crack 3 — right from impact */}
-            <path
-              d="M34,22 Q37,23 40,25 Q43,27 46,28"
-              fill="none" stroke="rgba(180,165,130,0.55)" strokeWidth={0.8} strokeLinecap="round"
-            />
-            {/* Radial crack 4 — down-right from impact */}
-            <path
-              d="M34,22 Q36,26 38,31 Q39,34 41,38"
-              fill="none" stroke="rgba(180,165,130,0.5)" strokeWidth={0.7} strokeLinecap="round"
-            />
-            {/* Radial crack 5 — up from impact */}
-            <path
-              d="M34,22 Q33,18 31,14 Q30,11 28,7"
-              fill="none" stroke="rgba(180,165,130,0.5)" strokeWidth={0.7} strokeLinecap="round"
-            />
-
-            {/* Concentric connecting crack — inner ring */}
-            <path
-              d="M27,18 Q29,21 31,27 Q33,25 38,31"
-              fill="none" stroke="rgba(180,165,130,0.35)" strokeWidth={0.6} strokeLinecap="round"
-            />
-            {/* Concentric connecting crack — outer ring */}
-            <path
-              d="M13,14 Q15,19 20,25 Q22,30 22,40"
-              fill="none" stroke="rgba(180,165,130,0.3)" strokeWidth={0.5} strokeLinecap="round"
-            />
-
-            {/* Branch off crack 1 — left fork */}
-            <path
-              d="M27,33 Q23,31 19,30 Q16,29 12,30"
-              fill="none" stroke="rgba(180,165,130,0.45)" strokeWidth={0.7} strokeLinecap="round"
-            />
-            {/* Branch off crack 2 — right fork near bottom */}
-            <path
-              d="M22,40 Q26,41 30,43 Q33,44 37,43"
-              fill="none" stroke="rgba(180,165,130,0.4)" strokeWidth={0.6} strokeLinecap="round"
-            />
-            {/* Branch off crack 3 — tiny splinter from crack 2 */}
-            <path
-              d="M20,15 Q19,19 17,22"
-              fill="none" stroke="rgba(180,165,130,0.35)" strokeWidth={0.5} strokeLinecap="round"
-            />
-            {/* Branch off crack 4 — tiny splinter downward */}
-            <path
-              d="M40,25 Q42,30 43,33"
-              fill="none" stroke="rgba(180,165,130,0.3)" strokeWidth={0.45} strokeLinecap="round"
-            />
-
-            {/* Micro-fractures near impact */}
-            <path
-              d="M33,24 L31,23" fill="none" stroke="rgba(200,185,150,0.4)" strokeWidth={0.4}
-            />
-            <path
-              d="M35,24 L37,22" fill="none" stroke="rgba(200,185,150,0.35)" strokeWidth={0.35}
-            />
-            <path
-              d="M32,20 L30,19" fill="none" stroke="rgba(200,185,150,0.35)" strokeWidth={0.35}
-            />
-
-            {/* Impact star — small radial lines at impact point */}
-            <circle cx={34} cy={22} r={1.5} fill="none" stroke="rgba(200,185,150,0.25)" strokeWidth={0.3} />
-          </g>
+          <circle cx={CX} cy={CY} r={R - 0.5} fill="rgba(0,0,0,0.45)" />
         )}
 
-        {/* Dead / Revive icons — ON TOP of the orb */}
+        {/* Dead / Revive icons */}
         {isDead && (
           <>
             {/* Skull — fades out on hover */}
             <text
               x={CX}
-              y={CY}
+              y={CY - 1}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={34}
+              fontSize={51}
               fill="rgba(180,50,50,1)"
               stroke="rgba(0,0,0,0.8)"
               strokeWidth={1.5}
@@ -349,10 +274,10 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
             {/* Revive cross — fades in on hover */}
             <text
               x={CX}
-              y={CY}
+              y={CY - 1}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={34}
+              fontSize={51}
               fill="rgba(58,200,90,1)"
               stroke="rgba(0,0,0,0.8)"
               strokeWidth={1.5}
@@ -365,6 +290,187 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
             </text>
           </>
         )}
+
+        {/* Shattered glass cracks — renders ON TOP of skull */}
+        {isDead && (
+          <g className="shattered-glass-effect">
+            <defs>
+              {/* Subtle distortion filter for the entire orb when shattered */}
+              <filter id={crackFilterId} x="-5%" y="-5%" width="110%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves={4} seed={42} result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale={1.5} xChannelSelector="R" yChannelSelector="G" />
+              </filter>
+              {/* Displacement map for crack-area refraction */}
+              <filter id={crackDispId} x="-10%" y="-10%" width="120%" height="120%">
+                <feTurbulence type="turbulence" baseFrequency="0.08" numOctaves={2} seed={7} result="warp" />
+                <feDisplacementMap in="SourceGraphic" in2="warp" scale={0.8} />
+              </filter>
+              {/* Gradient for shard edge highlights */}
+              <linearGradient id={shardGradId} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+              </linearGradient>
+            </defs>
+
+            {/* Glass shard fragments — polygonal pieces with visible refraction */}
+
+            {/* Large shard — upper right (impact zone) */}
+            <polygon
+              points="34,21 38,16 42,19 40,25 36,24"
+              fill="rgba(255,255,255,0.08)"
+              stroke="rgba(180,170,140,0.4)"
+              strokeWidth={0.5}
+            />
+
+            {/* Shard — upper area */}
+            <polygon
+              points="34,21 31,14 27,8 33,10 38,16"
+              fill="rgba(255,255,255,0.05)"
+              stroke="rgba(180,170,140,0.35)"
+              strokeWidth={0.45}
+            />
+
+            {/* Shard — right side */}
+            <polygon
+              points="40,25 42,19 47,24 46,31 42,29"
+              fill="rgba(255,255,255,0.06)"
+              stroke="rgba(180,170,140,0.35)"
+              strokeWidth={0.45}
+            />
+
+            {/* Shard — center-left large piece */}
+            <polygon
+              points="34,21 36,24 33,30 27,33 24,27 28,20"
+              fill="rgba(255,255,255,0.04)"
+              stroke="rgba(180,170,140,0.3)"
+              strokeWidth={0.45}
+            />
+
+            {/* Shard — lower left */}
+            <polygon
+              points="27,33 24,27 18,30 15,37 20,40"
+              fill="rgba(255,255,255,0.04)"
+              stroke="rgba(180,170,140,0.28)"
+              strokeWidth={0.4}
+            />
+
+            {/* Shard — bottom center */}
+            <polygon
+              points="27,33 20,40 24,47 33,48 36,42 33,30"
+              fill="rgba(255,255,255,0.03)"
+              stroke="rgba(180,170,140,0.25)"
+              strokeWidth={0.4}
+            />
+
+            {/* Shard — upper left */}
+            <polygon
+              points="28,20 24,27 18,24 14,17 20,13 27,14"
+              fill="rgba(255,255,255,0.04)"
+              stroke="rgba(180,170,140,0.25)"
+              strokeWidth={0.4}
+            />
+
+            {/* Primary crack lines — bold dark lines with subtle refraction offset */}
+            {/* Main crack: impact → bottom-left */}
+            <path
+              d="M34,21 L33,24 L30,28 L27,33 L23,37 L20,40 L17,47"
+              fill="none" stroke="rgba(0,0,0,1)" strokeWidth={1.8} strokeLinecap="round"
+            />
+            <path
+              d="M34.5,21.5 L33.5,24.5 L30.5,28.5 L27.5,33.5 L23.5,37.5"
+              fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={0.4} strokeLinecap="round"
+            />
+
+            {/* Crack: impact → upper-left */}
+            <path
+              d="M34,21 L28,20 L24,17 L20,13 L14,12"
+              fill="none" stroke="rgba(0,0,0,1)" strokeWidth={1.5} strokeLinecap="round"
+            />
+            <path
+              d="M34.4,21.5 L28.4,20.5 L24.4,17.5 L20.4,13.5"
+              fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth={0.35} strokeLinecap="round"
+            />
+
+            {/* Crack: impact → right */}
+            <path
+              d="M34,21 L38,22 L42,24 L46,28"
+              fill="none" stroke="rgba(0,0,0,0.95)" strokeWidth={1.4} strokeLinecap="round"
+            />
+            <path
+              d="M34.4,21.5 L38.4,22.5 L42.4,24.5"
+              fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth={0.3} strokeLinecap="round"
+            />
+
+            {/* Crack: impact → top */}
+            <path
+              d="M34,21 L33,16 L31,11 L28,6"
+              fill="none" stroke="rgba(0,0,0,0.9)" strokeWidth={1.3} strokeLinecap="round"
+            />
+            <path
+              d="M34.4,21.4 L33.4,16.4 L31.4,11.4"
+              fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth={0.3} strokeLinecap="round"
+            />
+
+            {/* Crack: impact → bottom-right */}
+            <path
+              d="M36,24 L38,29 L42,33 L45,37"
+              fill="none" stroke="rgba(0,0,0,0.85)" strokeWidth={1.2} strokeLinecap="round"
+            />
+            <path
+              d="M36.4,24.4 L38.4,29.4 L42.4,33.4"
+              fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth={0.25} strokeLinecap="round"
+            />
+
+            {/* Secondary connecting cracks — web pattern */}
+            <path
+              d="M24,27 L18,24 L14,22"
+              fill="none" stroke="rgba(0,0,0,0.85)" strokeWidth={1.1} strokeLinecap="round"
+            />
+            <path
+              d="M33,30 L36,32 L40,31"
+              fill="none" stroke="rgba(0,0,0,0.8)" strokeWidth={1.0} strokeLinecap="round"
+            />
+            <path
+              d="M27,33 L30,36 L33,40 L36,42"
+              fill="none" stroke="rgba(0,0,0,0.75)" strokeWidth={0.9} strokeLinecap="round"
+            />
+            <path
+              d="M18,30 L14,33 L11,36"
+              fill="none" stroke="rgba(0,0,0,0.7)" strokeWidth={0.85} strokeLinecap="round"
+            />
+
+            {/* Subtle refraction highlights along shard edges */}
+            <path d="M38,16 L42,19" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={0.35} strokeLinecap="round" />
+            <path d="M42,19 L47,24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth={0.3} strokeLinecap="round" />
+            <path d="M15,37 L20,40" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth={0.25} strokeLinecap="round" />
+            <path d="M24,47 L33,48" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth={0.25} strokeLinecap="round" />
+            <path d="M20,13 L27,14" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth={0.25} strokeLinecap="round" />
+            <path d="M46,31 L42,29" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth={0.25} strokeLinecap="round" />
+
+            {/* Impact crater — concentric stress rings */}
+            <circle cx={34} cy={21} r={3.5} fill="none" stroke="rgba(0,0,0,0.6)" strokeWidth={0.5} />
+            <circle cx={34} cy={21} r={6} fill="none" stroke="rgba(0,0,0,0.35)" strokeWidth={0.35} strokeDasharray="1.5 1" />
+            {/* Impact point — bright refraction spot */}
+            <circle cx={34} cy={21} r={1.8} fill="rgba(255,255,255,0.15)" />
+            <circle cx={34} cy={21} r={0.8} fill="rgba(255,255,255,0.35)" />
+
+            {/* Micro-fracture splinters near impact */}
+            <path d="M32,19 L30.5,17.5" fill="none" stroke="rgba(0,0,0,0.8)" strokeWidth={0.6} />
+            <path d="M36,19 L37.5,17" fill="none" stroke="rgba(0,0,0,0.75)" strokeWidth={0.55} />
+            <path d="M36,23 L38,24.5" fill="none" stroke="rgba(0,0,0,0.7)" strokeWidth={0.55} />
+            <path d="M32,23 L30.5,25" fill="none" stroke="rgba(0,0,0,0.65)" strokeWidth={0.5} />
+
+            {/* Glass dust particles — bright specks that twinkle */}
+            <circle cx={31} cy={16} r={0.7} fill="rgba(255,255,255,0.6)" className="glass-dust-1" />
+            <circle cx={37} cy={17} r={0.55} fill="rgba(255,255,255,0.5)" className="glass-dust-2" />
+            <circle cx={40} cy={21} r={0.6} fill="rgba(255,255,255,0.45)" className="glass-dust-3" />
+            <circle cx={32} cy={26} r={0.5} fill="rgba(255,255,255,0.4)" className="glass-dust-4" />
+            <circle cx={36} cy={16} r={0.45} fill="rgba(255,255,255,0.35)" className="glass-dust-5" />
+            <circle cx={29} cy={20} r={0.5} fill="rgba(255,255,255,0.4)" className="glass-dust-1" />
+            <circle cx={38} cy={26} r={0.4} fill="rgba(255,255,255,0.35)" className="glass-dust-3" />
+          </g>
+        )}
+
       </svg>
     </div>
   )

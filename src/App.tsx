@@ -7,6 +7,7 @@ import { CreatureList } from './components/CreatureList'
 import { EncounterToolbar } from './components/EncounterToolbar'
 import { StatBlockPanel } from './components/StatBlockPanel'
 import { FloatingNextTurn } from './components/FloatingNextTurn'
+import { Footer } from './components/Footer'
 import { Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
 import type { ViewMode } from './types/viewMode'
 import type { StatVisibility } from './types/encounterSettings'
@@ -156,6 +157,8 @@ function App() {
           onShowStatBlock={isDM ? setStatBlockSlug : undefined}
         />
       </div>
+
+      <Footer />
 
       <FloatingNextTurn toolbarRef={toolbarRef} visible={isDM && isStarted} onNextTurn={nextTurn} />
 
