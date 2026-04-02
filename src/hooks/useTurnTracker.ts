@@ -11,6 +11,11 @@ export function useTurnTracker(sortedCreatures: Creature[]) {
 
   const isStarted = turnState !== null
 
+  const isDead = (c: Creature) => c.hp <= 0 && c.maxHp > 0
+
+  const findFirstAlive = () =>
+    sortedCreatures.find((c) => !isDead(c))
+
   // Handle removed creatures: if the active creature no longer exists, advance
   useEffect(() => {
     if (!turnState) return
@@ -25,8 +30,10 @@ export function useTurnTracker(sortedCreatures: Creature[]) {
     )
 
     if (activeIndex === -1) {
+      const alive = sortedCreatures.find((c) => !isDead(c))
+      if (!alive) return
       setTurnState({
-        activeCreatureId: sortedCreatures[0].id,
+        activeCreatureId: alive.id,
         round: turnState.round,
       })
     }
@@ -34,7 +41,9 @@ export function useTurnTracker(sortedCreatures: Creature[]) {
 
   const startEncounter = () => {
     if (sortedCreatures.length === 0) return
-    setTurnState({ activeCreatureId: sortedCreatures[0].id, round: 1 })
+    const alive = findFirstAlive()
+    if (!alive) return
+    setTurnState({ activeCreatureId: alive.id, round: 1 })
   }
 
   const nextTurn = () => {
@@ -43,8 +52,17 @@ export function useTurnTracker(sortedCreatures: Creature[]) {
     const currentIndex = sortedCreatures.findIndex(
       (c) => c.id === turnState.activeCreatureId,
     )
-    const nextIndex = (currentIndex + 1) % sortedCreatures.length
-    const wraps = nextIndex === 0
+
+    let nextIndex = (currentIndex + 1) % sortedCreatures.length
+    let wraps = nextIndex <= currentIndex
+    const startIndex = nextIndex
+
+    while (isDead(sortedCreatures[nextIndex])) {
+      if (nextIndex === 0) wraps = true
+      nextIndex = (nextIndex + 1) % sortedCreatures.length
+      // All creatures dead — don't loop forever
+      if (nextIndex === startIndex) return
+    }
 
     setTurnState({
       activeCreatureId: sortedCreatures[nextIndex].id,

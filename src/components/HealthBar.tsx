@@ -9,7 +9,7 @@ type HealthBarProps = {
 }
 
 // Liquid color interpolation: green (>60%) → orange (30-60%) → red (<30%)
-function getLiquidColors(percent: number): { top: string; mid: string; bottom: string } {
+export function getLiquidColors(percent: number): { top: string; mid: string; bottom: string } {
   if (percent > 60) {
     return { top: '#44cc44', mid: '#228822', bottom: '#0e4a0e' }
   }
