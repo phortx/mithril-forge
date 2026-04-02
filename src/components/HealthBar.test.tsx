@@ -1,4 +1,4 @@
-import { getLiquidColors } from './HealthBar'
+import { getLiquidColors } from '../utils/liquidColors'
 
 describe('getLiquidColors', () => {
   it('returns green for health above 60%', () => {
