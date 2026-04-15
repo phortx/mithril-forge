@@ -1,4 +1,4 @@
-import { Code2, Bug } from 'lucide-react'
+import { Code2, Bug, Heart } from 'lucide-react'
 
 export function Footer() {
   const linkClass =
@@ -26,7 +26,16 @@ export function Footer() {
           <Bug size={14} />
           Report Bug
         </a>
-<span className="text-forge-tan/40">v0.1</span>
+        <a
+          href="https://ko-fi.com/phortx"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={linkClass}
+        >
+          <Heart size={14} />
+          Support on Ko-fi
+        </a>
+        <span className="text-forge-tan/40">v0.1</span>
       </div>
     </footer>
   )
