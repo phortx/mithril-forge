@@ -103,6 +103,9 @@ val copyFrontend by tasks.registering(Copy::class) {
 // Nur bootJar (Production) bekommt Frontend; bootRun bleibt schlank für Dev
 tasks.named("bootJar") { dependsOn(copyFrontend) }
 
+// processResources liest static/ — muss nach copyFrontend laufen
+tasks.named("processResources") { dependsOn(copyFrontend) }
+
 tasks.named<Delete>("clean") {
     delete(staticResources, frontendDist)
 }
