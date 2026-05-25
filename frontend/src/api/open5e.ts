@@ -54,6 +54,10 @@ export function getCachedMonster(slug: string): MonsterData | undefined {
   return monsterCache.get(slug)
 }
 
+export function clearMonsterCache(): void {
+  monsterCache.clear()
+}
+
 export function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2)
 }

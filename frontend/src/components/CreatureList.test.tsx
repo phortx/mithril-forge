@@ -7,13 +7,13 @@ const defaultProps = {
   activeCreatureId: null as string | null,
   viewMode: 'dm' as const,
   statVisibility: 'all' as const,
-  onRemove: vi.fn(),
-  onRollInitiative: vi.fn(),
-  onUpdateInitiative: vi.fn(),
-  onToggleCreatureType: vi.fn(),
-  onDamage: vi.fn(),
-  onHeal: vi.fn(),
-  onSetTempHp: vi.fn(),
+  onRemove: jest.fn(),
+  onRollInitiative: jest.fn(),
+  onUpdateInitiative: jest.fn(),
+  onToggleCreatureType: jest.fn(),
+  onDamage: jest.fn(),
+  onHeal: jest.fn(),
+  onSetTempHp: jest.fn(),
 }
 
 const mockCreatures: Creature[] = [
@@ -24,7 +24,7 @@ const mockCreatures: Creature[] = [
 
 describe('CreatureList', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    jest.clearAllMocks()
   })
 
   it('shows empty state when no creatures', () => {
@@ -82,7 +82,7 @@ describe('CreatureList', () => {
 
   it('calls onRemove with correct id when creature is dead and expanded', async () => {
     const user = userEvent.setup()
-    const onRemove = vi.fn()
+    const onRemove = jest.fn()
     const deadCreatures: Creature[] = [
       { id: '1', name: 'Goblin', initiativeModifier: 2, initiative: 15, creatureType: 'enemy', maxHp: 20, hp: 0, tempHp: 0, monsterSlug: null, ac: 10 },
     ]
@@ -147,7 +147,7 @@ describe('CreatureList', () => {
 
   it('allows manual initiative editing', async () => {
     const user = userEvent.setup()
-    const onUpdateInitiative = vi.fn()
+    const onUpdateInitiative = jest.fn()
     render(
       <CreatureList
         creatures={[
