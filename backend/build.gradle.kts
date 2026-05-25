@@ -81,6 +81,7 @@ val bunBuild by tasks.registering(Exec::class) {
     dependsOn(bunInstall)
     workingDir = frontendDir.asFile
     commandLine("bun", "run", "build")
+    environment.remove("GITHUB_ACTIONS")   // prevent wrong Vite base-path (/mithril-forge/ vs /)
     inputs.dir(frontendDir.dir("src"))
     inputs.dir(frontendDir.dir("public"))
     inputs.file(frontendDir.file("index.html"))
