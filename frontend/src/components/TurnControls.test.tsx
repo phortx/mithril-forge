@@ -5,14 +5,14 @@ import { TurnControls } from './TurnControls'
 const defaultProps = {
   isStarted: false,
   round: null as number | null,
-  onStart: vi.fn(),
-  onNextTurn: vi.fn(),
-  onEndEncounter: vi.fn(),
+  onStart: jest.fn(),
+  onNextTurn: jest.fn(),
+  onEndEncounter: jest.fn(),
 }
 
 describe('TurnControls', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    jest.clearAllMocks()
   })
 
   it('shows Start Encounter button when not started', () => {
@@ -25,12 +25,12 @@ describe('TurnControls', () => {
 
   it('calls onStart when Start Encounter is clicked', async () => {
     const user = userEvent.setup()
-    const onStart = vi.fn()
+    const onStart = jest.fn()
     render(<TurnControls {...defaultProps} onStart={onStart} />)
 
     await user.click(screen.getByRole('button', { name: 'Start Encounter' }))
 
-    expect(onStart).toHaveBeenCalledOnce()
+    expect(onStart).toHaveBeenCalledTimes(1)
   })
 
   it('shows round number when started', () => {

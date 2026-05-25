@@ -4,7 +4,7 @@ import { AddCreatureForm } from './AddCreatureForm'
 
 describe('AddCreatureForm', () => {
   it('renders name, type, modifier and max hp inputs with add button', () => {
-    render(<AddCreatureForm onAdd={vi.fn()} />)
+    render(<AddCreatureForm onAdd={jest.fn()} />)
 
     expect(screen.getByLabelText('Name')).toBeInTheDocument()
     expect(screen.getByLabelText('Init Mod')).toBeInTheDocument()
@@ -17,7 +17,7 @@ describe('AddCreatureForm', () => {
 
   it('calls onAdd with name, modifier, creature type, maxHp, and ac on submit', async () => {
     const user = userEvent.setup()
-    const onAdd = vi.fn()
+    const onAdd = jest.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), 'Goblin')
@@ -32,7 +32,7 @@ describe('AddCreatureForm', () => {
 
   it('resets fields after submit', async () => {
     const user = userEvent.setup()
-    render(<AddCreatureForm onAdd={vi.fn()} />)
+    render(<AddCreatureForm onAdd={jest.fn()} />)
 
     await user.type(screen.getByLabelText('Name'), 'Goblin')
     await user.clear(screen.getByLabelText('Init Mod'))
@@ -46,7 +46,7 @@ describe('AddCreatureForm', () => {
 
   it('does not call onAdd when name is empty', async () => {
     const user = userEvent.setup()
-    const onAdd = vi.fn()
+    const onAdd = jest.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.click(screen.getByRole('button', { name: /Add/ }))
@@ -56,7 +56,7 @@ describe('AddCreatureForm', () => {
 
   it('does not call onAdd when name is only whitespace', async () => {
     const user = userEvent.setup()
-    const onAdd = vi.fn()
+    const onAdd = jest.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), '   ')
@@ -67,7 +67,7 @@ describe('AddCreatureForm', () => {
 
   it('trims whitespace from name', async () => {
     const user = userEvent.setup()
-    const onAdd = vi.fn()
+    const onAdd = jest.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), '  Goblin  ')
@@ -77,7 +77,7 @@ describe('AddCreatureForm', () => {
   })
 
   it('defaults modifier to 0 and maxHp to 10', () => {
-    render(<AddCreatureForm onAdd={vi.fn()} />)
+    render(<AddCreatureForm onAdd={jest.fn()} />)
 
     expect(screen.getByLabelText('Init Mod')).toHaveValue(0)
     expect(screen.getByLabelText('Max HP')).toHaveValue(10)
@@ -85,7 +85,7 @@ describe('AddCreatureForm', () => {
 
   it('supports negative modifiers', async () => {
     const user = userEvent.setup()
-    const onAdd = vi.fn()
+    const onAdd = jest.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), 'Zombie')
@@ -99,7 +99,7 @@ describe('AddCreatureForm', () => {
 
   it('allows switching creature type to party', async () => {
     const user = userEvent.setup()
-    const onAdd = vi.fn()
+    const onAdd = jest.fn()
     render(<AddCreatureForm onAdd={onAdd} />)
 
     await user.type(screen.getByLabelText('Name'), 'Cleric')
@@ -111,7 +111,7 @@ describe('AddCreatureForm', () => {
 
   describe('quantity stepper', () => {
     it('shows quantity control for enemy type', () => {
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       expect(screen.getByText('Qty')).toBeInTheDocument()
       expect(screen.getByText('1')).toBeInTheDocument()
@@ -119,7 +119,7 @@ describe('AddCreatureForm', () => {
 
     it('hides quantity control for party type', async () => {
       const user = userEvent.setup()
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       await user.click(screen.getByText('Party'))
 
@@ -128,7 +128,7 @@ describe('AddCreatureForm', () => {
 
     it('increments and decrements quantity', async () => {
       const user = userEvent.setup()
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       const [minusBtn, plusBtn] = screen.getAllByRole('button').filter(
         (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
@@ -143,7 +143,7 @@ describe('AddCreatureForm', () => {
     })
 
     it('does not go below 1', () => {
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       const minusBtn = screen.getAllByRole('button').find(
         (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]') && (btn as HTMLButtonElement).disabled,
@@ -154,7 +154,7 @@ describe('AddCreatureForm', () => {
 
     it('calls onAdd multiple times with numbered names when qty > 1', async () => {
       const user = userEvent.setup()
-      const onAdd = vi.fn()
+      const onAdd = jest.fn()
       render(<AddCreatureForm onAdd={onAdd} />)
 
       await user.type(screen.getByLabelText('Name'), 'Goblin')
@@ -175,7 +175,7 @@ describe('AddCreatureForm', () => {
 
     it('does not number name when qty is 1', async () => {
       const user = userEvent.setup()
-      const onAdd = vi.fn()
+      const onAdd = jest.fn()
       render(<AddCreatureForm onAdd={onAdd} />)
 
       await user.type(screen.getByLabelText('Name'), 'Goblin')
@@ -187,7 +187,7 @@ describe('AddCreatureForm', () => {
 
     it('resets quantity after submit', async () => {
       const user = userEvent.setup()
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       const plusBtn = screen.getAllByRole('button').filter(
         (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
@@ -203,7 +203,7 @@ describe('AddCreatureForm', () => {
 
     it('shows count on Add button when qty > 1', async () => {
       const user = userEvent.setup()
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       const plusBtn = screen.getAllByRole('button').filter(
         (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
@@ -216,7 +216,7 @@ describe('AddCreatureForm', () => {
 
     it('resets quantity when switching to party', async () => {
       const user = userEvent.setup()
-      render(<AddCreatureForm onAdd={vi.fn()} />)
+      render(<AddCreatureForm onAdd={jest.fn()} />)
 
       const plusBtn = screen.getAllByRole('button').filter(
         (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
