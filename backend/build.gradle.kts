@@ -58,3 +58,59 @@ kotlin {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+// --- Frontend Build Integration ---
+
+val frontendDir = layout.projectDirectory.dir("../frontend")
+val frontendDist = frontendDir.dir("dist")
+val staticResources = layout.projectDirectory.dir("src/main/resources/static")
+
+val bunInstall by tasks.registering(Exec::class) {
+    group = "frontend"
+    description = "Install frontend dependencies (frozen lockfile)"
+    workingDir = frontendDir.asFile
+    commandLine("bun", "install", "--frozen-lockfile")
+    inputs.file(frontendDir.file("package.json"))
+    inputs.file(frontendDir.file("bun.lock"))
+    outputs.dir(frontendDir.dir("node_modules"))
+}
+
+val bunBuild by tasks.registering(Exec::class) {
+    group = "frontend"
+    description = "Build frontend with Vite/Bun"
+    dependsOn(bunInstall)
+    workingDir = frontendDir.asFile
+    commandLine("bun", "run", "build")
+    inputs.dir(frontendDir.dir("src"))
+    inputs.dir(frontendDir.dir("public"))
+    inputs.file(frontendDir.file("index.html"))
+    inputs.file(frontendDir.file("vite.config.ts"))
+    inputs.file(frontendDir.file("tsconfig.json"))
+    inputs.file(frontendDir.file("package.json"))
+    outputs.dir(frontendDist)
+}
+
+val copyFrontend by tasks.registering(Copy::class) {
+    group = "frontend"
+    description = "Copy Vite dist into Spring Boot static resources"
+    dependsOn(bunBuild)
+    doFirst { delete(staticResources) }   // verhindert stale chunks nach Renames
+    from(frontendDist)
+    into(staticResources)
+}
+
+// Nur bootJar (Production) bekommt Frontend; bootRun bleibt schlank für Dev
+tasks.named("bootJar") { dependsOn(copyFrontend) }
+
+tasks.named<Delete>("clean") {
+    delete(staticResources, frontendDist)
+}
+
+// Frontend-Tests via Gradle (optional, parallel zu bun run test im justfile)
+val bunTest by tasks.registering(Exec::class) {
+    group = "verification"
+    description = "Run frontend tests via Bun"
+    dependsOn(bunInstall)
+    workingDir = frontendDir.asFile
+    commandLine("bun", "run", "test")
+}
