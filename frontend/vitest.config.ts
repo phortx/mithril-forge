@@ -7,5 +7,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
+    // Node 25 enables experimental Web Storage by default and installs a
+    // non-configurable broken `localStorage` on globalThis before jsdom can
+    // attach its own. Disable it so jsdom's localStorage wins.
+    // See: https://github.com/vitest-dev/vitest/issues/8757
+    execArgv: ['--no-experimental-webstorage'],
   },
 })
