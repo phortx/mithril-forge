@@ -1,3 +1,20 @@
 spring:
   application:
     name: mithril-forge
+  docker:
+    compose:
+      file: ../compose.yaml        # compose.yaml liegt im Root, Backend ist Unterordner
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: secret
+  devtools:
+    restart:
+      exclude: static/**           # kein Restart-Loop wenn Frontend-Build static/ befüllt
+
+sentry:
+  enabled: false                   # kein DSN konfiguriert, Sentry im Dev stumm schalten
+
+server:
+  port: 8080
