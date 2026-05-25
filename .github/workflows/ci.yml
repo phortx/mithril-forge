@@ -1,4 +1,4 @@
-name: CI / Deploy
+name: CI
 
 on:
   push:
@@ -6,60 +6,57 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Only one deployment at a time; don't cancel in-progress runs on main
 concurrency:
-  group: pages
-  cancel-in-progress: false
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  ci:
-    name: Lint, Typecheck & Build
+  build:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup GraalVM (Java 24)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '24'
+          distribution: 'graalvm-community'
+          cache: 'gradle'
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.3.13'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
+        working-directory: frontend
         run: bun install --frozen-lockfile
 
-      - name: Lint
+      - name: Frontend — Lint
+        working-directory: frontend
         run: bun run lint
 
-      - name: Typecheck
+      - name: Frontend — Typecheck
+        working-directory: frontend
         run: bun run typecheck
 
-      - name: Build
-        run: bun run build
+      - name: Frontend — Test
+        working-directory: frontend
+        run: bun run test
 
-      - name: Upload Pages artifact
+      - name: Backend — Test
+        run: ./gradlew :backend:test
+
+      - name: Build Single JAR (frontend embedded)
+        run: ./gradlew :backend:bootJar
+
+      - name: Upload JAR artifact
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          path: dist
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: ci
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+          name: mithril-forge-jar
+          path: backend/build/libs/*.jar
+          retention-days: 30

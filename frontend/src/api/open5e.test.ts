@@ -1,4 +1,5 @@
-import { abilityModifier } from './open5e'
+import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test'
+import { abilityModifier, clearMonsterCache, getCachedMonster, getMonster, searchMonsters } from './open5e'
 import type { MonsterData } from '../types/statBlock'
 
 describe('abilityModifier', () => {
@@ -72,22 +73,19 @@ function makeMonster(overrides: Partial<MonsterData> = {}): MonsterData {
   }
 }
 
-describe('searchMonsters', () => {
-  let searchMonsters: typeof import('./open5e').searchMonsters
-  let getCachedMonster: typeof import('./open5e').getCachedMonster
-  const mockFetch = vi.fn()
+const originalFetch = globalThis.fetch
 
-  beforeEach(async () => {
-    vi.resetModules()
-    vi.stubGlobal('fetch', mockFetch)
+describe('searchMonsters', () => {
+  const mockFetch = jest.fn()
+
+  beforeEach(() => {
+    clearMonsterCache()
+    globalThis.fetch = mockFetch as unknown as typeof fetch
     mockFetch.mockReset()
-    const mod = await import('./open5e')
-    searchMonsters = mod.searchMonsters
-    getCachedMonster = mod.getCachedMonster
   })
 
   afterEach(() => {
-    vi.unstubAllGlobals()
+    globalThis.fetch = originalFetch
   })
 
   it('returns empty array for query shorter than 2 chars', async () => {
@@ -111,7 +109,7 @@ describe('searchMonsters', () => {
 
     const result = await searchMonsters('goblin')
 
-    expect(mockFetch).toHaveBeenCalledOnce()
+    expect(mockFetch).toHaveBeenCalledTimes(1)
     expect(mockFetch.mock.calls[0][0]).toContain('/monsters/')
     expect(mockFetch.mock.calls[0][0]).toContain('search=goblin')
     expect(result).toEqual([
@@ -147,21 +145,16 @@ describe('searchMonsters', () => {
 })
 
 describe('getMonster', () => {
-  let getMonster: typeof import('./open5e').getMonster
-  let getCachedMonster: typeof import('./open5e').getCachedMonster
-  const mockFetch = vi.fn()
+  const mockFetch = jest.fn()
 
-  beforeEach(async () => {
-    vi.resetModules()
-    vi.stubGlobal('fetch', mockFetch)
+  beforeEach(() => {
+    clearMonsterCache()
+    globalThis.fetch = mockFetch as unknown as typeof fetch
     mockFetch.mockReset()
-    const mod = await import('./open5e')
-    getMonster = mod.getMonster
-    getCachedMonster = mod.getCachedMonster
   })
 
   afterEach(() => {
-    vi.unstubAllGlobals()
+    globalThis.fetch = originalFetch
   })
 
   it('fetches monster by slug and returns data', async () => {
@@ -173,7 +166,7 @@ describe('getMonster', () => {
 
     const result = await getMonster('goblin')
 
-    expect(mockFetch).toHaveBeenCalledOnce()
+    expect(mockFetch).toHaveBeenCalledTimes(1)
     expect(mockFetch.mock.calls[0][0]).toContain('/monsters/goblin/')
     expect(result).toEqual(goblin)
   })
@@ -188,7 +181,7 @@ describe('getMonster', () => {
     await getMonster('goblin')
     const result = await getMonster('goblin')
 
-    expect(mockFetch).toHaveBeenCalledOnce()
+    expect(mockFetch).toHaveBeenCalledTimes(1)
     expect(result).toEqual(goblin)
   })
 
@@ -212,10 +205,8 @@ describe('getMonster', () => {
 })
 
 describe('getCachedMonster', () => {
-  it('returns undefined for unknown slug', async () => {
-    vi.resetModules()
-    const { getCachedMonster } = await import('./open5e')
-
+  it('returns undefined for unknown slug', () => {
+    clearMonsterCache()
     expect(getCachedMonster('unknown')).toBeUndefined()
   })
 })
