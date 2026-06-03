@@ -7,7 +7,7 @@
 Track initiative, HP, and more across two screens.\
 One for the DM. One for the players. No account. No cost.
 
-[Mithril Forge SaaS](https://mithril-forge.up.railway.app) [Report a Bug](https://github.com/phortx/mithril-forge/issues) · [Support on Ko-fi](https://ko-fi.com/phortx)
+[Mithril Forge SaaS](https://mithril-forge.up.railway.app) · [Report a Bug](https://github.com/phortx/mithril-forge/issues) · [Support on Ko-fi](https://ko-fi.com/phortx)
 
 </div>
 
