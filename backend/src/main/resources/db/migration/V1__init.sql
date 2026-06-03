@@ -1,0 +1,3 @@
+-- Initial Flyway migration
+-- Spring Session tables are currently handled by spring.session.jdbc.initialize-schema=always
+-- Future schema changes should be added here or in subsequent V2__..., V3__... files.
