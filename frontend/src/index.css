@@ -499,3 +499,9 @@
     0 0 40px rgba(201, 168, 76, 0.3);
   background: linear-gradient(180deg, var(--color-forge-gold-bright) 0%, var(--color-forge-gold) 100%);
 }
+
+.disable-animations,
+.disable-animations * {
+  animation: none !important;
+  transition: none !important;
+}

@@ -6,10 +6,11 @@ beforeEach(() => {
 })
 
 describe('useEncounterSettings', () => {
-  it('defaults to party-only stat visibility', () => {
+  it('defaults to party-only stat visibility and animations enabled', () => {
     const { result } = renderHook(() => useEncounterSettings())
 
     expect(result.current.settings.statVisibility).toBe('party-only')
+    expect(result.current.settings.animationsEnabled).toBe(true)
   })
 
   it('sets stat visibility to all', () => {
@@ -32,16 +33,28 @@ describe('useEncounterSettings', () => {
     expect(result.current.settings.statVisibility).toBe('none')
   })
 
+  it('toggles animations enabled state', () => {
+    const { result } = renderHook(() => useEncounterSettings())
+
+    act(() => {
+      result.current.setAnimationsEnabled(false)
+    })
+
+    expect(result.current.settings.animationsEnabled).toBe(false)
+  })
+
   it('persists settings to localStorage', () => {
     const { result, unmount } = renderHook(() => useEncounterSettings())
 
     act(() => {
       result.current.setStatVisibility('all')
+      result.current.setAnimationsEnabled(false)
     })
 
     unmount()
 
     const { result: result2 } = renderHook(() => useEncounterSettings())
     expect(result2.current.settings.statVisibility).toBe('all')
+    expect(result2.current.settings.animationsEnabled).toBe(false)
   })
 })

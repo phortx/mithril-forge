@@ -9,7 +9,7 @@ import { EncounterToolbar } from './components/EncounterToolbar'
 import { StatBlockPanel } from './components/StatBlockPanel'
 import { FloatingNextTurn } from './components/FloatingNextTurn'
 import { Footer } from './components/Footer'
-import { Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
+import { Eye, Crown, Heart, HeartOff, Users, Sparkles } from 'lucide-react'
 import type { StatVisibility } from './types/encounterSettings'
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
     resetEncounter,
   } = useEncounter()
 
-  const { settings, setStatVisibility } = useEncounterSettings()
+  const { settings, setStatVisibility, setAnimationsEnabled } = useEncounterSettings()
 
   const { turnState, isStarted, startEncounter, nextTurn, endEncounter } =
     useTurnTracker(creatures)
@@ -49,7 +49,7 @@ function App() {
   }
 
   return (
-    <div className="page-texture relative min-h-screen flex flex-col bg-forge-darkest text-forge-parchment font-body">
+    <div className={`page-texture relative min-h-screen flex flex-col bg-forge-darkest text-forge-parchment font-body ${!settings.animationsEnabled ? 'disable-animations' : ''}`}>
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6 p-8 w-full flex-grow">
         <header className="text-center">
           <h1 className="font-title text-5xl font-bold text-forge-gold tracking-widest title-glow">
@@ -84,25 +84,42 @@ function App() {
               </Link>
             </div>
             {isDM && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-heading text-forge-tan uppercase tracking-wider">Stats</span>
-                <div className="flex gap-0">
-                  {statVisibilityOptions.map((opt, i) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setStatVisibility(opt.value)}
-                      className={`px-2.5 py-1 text-xs font-heading uppercase tracking-wider flex items-center gap-1 transition-colors ${
-                        i === 0 ? 'rounded-l' : ''
-                      }${i === statVisibilityOptions.length - 1 ? 'rounded-r' : ''} ${
-                        settings.statVisibility === opt.value
-                          ? 'bg-forge-tan/20 text-forge-parchment-light'
-                          : 'bg-forge-brown/40 text-forge-tan/60 hover:bg-forge-brown/60'
-                      }`}
-                    >
-                      {opt.icon}
-                      {opt.label}
-                    </button>
-                  ))}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-heading text-forge-tan uppercase tracking-wider">Stats</span>
+                  <div className="flex gap-0">
+                    {statVisibilityOptions.map((opt, i) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setStatVisibility(opt.value)}
+                        className={`px-2.5 py-1 text-xs font-heading uppercase tracking-wider flex items-center gap-1 transition-colors ${
+                          i === 0 ? 'rounded-l' : ''
+                        }${i === statVisibilityOptions.length - 1 ? 'rounded-r' : ''} ${
+                          settings.statVisibility === opt.value
+                            ? 'bg-forge-tan/20 text-forge-parchment-light'
+                            : 'bg-forge-brown/40 text-forge-tan/60 hover:bg-forge-brown/60'
+                        }`}
+                      >
+                        {opt.icon}
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-heading text-forge-tan uppercase tracking-wider">Anim</span>
+                  <button
+                    onClick={() => setAnimationsEnabled(!settings.animationsEnabled)}
+                    className={`px-2.5 py-1 rounded text-xs font-heading uppercase tracking-wider flex items-center gap-1 transition-colors ${
+                      settings.animationsEnabled
+                        ? 'bg-forge-tan/20 text-forge-parchment-light'
+                        : 'bg-forge-brown/40 text-forge-tan/60 hover:bg-forge-brown/60'
+                    }`}
+                  >
+                    <Sparkles size={10} className={!settings.animationsEnabled ? 'opacity-50' : ''} />
+                    {settings.animationsEnabled ? 'On' : 'Off'}
+                  </button>
                 </div>
               </div>
             )}
