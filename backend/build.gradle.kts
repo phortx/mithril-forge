@@ -24,6 +24,8 @@ extra["testcontainersVersion"] = "1.21.3"
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-session-jdbc")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("io.sentry:sentry-spring-boot-4-starter")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

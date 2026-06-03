@@ -219,6 +219,23 @@ just install    # bun install + verify gradlew
 - http://localhost:5173/ - Frontend
 - http://localhost:8080/swagger-ui/index.html - Swagger UI
 
+## Deployment (Railway)
+
+Mithril Forge is configured to be easily deployable on Railway via Railpack/Nixpacks.
+
+### Database & Migrations
+
+When deploying to Railway:
+1. Add a **PostgreSQL** database service to your Railway project.
+2. Link the PostgreSQL service to your Mithril Forge application service.
+3. Set the following environment variables in your application service to map Railway's Postgres variables to Spring Boot properties:
+   - `SPRING_DATASOURCE_URL=jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}`
+   - `SPRING_DATASOURCE_USERNAME=${PGUSER}`
+   - `SPRING_DATASOURCE_PASSWORD=${PGPASSWORD}`
+
+**Flyway Migrations:**
+Flyway is integrated into the Spring Boot backend. Migrations are executed **automatically on application startup**. No separate migration command or step is required in Railway. As long as the database variables are set correctly, the Spring Boot app will connect and run any pending scripts from `src/main/resources/db/migration` before starting the web server.
+
 ## License
 
 Licensed under the [GNU General Public License v3.0](LICENSE).
