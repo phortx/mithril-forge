@@ -4,12 +4,16 @@ import type { EncounterSettings, StatVisibility } from '../types/encounterSettin
 export function useEncounterSettings() {
   const [settings, setSettings] = useLocalStorage<EncounterSettings>(
     'mithril-forge-settings',
-    { statVisibility: 'party-only' },
+    { statVisibility: 'party-only', animationsEnabled: true },
   )
 
   const setStatVisibility = (statVisibility: StatVisibility) => {
     setSettings((prev) => ({ ...prev, statVisibility }))
   }
 
-  return { settings, setStatVisibility }
+  const setAnimationsEnabled = (animationsEnabled: boolean) => {
+    setSettings((prev) => ({ ...prev, animationsEnabled }))
+  }
+
+  return { settings, setStatVisibility, setAnimationsEnabled }
 }
