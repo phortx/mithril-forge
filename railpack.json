@@ -1,16 +1,10 @@
 {
   "$schema": "https://schema.railpack.com",
   "steps": {
-    "setup": {
-      "commands": [
-        "curl -fsSL https://bun.sh/install | bash"
-      ]
-    },
     "build": {
-      "inputs": [{ "step": "setup" }],
       "commands": [
-        "export PATH=\"$HOME/.bun/bin:$PATH\"",
-        "./gradlew :backend:bootJar"
+        "curl -fsSL https://bun.sh/install | bash",
+        "export PATH=\"$HOME/.bun/bin:$PATH\" && ./gradlew :backend:bootJar"
       ]
     }
   },

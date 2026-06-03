@@ -9,9 +9,9 @@ spring:
       file: ../compose.yaml        # compose.yaml liegt im Root, Backend ist Unterordner
       enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydatabase
-    username: myuser
-    password: secret
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/mydatabase}
+    username: ${SPRING_DATASOURCE_USERNAME:myuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:secret}
   devtools:
     restart:
       exclude: static/**           # kein Restart-Loop wenn Frontend-Build static/ befüllt
