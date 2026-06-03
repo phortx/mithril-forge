@@ -1,11 +1,12 @@
-import { Code2, Bug, Heart } from 'lucide-react'
+import { Code2, Bug, Heart, Activity } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export function Footer() {
   const linkClass =
     'inline-flex items-center gap-1.5 text-forge-tan hover:text-forge-gold transition-colors'
 
   return (
-    <footer className="max-w-4xl mx-auto px-8 pb-6 pt-2">
+    <footer className="max-w-4xl mx-auto px-8 pb-6 pt-2 mt-auto">
       <div className="ornament-divider font-heading text-sm">&#x2726;</div>
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-4 text-xs font-heading tracking-wider">
         <a
@@ -35,6 +36,13 @@ export function Footer() {
           <Heart size={14} />
           Support on Ko-fi
         </a>
+        <Link
+          to="/status"
+          className={linkClass}
+        >
+          <Activity size={14} />
+          System Status
+        </Link>
         <span className="text-forge-tan/40">v0.1</span>
       </div>
     </footer>

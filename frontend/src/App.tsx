@@ -49,8 +49,8 @@ function App() {
   }
 
   return (
-    <div className="page-texture relative min-h-screen bg-forge-darkest text-forge-parchment font-body">
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6 p-8">
+    <div className="page-texture relative min-h-screen flex flex-col bg-forge-darkest text-forge-parchment font-body">
+      <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6 p-8 w-full flex-grow">
         <header className="text-center">
           <h1 className="font-title text-5xl font-bold text-forge-gold tracking-widest title-glow">
             Mithril Forge
