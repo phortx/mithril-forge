@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useLocation, Navigate, Link } from 'react-router-dom'
 import { useEncounter } from './hooks/useEncounter'
 import { useEncounterSettings } from './hooks/useEncounterSettings'
 import { useTurnTracker } from './hooks/useTurnTracker'
@@ -9,15 +10,15 @@ import { StatBlockPanel } from './components/StatBlockPanel'
 import { FloatingNextTurn } from './components/FloatingNextTurn'
 import { Footer } from './components/Footer'
 import { Eye, Crown, Heart, HeartOff, Users } from 'lucide-react'
-import type { ViewMode } from './types/viewMode'
 import type { StatVisibility } from './types/encounterSettings'
 
 function App() {
-  const [viewMode, setViewMode] = useState<ViewMode>('dm')
+  const location = useLocation()
+  const isDM = location.pathname.startsWith('/dm')
+
   const [statBlockSlug, setStatBlockSlug] = useState<string | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const toolbarRef = useRef<HTMLDivElement>(null)
-  const isDM = viewMode === 'dm'
 
   const {
     creatures,
@@ -43,6 +44,10 @@ function App() {
     { value: 'none', label: 'Hidden', icon: <HeartOff size={10} /> },
   ]
 
+  if (location.pathname === '/') {
+    return <Navigate to="/dm" replace />
+  }
+
   return (
     <div className="page-texture relative min-h-screen bg-forge-darkest text-forge-parchment font-body">
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6 p-8">
@@ -55,8 +60,8 @@ function App() {
           </p>
           <div className="flex flex-col items-center gap-2 mt-4">
             <div className="flex gap-0">
-              <button
-                onClick={() => setViewMode('dm')}
+              <Link
+                to="/dm"
                 className={`rounded-l px-5 py-2 text-sm font-heading uppercase tracking-wider flex items-center gap-2 transition-colors ${
                   isDM
                     ? 'bg-forge-gold text-forge-darkest'
@@ -65,9 +70,9 @@ function App() {
               >
                 <Crown size={16} />
                 DM
-              </button>
-              <button
-                onClick={() => setViewMode('player')}
+              </Link>
+              <Link
+                to="/player"
                 className={`rounded-r px-5 py-2 text-sm font-heading uppercase tracking-wider flex items-center gap-2 transition-colors ${
                   !isDM
                     ? 'bg-forge-gold text-forge-darkest'
@@ -76,7 +81,7 @@ function App() {
               >
                 <Eye size={16} />
                 Player
-              </button>
+              </Link>
             </div>
             {isDM && (
               <div className="flex items-center gap-2">
@@ -136,7 +141,7 @@ function App() {
           creatures={creatures}
           activeCreatureId={turnState?.activeCreatureId ?? null}
           readOnly={!isDM}
-          viewMode={viewMode}
+          viewMode={isDM ? 'dm' : 'player'}
           statVisibility={settings.statVisibility}
           onRemove={removeCreature}
           onRollInitiative={rollCreatureInitiative}
