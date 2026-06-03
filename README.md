@@ -214,7 +214,10 @@ just install    # bun install + verify gradlew
 | API docs | SpringDoc OpenAPI (Swagger UI at `/swagger-ui.html`) |
 | Testing | Testcontainers (PostgreSQL) |
 
----
+
+### URLs
+- http://localhost:5173/ - Frontend
+- http://localhost:8080/swagger-ui/index.html - Swagger UI
 
 ## License
 
