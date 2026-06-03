@@ -53,7 +53,12 @@ test-frontend:
 
 # --- Quality -------------------------------------------------------------
 
-lint:
+lint: lint-backend lint-frontend
+
+lint-backend:
+    ./gradlew :backend:ktlintCheck
+
+lint-frontend:
     cd frontend && bun run lint
 
 typecheck:

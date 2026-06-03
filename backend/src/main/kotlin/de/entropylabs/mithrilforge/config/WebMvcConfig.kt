@@ -1,4 +1,4 @@
-package de.entropy_labs.mithril_forge.config
+package de.entropylabs.mithrilforge.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry

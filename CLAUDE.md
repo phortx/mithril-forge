@@ -177,7 +177,7 @@ The Player view must never show enemy HP, AC, or stat blocks regardless of this 
 - Flyway for all schema changes — never modify the database by hand
 - JDBC for data access (no JPA/ORM)
 - Testcontainers for tests that need a real database
-- Package structure: `de.entropy_labs.mithril_forge`
+- Package structure: `de.entropylabs.mithrilforge`
 
 ## Key Design Decisions
 

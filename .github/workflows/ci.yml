@@ -47,6 +47,9 @@ jobs:
         working-directory: frontend
         run: bun run test
 
+      - name: Backend — Lint
+        run: ./gradlew :backend:ktlintCheck
+
       - name: Backend — Test
         run: ./gradlew :backend:test
 

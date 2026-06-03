@@ -5,9 +5,28 @@ import { Footer } from './Footer'
 
 export function StatusPage() {
   const [backendStatus, setBackendStatus] = useState<'loading' | 'online' | 'offline'>('loading')
-  const [localStorageStatus, setLocalStorageStatus] = useState<'checking' | 'available' | 'unavailable'>('checking')
+  const [localStorageStatus] = useState<'checking' | 'available' | 'unavailable'>(() => {
+    try {
+      const testKey = '__test__'
+      localStorage.setItem(testKey, testKey)
+      localStorage.removeItem(testKey)
+      return 'available'
+    } catch {
+      return 'unavailable'
+    }
+  })
   const [open5eStatus, setOpen5eStatus] = useState<'loading' | 'online' | 'offline'>('loading')
-  const [cryptoStatus, setCryptoStatus] = useState<'checking' | 'available' | 'unavailable'>('checking')
+  const [cryptoStatus] = useState<'checking' | 'available' | 'unavailable'>(() => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      try {
+        crypto.randomUUID()
+        return 'available'
+      } catch {
+        return 'unavailable'
+      }
+    }
+    return 'unavailable'
+  })
 
   useEffect(() => {
     // Check backend
@@ -24,7 +43,7 @@ export function StatusPage() {
         } else {
           setBackendStatus('offline')
         }
-      } catch (error) {
+      } catch {
         setBackendStatus('offline')
       }
     }
@@ -40,34 +59,12 @@ export function StatusPage() {
         } else {
           setOpen5eStatus('offline')
         }
-      } catch (error) {
+      } catch {
         setOpen5eStatus('offline')
       }
     }
     
     checkOpen5e()
-
-    // Check localStorage
-    try {
-      const testKey = '__test__'
-      localStorage.setItem(testKey, testKey)
-      localStorage.removeItem(testKey)
-      setLocalStorageStatus('available')
-    } catch (e) {
-      setLocalStorageStatus('unavailable')
-    }
-
-    // Check Crypto API (randomUUID)
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-      try {
-        crypto.randomUUID()
-        setCryptoStatus('available')
-      } catch {
-        setCryptoStatus('unavailable')
-      }
-    } else {
-      setCryptoStatus('unavailable')
-    }
   }, [])
 
   return (
