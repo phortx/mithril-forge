@@ -1,6 +1,9 @@
 spring:
   application:
     name: mithril-forge
+  session:
+    jdbc:
+      initialize-schema: always
   docker:
     compose:
       file: ../compose.yaml        # compose.yaml liegt im Root, Backend ist Unterordner
