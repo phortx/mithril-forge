@@ -1,4 +1,4 @@
-package de.entropylabs.mithrilforge.db
+package de.entropylabs.mithrilforge.features.users
 
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.java.UUIDTable

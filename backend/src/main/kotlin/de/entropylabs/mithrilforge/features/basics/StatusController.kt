@@ -1,6 +1,6 @@
-package de.entropylabs.mithrilforge
+package de.entropylabs.mithrilforge.features.basics
 
-import de.entropylabs.mithrilforge.db.User
+import de.entropylabs.mithrilforge.features.users.User
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional

@@ -51,6 +51,19 @@ test-backend:
 test-frontend:
     cd frontend && bun run test
 
+# Run End-to-End Tests via Playwright
+test-e2e:
+    cd frontend && bun run test:e2e
+
+# Start backend + frontend with E2E Profile for isolated testing
+test-e2e-stack:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    trap 'echo "Shutting down..."; kill 0' EXIT INT TERM
+    ./gradlew :backend:bootRun --args='--spring.profiles.active=e2e' --console=plain &
+    (cd frontend && bun run dev) &
+    wait
+
 # --- Quality -------------------------------------------------------------
 
 lint: lint-backend lint-frontend
@@ -65,7 +78,7 @@ typecheck:
     cd frontend && bun run typecheck
 
 # Run everything CI checks locally
-check: lint typecheck test
+check: lint typecheck test test-e2e
 
 # --- Database ------------------------------------------------------------
 

@@ -66,3 +66,8 @@ backend/src/main/resources/static/
 *.sw?
 
 /.claude/settings.local.json
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/

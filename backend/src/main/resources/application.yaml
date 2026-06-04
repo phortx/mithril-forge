@@ -1,12 +1,14 @@
 spring:
   application:
     name: mithril-forge
+    url: ${APPLICATION_URL:localhost:5173}
+    secret: ${SECRET:very-secret-string}
   session:
     jdbc:
       initialize-schema: always
   docker:
     compose:
-      file: ../compose.yaml        # compose.yaml liegt im Root, Backend ist Unterordner
+      file: ../compose.yaml
       enabled: true
   flyway:
     baseline-on-migrate: true
@@ -16,10 +18,22 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:secret}
   devtools:
     restart:
-      exclude: static/**           # kein Restart-Loop wenn Frontend-Build static/ befüllt
+      exclude: static/**
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
+    from: ${SMTP_FROM:noreply@example.com}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: ${SMTP_START_TLS:false}
 
 sentry:
-  enabled: false                   # kein DSN konfiguriert, Sentry im Dev stumm schalten
+  enabled: false
 
 server:
   port: 8080

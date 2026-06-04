@@ -53,7 +53,8 @@ mithril-forge/
 - **Tailwind CSS v4** with custom `@theme` block (fantasy color palette, fonts)
 - **lucide-react** (icons)
 - **usehooks-ts** `useLocalStorage` (cross-tab reactive state via `storage` event)
-- **Bun Test + React Testing Library** (`jest-dom`, `user-event`), happy-dom environment
+- **Bun Test + React Testing Library** (`jest-dom`, `user-event`, Unit)
+- **Playwright** (E2E tests with isolated DB/Mailpit via `test-e2e-stack`)
 - **Open5e SRD API** (`src/api/open5e.ts`) for monster data
 
 ### Backend
@@ -80,6 +81,8 @@ just build-clean    # clean + Single-JAR
 just test           # All tests (backend + frontend)
 just test-backend   # ./gradlew :backend:test (Testcontainers)
 just test-frontend  # cd frontend && bun run test
+just test-e2e       # Run End-to-End Tests via Playwright
+just test-e2e-stack # Start backend + frontend with E2E Profile for isolated testing
 
 just lint           # cd frontend && bun run lint
 just typecheck      # cd frontend && bun run typecheck
@@ -104,6 +107,8 @@ bun run lint        # ESLint
 bun run typecheck   # tsc --noEmit
 bun run test        # Tests once
 bun run test:watch  # Tests in watch mode
+bun run test:e2e    # E2E tests
+bun run test:e2e:ui # E2E tests with UI debugger
 ```
 
 ### Backend (from repo root)
@@ -178,6 +183,10 @@ The Player view must never show enemy HP, AC, or stat blocks regardless of this 
 - JetBrains Exposed and JDBC for data access
 - Testcontainers for tests that need a real database
 - Package structure: `de.entropylabs.mithrilforge`
+
+### Quality Assurance & Testing
+- **Zero Failures**: Always ensure that linting, typechecking, and all tests (`just check`) pass without any errors.
+- **High Test Coverage**: Maintain and maximize test coverage. Always write tests for new components, hooks, utilities, and backend logic, and ensure existing test coverage is not reduced.
 
 ## Key Design Decisions
 

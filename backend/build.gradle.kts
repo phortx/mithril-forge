@@ -25,6 +25,9 @@ extra["exposedVersion"] = "1.3.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("com.auth0:java-jwt:4.4.0")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.jetbrains.exposed:exposed-spring-boot4-starter:${property("exposedVersion")}")
     implementation("org.jetbrains.exposed:exposed-core:${property("exposedVersion")}")
     implementation("org.jetbrains.exposed:exposed-dao:${property("exposedVersion")}")
@@ -38,6 +41,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
     implementation("tools.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")
@@ -49,6 +53,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 dependencyManagement {
