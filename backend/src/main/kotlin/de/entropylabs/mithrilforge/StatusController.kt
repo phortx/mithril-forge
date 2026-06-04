@@ -17,13 +17,13 @@ class StatusController {
         try {
             // Checks if DB connection works via Exposed
             User.count()
-            
+
             ResponseEntity.ok(
                 mapOf(
                     "status" to "ok",
                     "app" to "mithril-forge",
-                    "database" to "connected"
-                )
+                    "database" to "connected",
+                ),
             )
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
@@ -31,10 +31,8 @@ class StatusController {
                     "status" to "error",
                     "app" to "mithril-forge",
                     "database" to "disconnected",
-                    "error" to (e.message ?: "Unknown error")
-                )
+                    "error" to (e.message ?: "Unknown error"),
+                ),
             )
         }
 }
-
-
