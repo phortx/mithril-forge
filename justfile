@@ -56,7 +56,7 @@ test-frontend:
 lint: lint-backend lint-frontend
 
 lint-backend:
-    ./gradlew :backend:ktlintCheck
+    ./gradlew :backend:ktlintFormat
 
 lint-frontend:
     cd frontend && bun run lint
