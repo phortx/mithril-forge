@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:${property("exposedVersion")}")
     implementation("org.jetbrains.exposed:exposed-java-time:${property("exposedVersion")}")
     implementation("org.springframework.boot:spring-boot-starter-session-jdbc")
-    implementation("org.flywaydb:flyway-core")
+    implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("io.sentry:sentry-spring-boot-4-starter")
