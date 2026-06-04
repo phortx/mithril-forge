@@ -23,6 +23,7 @@ class StatusControllerTest {
                 status { isOk() }
                 jsonPath("$.status") { value("ok") }
                 jsonPath("$.app") { value("mithril-forge") }
+                jsonPath("$.database") { value("connected") }
             }
     }
 }
