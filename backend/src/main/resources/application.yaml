@@ -8,6 +8,8 @@ spring:
     compose:
       file: ../compose.yaml        # compose.yaml liegt im Root, Backend ist Unterordner
       enabled: true
+  flyway:
+    baseline-on-migrate: true
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/mydatabase}
     username: ${SPRING_DATASOURCE_USERNAME:myuser}
