@@ -210,7 +210,7 @@ just install    # bun install + verify gradlew
 | Framework | Spring Boot 4.0.6 |
 | Database | PostgreSQL |
 | Migrations | Flyway |
-| Data access | Spring JDBC |
+| Data access | JetBrains Exposed, Spring JDBC |
 | API docs | SpringDoc OpenAPI (Swagger UI at `/swagger-ui.html`) |
 | Testing | Testcontainers (PostgreSQL) |
 

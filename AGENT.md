@@ -60,7 +60,7 @@ mithril-forge/
 - **Kotlin 2.3.21**, **Java GraalVM Community 24**
 - **Spring Boot 4.0.6** (Web MVC, JDBC, Session JDBC, DevTools, Docker Compose Support)
 - **PostgreSQL** database, **Flyway** migrations
-- **Spring JDBC** for data access
+- **JetBrains Exposed** and **Spring JDBC** for data access
 - **SpringDoc OpenAPI 3** (Swagger UI at `/swagger-ui.html`)
 - **Testcontainers** (PostgreSQL) for integration tests
 - **Sentry** Spring Boot starter (currently disabled)
@@ -175,7 +175,7 @@ The Player view must never show enemy HP, AC, or stat blocks regardless of this 
 - Kotlin idioms: data classes, extension functions, functional style where it reads naturally
 - Spring conventions: `@RestController`, `@Service`, `@Repository` layering
 - Flyway for all schema changes — never modify the database by hand
-- JDBC for data access (no JPA/ORM)
+- JetBrains Exposed and JDBC for data access
 - Testcontainers for tests that need a real database
 - Package structure: `de.entropylabs.mithrilforge`
 
