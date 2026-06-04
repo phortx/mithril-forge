@@ -21,11 +21,11 @@ repositories {
 
 extra["sentryVersion"] = "8.27.0"
 extra["testcontainersVersion"] = "1.21.3"
-extra["exposedVersion"] = "0.58.0"
+extra["exposedVersion"] = "1.3.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.jetbrains.exposed:exposed-spring-boot-starter:${property("exposedVersion")}")
+    implementation("org.jetbrains.exposed:exposed-spring-boot4-starter:${property("exposedVersion")}")
     implementation("org.jetbrains.exposed:exposed-core:${property("exposedVersion")}")
     implementation("org.jetbrains.exposed:exposed-dao:${property("exposedVersion")}")
     implementation("org.jetbrains.exposed:exposed-jdbc:${property("exposedVersion")}")
