@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Activity, Database, CheckCircle2, XCircle, Loader2, Globe, ShieldCheck } from 'lucide-react'
-import { Footer } from './Footer'
+import { Navigation } from './Navigation'
 
 export function StatusPage() {
   const [backendStatus, setBackendStatus] = useState<'loading' | 'online' | 'offline'>('loading')
@@ -69,6 +69,7 @@ export function StatusPage() {
 
   return (
     <div className="page-texture relative min-h-screen flex flex-col bg-forge-darkest text-forge-parchment font-body">
+      <Navigation />
       <div className="relative z-10 max-w-2xl mx-auto flex flex-col gap-8 p-8 w-full flex-grow">
         <header className="text-center">
           <h1 className="font-title text-5xl font-bold text-forge-gold tracking-widest title-glow mb-4">
@@ -201,7 +202,7 @@ export function StatusPage() {
           </div>
         </div>
       </div>
-      <Footer />
+
     </div>
   )
 }
