@@ -8,7 +8,7 @@ import { CreatureList } from './components/CreatureList'
 import { EncounterToolbar } from './components/EncounterToolbar'
 import { StatBlockPanel } from './components/StatBlockPanel'
 import { FloatingNextTurn } from './components/FloatingNextTurn'
-import { Footer } from './components/Footer'
+import { Navigation } from './components/Navigation'
 import { Eye, Crown, Heart, HeartOff, Users, Sparkles } from 'lucide-react'
 import type { StatVisibility } from './types/encounterSettings'
 
@@ -50,6 +50,7 @@ function App() {
 
   return (
     <div className={`page-texture relative min-h-screen flex flex-col bg-forge-darkest text-forge-parchment font-body ${!settings.animationsEnabled ? 'disable-animations' : ''}`}>
+      <Navigation />
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6 p-8 w-full flex-grow">
         <header className="text-center">
           <h1 className="font-title text-5xl font-bold text-forge-gold tracking-widest title-glow">
@@ -180,7 +181,7 @@ function App() {
         />
       </div>
 
-      <Footer />
+
 
       <FloatingNextTurn toolbarRef={toolbarRef} visible={isDM && isStarted} onNextTurn={nextTurn} />
 

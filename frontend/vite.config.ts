@@ -7,7 +7,7 @@ const BACKEND_URL = process.env.VITE_BACKEND_URL ?? 'http://localhost:8080'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.GITHUB_ACTIONS ? '/mithril-forge/' : '/',
+
   server: {
     port: 5173,
     strictPort: true,

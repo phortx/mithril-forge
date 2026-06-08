@@ -77,52 +77,6 @@ The active encounter state (creatures, initiative, HP, turns) syncs between the 
 
 ---
 
-## Roadmap
-
-### v0.1 — Proof of Concept
-- [x] Tech stack setup (Bun, React, TypeScript, Vite)
-- [x] GitHub Actions CI
-- [x] Add creatures, roll/set initiative, sorted order
-- [x] Active turn highlight, Next Turn, round counter
-- [x] localStorage persistence & cross-tab sync
-
-### v0.2 — MVP
-- [x] Fantasy design (dark tones, parchment, thematic fonts, animations, icons)
-- [x] DM / Player view toggle
-- [x] HP tracking (current/max, damage, heal, temp HP)
-- [x] HP visibility toggle (all / party-only / none)
-- [x] In-game elapsed time display
-- [x] Creature type toggle (Party/Enemy inline)
-- [x] AC tracking & display for DM
-- [x] Kill / Revive with death status in Player view
-- [x] Encounter reset / End encounter
-- [x] Add multiple creatures of the same type at once
-- [x] Test coverage
-
-### v0.3 — SRD & Stat Blocks
-- [x] SRD monster autocomplete via Open5e API
-- [x] Auto-fill creature stats from SRD data
-- [x] Stat block side panel (DM only)
-
-### v0.4 — Backend Integration
-- [x] Spring Boot backend (Kotlin, PostgreSQL)
-- [x] Monorepo structure (frontend/ + backend/)
-- [x] Single-JAR production build (frontend embedded in backend)
-- [x] Dev orchestration via justfile (parallel frontend + backend)
-- [x] Vite dev proxy (/api → :8080, no CORS needed)
-- [x] SPA routing in production via WebMvcConfig
-
-### Future
-- [ ] Encounter templates (save/load via backend API)
-- [ ] Condition tags
-- [ ] Concentration toggle with visual indicator
-- [ ] Pets/Summons with owner linkage and shared initiative
-- [ ] Notes field per creature (DM only)
-- [ ] Keyboard shortcuts
-- [ ] D&D Beyond integration
-
----
-
 ## Development
 
 ### Prerequisites
@@ -156,6 +110,8 @@ just install    # bun install + verify gradlew
 | `just test` | All tests (backend + frontend) |
 | `just test-backend` | Backend tests only (Testcontainers) |
 | `just test-frontend` | Frontend tests only |
+| `just test-e2e` | End-to-End tests via Playwright (starts isolated E2E stack) |
+| `just test-e2e-stack` | Start backend + frontend with isolated E2E Postgres/Mailpit |
 | `just lint` | ESLint (frontend) |
 | `just typecheck` | TypeScript type check (frontend) |
 | `just check` | lint + typecheck + test |
@@ -177,6 +133,8 @@ just install    # bun install + verify gradlew
 | `bun run typecheck` | TypeScript type checker |
 | `bun run test` | Run tests once |
 | `bun run test:watch` | Run tests in watch mode |
+| `bun run test:e2e` | Playwright E2E tests |
+| `bun run test:e2e:ui` | Playwright E2E tests in UI mode |
 
 #### Backend (from repo root)
 
@@ -199,7 +157,7 @@ just install    # bun install + verify gradlew
 | Styling | Tailwind CSS v4 |
 | State sync | `useLocalStorage` from usehooks-ts |
 | Icons | lucide-react |
-| Testing | Bun Test + React Testing Library + jest-dom + happy-dom |
+| Testing | Bun Test + RTL (Unit) + Playwright (E2E) |
 
 **Backend**
 
@@ -218,23 +176,48 @@ just install    # bun install + verify gradlew
 ### URLs
 - http://localhost:5173/ - Frontend
 - http://localhost:8080/swagger-ui/index.html - Swagger UI
+- http://localhost:8025/ - Mailpit Web UI (Local Email Testing)
 
-## Deployment (Railway)
+## Deployment
 
-Mithril Forge is configured to be easily deployable on Railway via Railpack/Nixpacks.
+Mithril Forge can be deployed to any platform capable of running Java/Spring Boot applications with a PostgreSQL database. It is pre-configured to be easily deployable on platforms like Railway via Railway Buildpack.
 
-### Database & Migrations
+### Environment Variables
 
-When deploying to Railway:
+To properly run the application in production, you need to configure the following environment variables:
+
+**Core Application**
+- `APPLICATION_URL`: The public domain of your application (e.g., `mithril-forge.up.railway.app`). Used for generating absolute links/emails.
+- `SECRET`: A secure, random string used for session signing and internal security.
+
+**Database (PostgreSQL)**
+- `SPRING_DATASOURCE_URL`: JDBC URL for your PostgreSQL database (e.g., `jdbc:postgresql://hostname:5432/dbname`).
+- `SPRING_DATASOURCE_USERNAME`: Database username.
+- `SPRING_DATASOURCE_PASSWORD`: Database password.
+
+**Mail (SMTP)**
+Used for sending emails:
+- `SMTP_HOST`: The SMTP server host (e.g., `smtp.mailgun.org`).
+- `SMTP_PORT`: The SMTP server port (e.g., `587`).
+- `SMTP_USER`: SMTP username.
+- `SMTP_PASSWORD`: SMTP password.
+- `SMTP_FROM`: The sender email address (e.g., `noreply@yourdomain.com`).
+- `SMTP_START_TLS`: Set to `true` to enable STARTTLS.
+
+### Database Migrations
+
+Flyway is integrated into the Spring Boot backend. Migrations are executed **automatically on application startup**. As long as the database variables are set correctly, the app will connect and run any pending scripts from `src/main/resources/db/migration` before starting the web server. No manual migration step is required.
+
+### Example: Railway Deployment
+
 1. Add a **PostgreSQL** database service to your Railway project.
 2. Link the PostgreSQL service to your Mithril Forge application service.
-3. Set the following environment variables in your application service to map Railway's Postgres variables to Spring Boot properties:
-   - `SPRING_DATASOURCE_URL=jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}`
-   - `SPRING_DATASOURCE_USERNAME=${PGUSER}`
-   - `SPRING_DATASOURCE_PASSWORD=${PGPASSWORD}`
-
-**Flyway Migrations:**
-Flyway is integrated into the Spring Boot backend. Migrations are executed **automatically on application startup**. No separate migration command or step is required in Railway. As long as the database variables are set correctly, the Spring Boot app will connect and run any pending scripts from `src/main/resources/db/migration` before starting the web server.
+3. Map Railway's Postgres variables to Spring Boot properties:
+   - `SPRING_DATASOURCE_URL=jdbc:postgresql://${{PGHOST}}:${{PGPORT}}/${{PGDATABASE}}`
+   - `SPRING_DATASOURCE_USERNAME=${{PGUSER}}`
+   - `SPRING_DATASOURCE_PASSWORD=${{PGPASSWORD}}`
+   - `APPLICATION_URL=${{RAILWAY_PUBLIC_DOMAIN}}`
+4. Add your `APPLICATION_URL`, `SECRET`, and any required `SMTP_*` variables.
 
 ## License
 
