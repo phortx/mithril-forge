@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp } from 'lucide-react'
+import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp, Book } from 'lucide-react'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -126,6 +126,15 @@ export function Navigation() {
 
             {isMetaOpen && (
               <div className="flex flex-col gap-1 mt-2 pl-4 border-l border-forge-leather/40 ml-2">
+                <a
+                  href="/documentation"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-2 rounded text-forge-parchment/70 hover:text-forge-gold hover:bg-forge-brown/30 transition-all font-sans text-sm"
+                >
+                  <Book size={14} />
+                  Documentation
+                </a>
                 <a
                   href="https://github.com/phortx/mithril-forge"
                   target="_blank"
