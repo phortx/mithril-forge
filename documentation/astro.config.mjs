@@ -5,6 +5,7 @@ import starlightThemeSix from '@six-tech/starlight-theme-six';
 
 // https://astro.build/config
 export default defineConfig({
+	base: '/documentation',
 	integrations: [
 		starlight({
 			title: 'My Docs',

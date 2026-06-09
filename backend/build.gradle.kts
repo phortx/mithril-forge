@@ -118,14 +118,57 @@ val copyFrontend by tasks.registering(Copy::class) {
     into(staticResources)
 }
 
+// --- Documentation Build Integration ---
+
+val docsDir = layout.projectDirectory.dir("../documentation")
+val docsDist = docsDir.dir("dist")
+
+val npmInstallDocs by tasks.registering(Exec::class) {
+    group = "documentation"
+    description = "Install documentation dependencies"
+    workingDir = docsDir.asFile
+    commandLine("npm", "install")
+    inputs.file(docsDir.file("package.json"))
+    inputs.file(docsDir.file("package-lock.json"))
+    outputs.dir(docsDir.dir("node_modules"))
+}
+
+val npmBuildDocs by tasks.registering(Exec::class) {
+    group = "documentation"
+    description = "Build documentation with Astro"
+    dependsOn(npmInstallDocs)
+    workingDir = docsDir.asFile
+    commandLine("npm", "run", "build")
+    inputs.dir(docsDir.dir("src"))
+    inputs.dir(docsDir.dir("public"))
+    inputs.file(docsDir.file("astro.config.mjs"))
+    inputs.file(docsDir.file("package.json"))
+    outputs.dir(docsDist)
+}
+
+val copyDocs by tasks.registering(Copy::class) {
+    group = "documentation"
+    description = "Copy Astro dist into Spring Boot static resources under /documentation"
+    dependsOn(npmBuildDocs)
+    mustRunAfter(copyFrontend)
+    from(docsDist)
+    into(staticResources.dir("documentation"))
+}
+
 // Nur bootJar (Production) bekommt Frontend; bootRun bleibt schlank für Dev
-tasks.named("bootJar") { dependsOn(copyFrontend) }
+tasks.named("bootJar") { 
+    dependsOn(copyFrontend)
+    dependsOn(copyDocs)
+}
 
 // processResources liest static/ — muss nach copyFrontend laufen
-tasks.named("processResources") { dependsOn(copyFrontend) }
+tasks.named("processResources") { 
+    dependsOn(copyFrontend)
+    dependsOn(copyDocs)
+}
 
 tasks.named<Delete>("clean") {
-    delete(staticResources, frontendDist)
+    delete(staticResources, frontendDist, docsDist)
 }
 
 // Frontend-Tests via Gradle (optional, parallel zu bun run test im justfile)
