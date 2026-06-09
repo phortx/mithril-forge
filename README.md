@@ -21,8 +21,8 @@ Mithril Forge replaces paper initiative cards with a browser-based tracker desig
 
 Comprehensive documentation for both users and developers is available:
 
-- **[User Manual](documentation/src/content/docs/user-manual)**: Learn how to manage encounters, track combat, and use the interface.
-- **[Technical Documentation](documentation/src/content/docs/technical-docs)**: Find setup guides, CLI commands, tech stack details, and deployment instructions.
+- **[User Manual](https://mithril-forge.up.railway.app/documentation/user-manual)**: Learn how to manage encounters, track combat, and use the interface.
+- **[Technical Documentation](https://mithril-forge.up.railway.app/documentation/technical-docs)**: Find setup guides, CLI commands, tech stack details, and deployment instructions.
 
 To view the documentation locally:
 ```bash
@@ -38,7 +38,7 @@ just install    # Install dependencies
 just dev        # Start backend and frontend
 ```
 
-For full details, please refer to the [Development Setup guide](documentation/src/content/docs/technical-docs/how-to/development-setup.md).
+For full details, please refer to the [Development Setup guide](https://mithril-forge.up.railway.app/documentation/technical-docs/how-to/development-setup).
 
 ## License
 
