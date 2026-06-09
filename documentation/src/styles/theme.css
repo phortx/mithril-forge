@@ -77,7 +77,11 @@ h6,
 }
 .sidebar-pane {
   border-right: 1px solid var(--sl-color-gray-4) !important;
+  overflow-y: auto !important;
+  scrollbar-gutter: stable;
 }
 .right-sidebar {
   border-left: 1px solid var(--sl-color-gray-4) !important;
+  overflow-y: auto !important;
+  scrollbar-gutter: stable;
 }
