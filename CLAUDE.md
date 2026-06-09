@@ -1,1 +1,3 @@
-@AGENT.md
+# CLAUDE.md
+
+See @AGENTS.md
