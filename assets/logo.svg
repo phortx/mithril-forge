@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="emberDark" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3d1414" />
+      <stop offset="50%" stop-color="#8b2525" />
+      <stop offset="100%" stop-color="#c45a2d" />
+    </linearGradient>
+    <linearGradient id="ember" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b2525" />
+      <stop offset="50%" stop-color="#c45a2d" />
+      <stop offset="100%" stop-color="#e4c65a" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e4c65a" />
+      <stop offset="50%" stop-color="#c9a84c" />
+      <stop offset="100%" stop-color="#8a7235" />
+    </linearGradient>
+    <linearGradient id="ironLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6b5438" />
+      <stop offset="100%" stop-color="#3d2e1f" />
+    </linearGradient>
+    <linearGradient id="ironBase" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d2e1f" />
+      <stop offset="100%" stop-color="#2a1f16" />
+    </linearGradient>
+    <linearGradient id="ironDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a1f16" />
+      <stop offset="100%" stop-color="#1a1410" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="glowGold" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowEmber" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glowSmall" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="dropShadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background/Magic Layer (No Drop Shadow) -->
+  <g>
+    <!-- Magic Halos -->
+    <circle cx="250" cy="130" r="100" fill="none" stroke="url(#emberDark)" stroke-width="1" opacity="0.6" />
+    <circle cx="250" cy="130" r="80" fill="none" stroke="url(#gold)" stroke-width="1.5" stroke-dasharray="4 12" opacity="0.8" filter="url(#glowSmall)" />
+    <circle cx="250" cy="130" r="60" fill="none" stroke="url(#ember)" stroke-width="2" stroke-dasharray="16 8" opacity="0.9" />
+
+    <!-- Floating Sparks -->
+    <circle cx="160" cy="150" r="3" fill="#e4c65a" filter="url(#glowSmall)" />
+    <circle cx="330" cy="120" r="4" fill="#c45a2d" filter="url(#glowSmall)" />
+    <circle cx="210" cy="70" r="2.5" fill="#d97044" filter="url(#glowSmall)" />
+    <circle cx="280" cy="50" r="2.5" fill="#e4c65a" filter="url(#glowSmall)" />
+    <circle cx="120" cy="90" r="2" fill="#c45a2d" filter="url(#glowSmall)" />
+    <circle cx="370" cy="160" r="3" fill="#d97044" filter="url(#glowSmall)" />
+    <circle cx="190" cy="180" r="2" fill="#e4c65a" filter="url(#glowSmall)" />
+    <circle cx="310" cy="190" r="2.5" fill="#c45a2d" filter="url(#glowSmall)" />
+    
+    <!-- Fire Layers -->
+    <path d="M 250 40 L 310 130 L 250 210 L 190 130 Z" fill="url(#emberDark)" filter="url(#glowEmber)" opacity="0.9" />
+    <path d="M 250 60 L 290 130 L 250 200 L 210 130 Z" fill="url(#ember)" filter="url(#glowEmber)" />
+    <path d="M 250 85 L 270 130 L 250 185 L 230 130 Z" fill="url(#gold)" filter="url(#glowGold)" />
+    <path d="M 250 100 L 258 130 L 250 170 L 242 130 Z" fill="#ffffff" filter="url(#glowSmall)" />
+  </g>
+
+  <!-- Solid Anvil (With Drop Shadow) -->
+  <g filter="url(#dropShadow)">
+    <!-- Base Layer 3 -->
+    <path d="M 120 420 L 380 420 L 400 460 L 100 460 Z" fill="url(#ironDark)" stroke="url(#gold)" stroke-width="2" stroke-linejoin="round" />
+    <!-- Base Layer 2 -->
+    <path d="M 140 380 L 360 380 L 380 420 L 120 420 Z" fill="url(#ironBase)" stroke="url(#gold)" stroke-width="2" stroke-linejoin="round" />
+    <!-- Base Layer 1 -->
+    <path d="M 170 340 L 330 340 L 350 380 L 150 380 Z" fill="url(#ironLight)" stroke="url(#gold)" stroke-width="2" stroke-linejoin="round" />
+    
+    <!-- Side Supports / Wings -->
+    <path d="M 170 240 L 200 240 L 180 340 C 130 340 120 280 140 240 Z" fill="url(#ironDark)" stroke="url(#gold)" stroke-width="1.5" stroke-linejoin="round" />
+    <path d="M 330 240 L 300 240 L 320 340 C 370 340 380 280 360 240 Z" fill="url(#ironDark)" stroke="url(#gold)" stroke-width="1.5" stroke-linejoin="round" />
+
+    <!-- Main Body -->
+    <path d="M 200 240 L 300 240 L 320 340 L 180 340 Z" fill="url(#ironBase)" stroke="url(#gold)" stroke-width="2" stroke-linejoin="round" />
+
+    <!-- Center Medallion -->
+    <circle cx="250" cy="290" r="24" fill="url(#ironDark)" stroke="url(#gold)" stroke-width="2" />
+    <path d="M 250 275 L 265 295 L 250 305 L 235 295 Z" fill="url(#gold)" />
+    <path d="M 250 282 L 258 295 L 250 300 L 242 295 Z" fill="url(#ember)" />
+
+    <!-- Top Anvil Block -->
+    <path d="M 130 200 L 370 200 L 390 240 L 110 240 Z" fill="url(#ironLight)" stroke="url(#gold)" stroke-width="2" stroke-linejoin="round" />
+    
+    <!-- Strike Surface Plate -->
+    <path d="M 150 190 L 350 190 L 360 200 L 140 200 Z" fill="url(#gold)" stroke="url(#ironDark)" stroke-width="1" stroke-linejoin="round" />
+  </g>
+</svg>

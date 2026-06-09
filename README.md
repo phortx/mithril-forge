@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/logo.svg" alt="Mithril Forge Logo" width="250" />
+
 # Mithril Forge
 
 **D&D Encounter Tracker — Right in Your Browser**
@@ -112,6 +114,8 @@ just install    # bun install + verify gradlew
 | `just test-frontend` | Frontend tests only |
 | `just test-e2e` | End-to-End tests via Playwright (starts isolated E2E stack) |
 | `just test-e2e-stack` | Start backend + frontend with isolated E2E Postgres/Mailpit |
+| `just dev-docs` | Start the local documentation dev server (Starlight) |
+| `just build-docs` | Build the documentation for production |
 | `just lint` | ESLint (frontend) |
 | `just typecheck` | TypeScript type check (frontend) |
 | `just check` | lint + typecheck + test |
@@ -177,6 +181,19 @@ just install    # bun install + verify gradlew
 - http://localhost:5173/ - Frontend
 - http://localhost:8080/swagger-ui/index.html - Swagger UI
 - http://localhost:8025/ - Mailpit Web UI (Local Email Testing)
+
+## Documentation
+
+Mithril Forge includes comprehensive documentation (both a user manual and developer documentation) built with [Starlight](https://starlight.astro.build/). 
+
+The documentation source files are located in the `documentation/src/content/docs/` directory as Markdown (`.md` or `.mdx`) files. Images can be added to `documentation/src/assets/` and static assets to `documentation/public/`.
+
+### Documentation Commands
+
+| Command | Description |
+|---|---|
+| `just dev-docs` | Start the local documentation dev server at `localhost:4321` |
+| `just build-docs` | Build the documentation for production to `documentation/dist/` |
 
 ## Deployment
 

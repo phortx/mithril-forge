@@ -50,6 +50,23 @@ jobs:
         working-directory: frontend
         run: bun run test
 
+      - name: Install documentation dependencies
+        working-directory: documentation
+        run: npm ci
+
+      - name: Documentation — Lint
+        working-directory: documentation
+        run: npm run lint
+
+      - name: Documentation — Check
+        working-directory: documentation
+        run: npm run check
+
+      - name: Documentation — Build
+        working-directory: documentation
+        run: npm run build
+
+
       - name: Backend — Lint
         run: ./gradlew :backend:ktlintCheck
 

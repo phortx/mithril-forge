@@ -14,7 +14,7 @@ default:
 
 # Start backend + frontend in parallel (Postgres auto-managed by Spring Boot)
 # Ctrl+C cleanly shuts down both processes via SIGTERM propagation.
-dev:
+dev: sync-assets
     #!/usr/bin/env bash
     set -euo pipefail
     trap 'echo "Shutting down..."; kill 0' EXIT INT TERM
@@ -33,7 +33,7 @@ dev-frontend:
 # --- Build ---------------------------------------------------------------
 
 # Build the deployable Single-JAR (frontend bundled into backend)
-build:
+build: sync-assets
     ./gradlew :backend:bootJar
 
 # Clean build from scratch
@@ -66,7 +66,7 @@ test-e2e-stack:
 
 # --- Quality -------------------------------------------------------------
 
-lint: lint-backend lint-frontend
+lint: lint-backend lint-frontend lint-docs
 
 lint-backend:
     ./gradlew :backend:ktlintFormat
@@ -74,11 +74,22 @@ lint-backend:
 lint-frontend:
     cd frontend && bun run lint
 
-typecheck:
+lint-docs:
+    cd documentation && npm run lint
+
+format-docs:
+    cd documentation && npm run format
+
+typecheck: typecheck-frontend typecheck-docs
+
+typecheck-frontend:
     cd frontend && bun run typecheck
 
+typecheck-docs:
+    cd documentation && npm run check
+
 # Run everything CI checks locally
-check: lint typecheck test test-e2e
+check: lint typecheck build-docs test test-e2e
 
 # --- Database ------------------------------------------------------------
 
@@ -95,11 +106,30 @@ db-reset:
     docker compose down -v
     docker compose up -d postgres
 
+# --- Documentation -------------------------------------------------------
+
+# Start the Starlight documentation dev server
+dev-docs: sync-assets
+    cd documentation && npm run dev
+
+# Build the documentation for production
+build-docs: sync-assets
+    cd documentation && npm run build
+
+# --- Assets --------------------------------------------------------------
+
+# Sync shared assets to their respective application public folders
+sync-assets:
+    mkdir -p frontend/public documentation/public
+    cp -r assets/* frontend/public/ 2>/dev/null || true
+    cp -r assets/* documentation/public/ 2>/dev/null || true
+
 # --- Utilities -----------------------------------------------------------
 
-# Install dependencies for both sides
-install:
+# Install dependencies for all projects
+install: sync-assets
     cd frontend && bun install
+    cd documentation && npm install
     ./gradlew --version
 
 # Wipe everything build-related
