@@ -127,7 +127,7 @@ val npmInstallDocs by tasks.registering(Exec::class) {
     group = "documentation"
     description = "Install documentation dependencies"
     workingDir = docsDir.asFile
-    commandLine("npm", "install")
+    commandLine("bun", "install")
     inputs.file(docsDir.file("package.json"))
     inputs.file(docsDir.file("package-lock.json"))
     outputs.dir(docsDir.dir("node_modules"))
@@ -138,7 +138,7 @@ val npmBuildDocs by tasks.registering(Exec::class) {
     description = "Build documentation with Astro"
     dependsOn(npmInstallDocs)
     workingDir = docsDir.asFile
-    commandLine("npm", "run", "build")
+    commandLine("bun", "run", "build")
     inputs.dir(docsDir.dir("src"))
     inputs.dir(docsDir.dir("public"))
     inputs.file(docsDir.file("astro.config.mjs"))
