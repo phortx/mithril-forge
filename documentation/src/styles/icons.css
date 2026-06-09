@@ -1,0 +1,44 @@
+nav.nav-bar a {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+nav.nav-bar a[data-icon]::before {
+  content: "";
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+nav.nav-bar a[data-icon="home"]::before {
+  -webkit-mask-image: url('/documentation/icons/home.svg');
+  mask-image: url('/documentation/icons/home.svg');
+}
+nav.nav-bar a[data-icon="manual"]::before {
+  -webkit-mask-image: url('/documentation/icons/manual.svg');
+  mask-image: url('/documentation/icons/manual.svg');
+}
+nav.nav-bar a[data-icon="tech"]::before {
+  -webkit-mask-image: url('/documentation/icons/tech.svg');
+  mask-image: url('/documentation/icons/tech.svg');
+}
+nav.nav-bar a[data-icon="issues"]::before {
+  -webkit-mask-image: url('/documentation/icons/issues.svg');
+  mask-image: url('/documentation/icons/issues.svg');
+}
+nav.nav-bar a[data-icon="roadmap"]::before {
+  -webkit-mask-image: url('/documentation/icons/roadmap.svg');
+  mask-image: url('/documentation/icons/roadmap.svg');
+}
+nav.nav-bar a[data-icon="forum"]::before {
+  -webkit-mask-image: url('/documentation/icons/forum.svg');
+  mask-image: url('/documentation/icons/forum.svg');
+}

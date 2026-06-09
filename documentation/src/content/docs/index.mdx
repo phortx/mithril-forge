@@ -1,40 +1,53 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: Mithril Forge Documentation Portal
+description: Official documentation for Mithril Forge.
+template: splash
+editUrl: false
+lastUpdated: false
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Welcome to the official documentation for Mithril Forge!
   image:
-    file: ../../assets/houston.webp
-  actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+    file: ../../../public/logo.svg
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard } from '@astrojs/starlight/components';
 
-## Next steps
+<div class="homepage-container">
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+<h2 class="text-center">Documentation Portal</h2>
+
+<CardGrid>
+	<Card title="User Manual" icon="open-book">
+		Everything you need to know to use Mithril Forge. Includes getting started guides, troubleshooting, and user guides.
+        <br/><br/>
+        <a href="/documentation/user-manual/">Go to User Manual →</a>
 	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="Technical Documentation" icon="setting">
+		Detailed information on architecture, development, and internal workings following the Diátaxis standard.
+        <br/><br/>
+        <a href="/documentation/technical-docs/">Go to Technical Docs →</a>
 	</Card>
 </CardGrid>
+
+<h2 class="text-center" style="margin-top: 4rem;">Community & Resources</h2>
+
+<CardGrid>
+    <LinkCard 
+        title="Give Feedback" 
+        description="Report bugs or request new features on our GitHub Issues page." 
+        href="https://github.com/phortx/mithril-forge/issues" 
+    />
+    <LinkCard 
+        title="Roadmap" 
+        description="See what's coming next and track our project milestones." 
+        href="https://github.com/phortx/mithril-forge/milestones" 
+    />
+    <LinkCard 
+        title="Forum" 
+        description="Join the community discussions, ask questions, and share ideas." 
+        href="https://github.com/phortx/mithril-forge/discussions" 
+    />
+</CardGrid>
+
+</div>

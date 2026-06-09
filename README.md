@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/logo.svg" alt="Mithril Forge Logo" width="250" />
+
 # Mithril Forge
 
 **D&D Encounter Tracker — Right in Your Browser**

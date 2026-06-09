@@ -14,7 +14,7 @@ default:
 
 # Start backend + frontend in parallel (Postgres auto-managed by Spring Boot)
 # Ctrl+C cleanly shuts down both processes via SIGTERM propagation.
-dev:
+dev: sync-assets
     #!/usr/bin/env bash
     set -euo pipefail
     trap 'echo "Shutting down..."; kill 0' EXIT INT TERM
@@ -33,7 +33,7 @@ dev-frontend:
 # --- Build ---------------------------------------------------------------
 
 # Build the deployable Single-JAR (frontend bundled into backend)
-build:
+build: sync-assets
     ./gradlew :backend:bootJar
 
 # Clean build from scratch
@@ -98,17 +98,25 @@ db-reset:
 # --- Documentation -------------------------------------------------------
 
 # Start the Starlight documentation dev server
-dev-docs:
+dev-docs: sync-assets
     cd documentation && npm run dev
 
 # Build the documentation for production
-build-docs:
+build-docs: sync-assets
     cd documentation && npm run build
+
+# --- Assets --------------------------------------------------------------
+
+# Sync shared assets to their respective application public folders
+sync-assets:
+    mkdir -p frontend/public documentation/public
+    cp -r assets/* frontend/public/ 2>/dev/null || true
+    cp -r assets/* documentation/public/ 2>/dev/null || true
 
 # --- Utilities -----------------------------------------------------------
 
 # Install dependencies for all projects
-install:
+install: sync-assets
     cd frontend && bun install
     cd documentation && npm install
     ./gradlew --version

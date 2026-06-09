@@ -1,0 +1,39 @@
+/* Center the hero text and limit width */
+html[data-has-hero] .hero {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+html[data-has-hero] .hero .copy {
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+html[data-has-hero] .hero .title {
+    text-align: center !important;
+}
+html[data-has-hero] .hero .tagline {
+    text-align: center !important;
+}
+
+/* Hide footer completely on homepage just in case */
+html[data-has-hero] footer {
+    display: none !important;
+}
+
+/* Fixed width container for content */
+.homepage-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Make logo smaller in the Starlight header */
+.site-title img {
+    height: 2rem !important; /* Adjust as needed, default is often larger */
+    max-height: 40px !important;
+    width: auto !important;
+}

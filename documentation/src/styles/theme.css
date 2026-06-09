@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&display=swap');
+
+:root, :root[data-theme='light'], :root[data-theme='dark'] {
+  /* Accents - Gold */
+  --sl-color-accent-low: #3d2e1f; /* Forge Leather */
+  --sl-color-accent: #c9a84c; /* Forge Gold */
+  --sl-color-accent-high: #e4c65a; /* Forge Gold Bright */
+  
+  /* Text and background */
+  --sl-color-white: #e8dcc4; /* Forge Parchment Light */
+  --sl-color-gray-1: #d4c4a0; /* Forge Parchment */
+  --sl-color-gray-2: #8a7235; /* Forge Gold Dim */
+  --sl-color-gray-3: #6b5438; /* Forge Tan */
+  --sl-color-gray-4: #3d2e1f; /* Forge Leather */
+  --sl-color-gray-5: #2a1f16; /* Forge Brown */
+  --sl-color-gray-6: #1a1410; /* Forge Dark */
+  --sl-color-black: #0d0a07; /* Forge Darkest */
+  
+  --sl-color-bg: var(--sl-color-black);
+  --sl-color-bg-nav: var(--sl-color-gray-6);
+  --sl-color-bg-sidebar: var(--sl-color-gray-6);
+  --sl-color-bg-inline-code: var(--sl-color-gray-5);
+  
+  --sl-color-text: var(--sl-color-gray-1);
+  --sl-color-text-accent: var(--sl-color-accent);
+
+  /* Overriding Six-Theme specific variables which were causing the blue tint */
+  --background: #0d0a07; /* Forge Darkest */
+  --foreground: #d4c4a0; /* Forge Parchment */
+  --foreground-light: #e8dcc4; /* Forge Parchment Light */
+  --card: #1a1410; /* Forge Dark */
+  --card-foreground: #d4c4a0;
+  --popover: #2a1f16; /* Forge Brown */
+  --popover-foreground: #e8dcc4;
+  --primary: #c9a84c; /* Forge Gold */
+  --primary-foreground: #0d0a07;
+  --secondary: #3d2e1f; /* Forge Leather */
+  --secondary-foreground: #e8dcc4;
+  --muted: #1a1410;
+  --muted-foreground: #6b5438; /* Forge Tan */
+  --accent: #2a1f16;
+  --accent-foreground: #c9a84c;
+  --destructive: #6b1d1d;
+  --border: #3d2e1f;
+  --input: #1a1410;
+  --ring: #8a7235;
+  --mark-background: #8a7235;
+
+  --code-background: #0d0a07;
+  --ec-frm-edActTabBg: #1a1410;
+  --ec-frm-edTabBarBg: #0d0a07;
+  
+  --sl-color-banner-bg: #1a1410;
+  --sl-color-banner-border: #3d2e1f;
+  --sl-color-banner-text: #c9a84c;
+}
+
+/* Headings with Cinzel */
+h1, h2, h3, h4, h5, h6, .site-title, .sl-nav-tabs, .sl-sidebar-tabs, .large {
+  font-family: "Cinzel", serif !important;
+}
+
+/* Adjusting borders to use Forge Leather */
+.sl-flex.header {
+  border-bottom: 1px solid var(--sl-color-gray-4) !important;
+}
+.sidebar-pane {
+  border-right: 1px solid var(--sl-color-gray-4) !important;
+}
+.right-sidebar {
+  border-left: 1px solid var(--sl-color-gray-4) !important;
+}
