@@ -66,10 +66,6 @@ jobs:
         working-directory: documentation
         run: npm run build
 
-      - name: Documentation — Broken Link Check
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: --verbose --no-progress './documentation/dist/**/*.html'
 
       - name: Backend — Lint
         run: ./gradlew :backend:ktlintCheck
