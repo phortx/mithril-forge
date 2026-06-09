@@ -52,19 +52,19 @@ jobs:
 
       - name: Install documentation dependencies
         working-directory: documentation
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Documentation — Lint
         working-directory: documentation
-        run: npm run lint
+        run: bun run lint
 
       - name: Documentation — Check
         working-directory: documentation
-        run: npm run check
+        run: bun run check
 
       - name: Documentation — Build
         working-directory: documentation
-        run: npm run build
+        run: bun run build
 
 
       - name: Backend — Lint

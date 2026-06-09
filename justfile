@@ -75,10 +75,10 @@ lint-frontend:
     cd frontend && bun run lint
 
 lint-docs:
-    cd documentation && npm run lint
+    cd documentation && bun run lint
 
 format-docs:
-    cd documentation && npm run format
+    cd documentation && bun run format
 
 typecheck: typecheck-frontend typecheck-docs
 
@@ -86,7 +86,7 @@ typecheck-frontend:
     cd frontend && bun run typecheck
 
 typecheck-docs:
-    cd documentation && npm run check
+    cd documentation && bun run check
 
 # Run everything CI checks locally
 check: lint typecheck build-docs test test-e2e
@@ -110,11 +110,11 @@ db-reset:
 
 # Start the Starlight documentation dev server
 dev-docs: sync-assets
-    cd documentation && npm run dev
+    cd documentation && bun run dev
 
 # Build the documentation for production
 build-docs: sync-assets
-    cd documentation && npm run build
+    cd documentation && bun run build
 
 # --- Assets --------------------------------------------------------------
 
@@ -129,7 +129,7 @@ sync-assets:
 # Install dependencies for all projects
 install: sync-assets
     cd frontend && bun install
-    cd documentation && npm install
+    cd documentation && bun install
     ./gradlew --version
 
 # Wipe everything build-related

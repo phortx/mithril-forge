@@ -10,16 +10,19 @@ You can deploy Mithril Forge to any platform capable of running Java/Spring Boot
 To run the application in production, configure the following environment variables:
 
 **Core Application**
+
 - `APPLICATION_URL`: The public domain of your application (for example, `mithril-forge.up.railway.app`). This is used for generating absolute links and emails.
 - `SECRET`: A secure, random string used for session signing and internal security.
 
 **Database (PostgreSQL)**
+
 - `SPRING_DATASOURCE_URL`: JDBC URL for your PostgreSQL database (for example, `jdbc:postgresql://hostname:5432/dbname`).
 - `SPRING_DATASOURCE_USERNAME`: Database username.
 - `SPRING_DATASOURCE_PASSWORD`: Database password.
 
 **Mail (SMTP)**
 Used for sending emails:
+
 - `SMTP_HOST`: The SMTP server host (for example, `smtp.mailgun.org`).
 - `SMTP_PORT`: The SMTP server port (for example, `587`).
 - `SMTP_USER`: SMTP username.
