@@ -4,7 +4,8 @@
 
 **Architecture & Context:**
 - **Monorepo:** React 19 (Frontend) + Spring Boot 4 (Backend).
-- **Production Build:** Single JAR. `bootJar` builds Vite frontend and embeds it in `backend/src/main/resources/static/`. SPA routing via `WebMvcConfig`.
+- **Production Build:** Single JAR. `bootJar` builds the Vite frontend and Astro documentation via Bun and embeds them in `backend/src/main/resources/static/` and `static/documentation/`. SPA routing via `WebMvcConfig`.
+- **Deployment:** Deployed on Railway using `railpack.json`, which installs Bun before running the Gradle build.
 - **State Strategy:** Active encounter state syncs across browser tabs (DM/Player) using `usehooks-ts` `useLocalStorage` on `storage` events. **DO NOT** replace with BroadcastChannel/WebSockets. Persistent data (templates, etc.) stored in PostgreSQL.
 - **Player vs DM View:** Same SPA. Player view ONLY shows initiative order, names, active turn, status, timer. Never show enemy HP, AC, or stat blocks to players.
 - **Open5e:** Fetches monster data. Stat blocks only visible in DM view.
@@ -16,7 +17,7 @@
 
 ## Key Commands (`just`)
 - `just dev` / `dev-backend` / `dev-frontend`: Local dev servers (Frontend proxy to :8080).
-- `just test` / `test-backend` / `test-frontend` / `test-e2e` / `test-e2e-stack`: Testing. E2E stack runs isolated DB/Mailpit.
+- `just test` / `test-backend` / `test-frontend` / `test-e2e` / `test-e2e-stack`: Testing. E2E stack runs isolated Postgres DB (port 5433) and Mailpit (port 8026) via `compose-e2e.yaml`.
 - `just check`: Runs lint + typecheck + test. Must always pass with zero errors.
 - `just build` / `run-jar`: Build / run production JAR.
 - `just dev-docs` / `build-docs`: Start Starlight dev server / build docs.
