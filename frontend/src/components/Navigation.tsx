@@ -51,18 +51,19 @@ export function Navigation() {
       >
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-forge-leather mb-6">
-            <span className="font-title text-xl font-bold text-forge-gold tracking-wider title-glow">
-              Mithril Forge
-            </span>
+          <div className="flex flex-col items-center justify-center pb-6 border-b border-forge-leather mb-6 relative">
             <button
               onClick={closeNav}
-              className="p-1.5 rounded text-forge-tan hover:text-forge-gold hover:bg-forge-brown/40 transition-all focus:outline-none cursor-pointer"
+              className="absolute top-0 right-0 p-1.5 rounded text-forge-tan hover:text-forge-gold hover:bg-forge-brown/40 transition-all focus:outline-none cursor-pointer"
               aria-label="Close Menu"
               data-testid="nav-close"
             >
               <X size={20} />
             </button>
+            <img src="/logo.svg" alt="Mithril Forge Logo" className="h-40 w-auto mb-4 drop-shadow-[0_0_15px_rgba(201,168,76,0.2)]" />
+            <span className="font-title text-2xl font-bold text-forge-gold tracking-wider title-glow text-center">
+              Mithril Forge
+            </span>
           </div>
 
           {/* Navigation Links */}

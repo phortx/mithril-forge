@@ -1,0 +1,59 @@
+---
+title: Mithril Forge Documentation Portal
+description: Official documentation for Mithril Forge.
+template: splash
+editUrl: false
+lastUpdated: false
+hero:
+  tagline: Welcome to the official documentation for Mithril Forge!
+  image:
+    file: ../../../public/logo.svg
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+import { LinkCard } from "@astrojs/starlight/components";
+
+<div class="homepage-container">
+
+<h2 class="text-center">Documentation Portal</h2>
+
+<CardGrid>
+  <Card title="User Manual" icon="open-book">
+    Everything you need to know to use Mithril Forge. Includes getting started
+    guides, troubleshooting, and user guides.
+    <br />
+    <br />
+    <a href="/documentation/user-manual/">Go to User Manual →</a>
+  </Card>
+  <Card title="Technical Documentation" icon="setting">
+    Detailed information on architecture, development, and internal workings
+    following the Diátaxis standard.
+    <br />
+    <br />
+    <a href="/documentation/technical-docs/">Go to Technical Docs →</a>
+  </Card>
+</CardGrid>
+
+<h2 class="text-center" style="margin-top: 4rem;">
+  Community & Resources
+</h2>
+
+<CardGrid>
+  <LinkCard
+    title="Give Feedback"
+    description="Report bugs or request new features on our GitHub Issues page."
+    href="https://github.com/phortx/mithril-forge/issues"
+  />
+  <LinkCard
+    title="Roadmap"
+    description="See what's coming next and track our project milestones."
+    href="https://github.com/phortx/mithril-forge/milestones"
+  />
+  <LinkCard
+    title="Forum"
+    description="Join the community discussions, ask questions, and share ideas."
+    href="https://github.com/phortx/mithril-forge/discussions"
+  />
+</CardGrid>
+
+</div>
