@@ -66,7 +66,7 @@ test-e2e-stack:
 
 # --- Quality -------------------------------------------------------------
 
-lint: lint-backend lint-frontend
+lint: lint-backend lint-frontend lint-docs
 
 lint-backend:
     ./gradlew :backend:ktlintFormat
@@ -74,11 +74,22 @@ lint-backend:
 lint-frontend:
     cd frontend && bun run lint
 
-typecheck:
+lint-docs:
+    cd documentation && npm run lint
+
+format-docs:
+    cd documentation && npm run format
+
+typecheck: typecheck-frontend typecheck-docs
+
+typecheck-frontend:
     cd frontend && bun run typecheck
 
+typecheck-docs:
+    cd documentation && npm run check
+
 # Run everything CI checks locally
-check: lint typecheck test test-e2e
+check: lint typecheck build-docs test test-e2e
 
 # --- Database ------------------------------------------------------------
 

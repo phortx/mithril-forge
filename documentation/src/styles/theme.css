@@ -1,11 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&display=swap");
 
-:root, :root[data-theme='light'], :root[data-theme='dark'] {
+:root,
+:root[data-theme="light"],
+:root[data-theme="dark"] {
   /* Accents - Gold */
   --sl-color-accent-low: #3d2e1f; /* Forge Leather */
   --sl-color-accent: #c9a84c; /* Forge Gold */
   --sl-color-accent-high: #e4c65a; /* Forge Gold Bright */
-  
+
   /* Text and background */
   --sl-color-white: #e8dcc4; /* Forge Parchment Light */
   --sl-color-gray-1: #d4c4a0; /* Forge Parchment */
@@ -15,12 +17,12 @@
   --sl-color-gray-5: #2a1f16; /* Forge Brown */
   --sl-color-gray-6: #1a1410; /* Forge Dark */
   --sl-color-black: #0d0a07; /* Forge Darkest */
-  
+
   --sl-color-bg: var(--sl-color-black);
   --sl-color-bg-nav: var(--sl-color-gray-6);
   --sl-color-bg-sidebar: var(--sl-color-gray-6);
   --sl-color-bg-inline-code: var(--sl-color-gray-5);
-  
+
   --sl-color-text: var(--sl-color-gray-1);
   --sl-color-text-accent: var(--sl-color-accent);
 
@@ -49,14 +51,23 @@
   --code-background: #0d0a07;
   --ec-frm-edActTabBg: #1a1410;
   --ec-frm-edTabBarBg: #0d0a07;
-  
+
   --sl-color-banner-bg: #1a1410;
   --sl-color-banner-border: #3d2e1f;
   --sl-color-banner-text: #c9a84c;
 }
 
 /* Headings with Cinzel */
-h1, h2, h3, h4, h5, h6, .site-title, .sl-nav-tabs, .sl-sidebar-tabs, .large {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.site-title,
+.sl-nav-tabs,
+.sl-sidebar-tabs,
+.large {
   font-family: "Cinzel", serif !important;
 }
 

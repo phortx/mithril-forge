@@ -19,26 +19,26 @@ nav.nav-bar a[data-icon]::before {
 }
 
 nav.nav-bar a[data-icon="home"]::before {
-  -webkit-mask-image: url('/documentation/icons/home.svg');
-  mask-image: url('/documentation/icons/home.svg');
+  -webkit-mask-image: url("/documentation/icons/home.svg");
+  mask-image: url("/documentation/icons/home.svg");
 }
 nav.nav-bar a[data-icon="manual"]::before {
-  -webkit-mask-image: url('/documentation/icons/manual.svg');
-  mask-image: url('/documentation/icons/manual.svg');
+  -webkit-mask-image: url("/documentation/icons/manual.svg");
+  mask-image: url("/documentation/icons/manual.svg");
 }
 nav.nav-bar a[data-icon="tech"]::before {
-  -webkit-mask-image: url('/documentation/icons/tech.svg');
-  mask-image: url('/documentation/icons/tech.svg');
+  -webkit-mask-image: url("/documentation/icons/tech.svg");
+  mask-image: url("/documentation/icons/tech.svg");
 }
 nav.nav-bar a[data-icon="issues"]::before {
-  -webkit-mask-image: url('/documentation/icons/issues.svg');
-  mask-image: url('/documentation/icons/issues.svg');
+  -webkit-mask-image: url("/documentation/icons/issues.svg");
+  mask-image: url("/documentation/icons/issues.svg");
 }
 nav.nav-bar a[data-icon="roadmap"]::before {
-  -webkit-mask-image: url('/documentation/icons/roadmap.svg');
-  mask-image: url('/documentation/icons/roadmap.svg');
+  -webkit-mask-image: url("/documentation/icons/roadmap.svg");
+  mask-image: url("/documentation/icons/roadmap.svg");
 }
 nav.nav-bar a[data-icon="forum"]::before {
-  -webkit-mask-image: url('/documentation/icons/forum.svg');
-  mask-image: url('/documentation/icons/forum.svg');
+  -webkit-mask-image: url("/documentation/icons/forum.svg");
+  mask-image: url("/documentation/icons/forum.svg");
 }
