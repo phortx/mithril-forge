@@ -95,11 +95,22 @@ db-reset:
     docker compose down -v
     docker compose up -d postgres
 
+# --- Documentation -------------------------------------------------------
+
+# Start the Starlight documentation dev server
+dev-docs:
+    cd documentation && npm run dev
+
+# Build the documentation for production
+build-docs:
+    cd documentation && npm run build
+
 # --- Utilities -----------------------------------------------------------
 
-# Install dependencies for both sides
+# Install dependencies for all projects
 install:
     cd frontend && bun install
+    cd documentation && npm install
     ./gradlew --version
 
 # Wipe everything build-related
