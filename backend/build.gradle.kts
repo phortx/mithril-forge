@@ -123,22 +123,22 @@ val copyFrontend by tasks.registering(Copy::class) {
 val docsDir = layout.projectDirectory.dir("../documentation")
 val docsDist = docsDir.dir("dist")
 
-val npmInstallDocs by tasks.registering(Exec::class) {
+val bunInstallDocs by tasks.registering(Exec::class) {
     group = "documentation"
     description = "Install documentation dependencies"
     workingDir = docsDir.asFile
-    commandLine("npm", "install")
+    commandLine("bun", "install", "--frozen-lockfile")
     inputs.file(docsDir.file("package.json"))
-    inputs.file(docsDir.file("package-lock.json"))
+    inputs.file(docsDir.file("bun.lock"))
     outputs.dir(docsDir.dir("node_modules"))
 }
 
-val npmBuildDocs by tasks.registering(Exec::class) {
+val bunBuildDocs by tasks.registering(Exec::class) {
     group = "documentation"
     description = "Build documentation with Astro"
-    dependsOn(npmInstallDocs)
+    dependsOn(bunInstallDocs)
     workingDir = docsDir.asFile
-    commandLine("npm", "run", "build")
+    commandLine("bun", "run", "build")
     inputs.dir(docsDir.dir("src"))
     inputs.dir(docsDir.dir("public"))
     inputs.file(docsDir.file("astro.config.mjs"))
@@ -149,7 +149,7 @@ val npmBuildDocs by tasks.registering(Exec::class) {
 val copyDocs by tasks.registering(Copy::class) {
     group = "documentation"
     description = "Copy Astro dist into Spring Boot static resources under /documentation"
-    dependsOn(npmBuildDocs)
+    dependsOn(bunBuildDocs)
     mustRunAfter(copyFrontend)
     from(docsDist)
     into(staticResources.dir("documentation"))
