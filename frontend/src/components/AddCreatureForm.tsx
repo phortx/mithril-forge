@@ -157,14 +157,14 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
               </button>
               <span
                 key={quantity}
-                className="w-7 text-center font-heading text-base text-forge-parchment-light tabular-nums qty-bump"
+                className="w-8 text-center font-heading text-base text-forge-parchment-light tabular-nums qty-bump"
               >
                 {quantity}
               </span>
               <button
                 type="button"
-                onClick={() => setQuantity((q) => Math.min(20, q + 1))}
-                disabled={quantity >= 20}
+                onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+                disabled={quantity >= 99}
                 className="px-2 h-full flex items-center text-forge-gold hover:text-forge-gold-bright disabled:text-forge-leather disabled:cursor-default transition-colors"
               >
                 <Plus size={14} strokeWidth={2.5} />
