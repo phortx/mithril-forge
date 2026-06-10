@@ -3,14 +3,13 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "check": "astro check",
-    "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "dev": "bun --bun astro dev",
+    "start": "bun --bun astro dev",
+    "build": "bun --bun astro build",
+    "preview": "bun --bun astro preview",
+    "check": "bun --bun astro check",
+    "lint": "bun --bun prettier --check .",
+    "format": "bun --bun prettier --write ."
   },
   "dependencies": {
     "@astrojs/starlight": "^0.39.3",
