@@ -62,10 +62,11 @@ describe('SignUpPage', () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalled()
-      const callArgs = mockFetch.mock.calls[0]
-      expect(callArgs[0]).toContain('/api/users/')
-      expect(callArgs[1].method).toBe('POST')
-      expect(callArgs[1].body).toBe(JSON.stringify({ email: 'test@example.com', password: 'securepassword' }))
+      const callArgs = mockFetch.mock.calls.find((call: unknown[]) => String(call[0]).includes('/api/users/'))
+      expect(callArgs).toBeDefined()
+      expect(callArgs![0]).toContain('/api/users/')
+      expect(callArgs![1].method).toBe('POST')
+      expect(callArgs![1].body).toBe(JSON.stringify({ email: 'test@example.com', password: 'securepassword' }))
     })
 
     // Wait for the success toast

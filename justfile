@@ -129,6 +129,7 @@ sync-assets:
 # Install dependencies for all projects
 install: sync-assets
     cd frontend && bun install
+    cd frontend && bun run test:e2e:install
     cd documentation && bun install
     ./gradlew --version
 
