@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 @Import(TestcontainersConfiguration::class)
 @Transactional
 class SessionsControllerTest {
-
     @Autowired
     lateinit var mockMvc: MockMvc
 

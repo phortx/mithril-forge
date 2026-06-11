@@ -51,7 +51,8 @@ class SessionsController(
     private fun sessionCookie(userId: UUID): ResponseCookie {
         val token = tokenService.generateSessionToken(userId)
 
-        return ResponseCookie.from("session_token", token)
+        return ResponseCookie
+            .from("session_token", token)
             .httpOnly(true)
             .path("/")
             .maxAge(Duration.ofDays(7))
