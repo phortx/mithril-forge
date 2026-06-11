@@ -13,7 +13,7 @@ describe('SignUpPage', () => {
   beforeEach(() => {
     mockFetch = jest.fn((url: string | URL | Request) => {
       const urlStr = url.toString()
-      if (urlStr.includes('/api/users/')) {
+      if (urlStr.includes('/api/users')) {
         return Promise.resolve({
           ok: true,
           json: async () => ({ email: "test@example.com" }),
@@ -62,9 +62,9 @@ describe('SignUpPage', () => {
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalled()
-      const callArgs = mockFetch.mock.calls.find((call: unknown[]) => String(call[0]).includes('/api/users/'))
+      const callArgs = mockFetch.mock.calls.find((call: unknown[]) => String(call[0]).includes('/api/users'))
       expect(callArgs).toBeDefined()
-      expect(callArgs![0]).toContain('/api/users/')
+      expect(callArgs![0]).toContain('/api/users')
       expect(callArgs![1].method).toBe('POST')
       expect(callArgs![1].body).toBe(JSON.stringify({ email: 'test@example.com', password: 'securepassword' }))
     })
