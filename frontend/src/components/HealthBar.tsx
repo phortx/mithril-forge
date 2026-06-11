@@ -239,7 +239,7 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
             {/* Skull — fades out on hover */}
             <text
               x={CX}
-              y={CY - 1}
+              y={CY - 7}
               textAnchor="middle"
               dominantBaseline="central"
               fontSize={51}
@@ -256,7 +256,7 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
             {/* Revive cross — fades in on hover */}
             <text
               x={CX}
-              y={CY - 1}
+              y={CY - 7}
               textAnchor="middle"
               dominantBaseline="central"
               fontSize={51}
@@ -268,7 +268,7 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
               opacity={isReviveHover ? 1 : 0}
               style={{ transition: 'opacity 250ms ease' }}
             >
-              &#x2618;
+              &#x2625;
             </text>
           </>
         )}
