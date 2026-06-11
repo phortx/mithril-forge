@@ -28,7 +28,7 @@ class UsersController(
     private val emailService: EmailService,
     private val tokenService: TokenService,
 ) {
-    @PostMapping("/")
+    @PostMapping
     fun signUp(
         @Valid @RequestBody payload: SignUpRequest,
     ): ResponseEntity<Map<String, String>> {

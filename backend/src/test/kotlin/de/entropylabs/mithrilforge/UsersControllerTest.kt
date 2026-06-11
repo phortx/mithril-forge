@@ -38,7 +38,7 @@ class UsersControllerTest {
     @Test
     fun `signUp creates user and sends email`() {
         mockMvc
-            .post("/api/users/") {
+            .post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "test@example.com", "password": "password123"}"""
             }.andExpect {
@@ -62,7 +62,7 @@ class UsersControllerTest {
     @Test
     fun `signUp returns bad request for empty email or password`() {
         mockMvc
-            .post("/api/users/") {
+            .post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "", "password": "password123"}"""
             }.andExpect {
@@ -71,7 +71,7 @@ class UsersControllerTest {
             }
 
         mockMvc
-            .post("/api/users/") {
+            .post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "test@example.com", "password": ""}"""
             }.andExpect {
@@ -84,7 +84,7 @@ class UsersControllerTest {
     fun `signUp returns conflict if email already exists`() {
         // Create user first
         mockMvc
-            .post("/api/users/") {
+            .post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "test@example.com", "password": "password123"}"""
             }.andExpect {
@@ -92,7 +92,7 @@ class UsersControllerTest {
             }
 
         mockMvc
-            .post("/api/users/") {
+            .post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "test@example.com", "password": "password123"}"""
             }.andExpect {
@@ -105,7 +105,7 @@ class UsersControllerTest {
     fun `confirm returns ok for valid token`() {
         // 1. Create a user
         mockMvc
-            .post("/api/users/") {
+            .post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "confirm@example.com", "password": "password123"}"""
             }.andExpect {
