@@ -24,7 +24,7 @@ class SessionsControllerTest {
     lateinit var userRepository: UserRepository
 
     @Test
-    fun `login returns created with valid credentials`() {
+    fun `login returns ok with valid credentials and sets session cookie`() {
         userRepository.create("test@example.com", "password123")
 
         mockMvc
@@ -32,8 +32,17 @@ class SessionsControllerTest {
                 contentType = MediaType.APPLICATION_JSON
                 content = """{"email": "test@example.com", "password": "password123"}"""
             }.andExpect {
-                status { isCreated() }
+                status { isOk() }
                 jsonPath("$.email") { value("test@example.com") }
+                cookie {
+                    exists("session_token")
+                    httpOnly("session_token", true)
+                    path("session_token", "/")
+                }
+                header {
+                    string("Set-Cookie", org.hamcrest.Matchers.containsString("SameSite=Strict"))
+                    string("Set-Cookie", org.hamcrest.Matchers.containsString("Max-Age="))
+                }
             }
     }
 
