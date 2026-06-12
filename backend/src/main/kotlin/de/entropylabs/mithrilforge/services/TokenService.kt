@@ -37,4 +37,11 @@ class TokenService(
 
         return verifier.verify(token)
     }
+
+    fun generateSessionToken(userId: UUID): String =
+        JWT
+            .create()
+            .withIssuer(issuer)
+            .withSubject(userId.toString())
+            .sign(algorithm)
 }

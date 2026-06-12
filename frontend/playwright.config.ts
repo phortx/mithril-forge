@@ -6,9 +6,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:5174',
     trace: 'on-first-retry',
   },
   projects: [
@@ -16,7 +16,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'cd .. && just test-e2e-stack',
-    url: 'http://localhost:8080/api/status',
+    url: 'http://localhost:8081/api/status',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

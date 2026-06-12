@@ -61,7 +61,7 @@ test-e2e-stack:
     set -euo pipefail
     trap 'echo "Shutting down..."; kill 0' EXIT INT TERM
     ./gradlew :backend:bootRun --args='--spring.profiles.active=e2e' --console=plain &
-    (cd frontend && bun run dev) &
+    (cd frontend && VITE_BACKEND_URL=http://localhost:8081 bun run dev --port 5174) &
     wait
 
 # --- Quality -------------------------------------------------------------

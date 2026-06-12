@@ -41,7 +41,7 @@ Never commit code that fails these checks.
 - Strict TS (`noUnusedLocals`, `noUnusedParameters`).
 - Named exports only (except `App.tsx`).
 - Co-locate tests (`Foo.test.tsx` next to `Foo.tsx`).
-- Relative imports only. No barrel exports. No Prettier (ESLint only). English UI only.
+- Relative imports only. No barrel exports. No Prettier (ESLint only). **CRITICAL: English UI and texts only. Never use German or any other language.**
 - Maintain high test coverage; always test new code.
 
 ### Backend
