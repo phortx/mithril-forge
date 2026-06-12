@@ -166,7 +166,7 @@ describe('CreatureList', () => {
       name: 'Initiative for Goblin',
     })
     await user.type(input, '18')
-    await user.keyboard('{Enter}')
+    await user.keyboard('{Tab}')
 
     expect(onUpdateInitiative).toHaveBeenCalledWith('1', 18)
   })

@@ -4,6 +4,7 @@ import { Skull, BookOpen, Shield, Trash2, Dices } from 'lucide-react'
 import { HealthBar } from './HealthBar'
 import { HpControls } from './HpControls'
 import { formatModifier } from '../utils/formatModifier'
+import { NumberInput } from './NumberInput'
 
 type CreatureCardProps = {
   creature: Creature
@@ -46,17 +47,22 @@ function InitiativeInput({
 
   if (editing) {
     return (
-      <input
-        type="number"
+      <NumberInput
         value={draft}
-        onChange={(e) => setDraft(e.target.value)}
+        onChange={(v) => setDraft(v.toString())}
         onBlur={commit}
+        onEnter={(val) => {
+          console.log('InitiativeInput onEnter called! val:', val)
+          setEditing(false)
+          const parsed = parseInt(val.toString(), 10)
+          onUpdate(creature.id, isNaN(parsed) ? null : parsed)
+        }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') commit()
           if (e.key === 'Escape') setEditing(false)
         }}
         autoFocus
-        className="input-forge w-14 rounded px-1 py-0.5 text-center text-xl font-heading font-bold"
+        containerClassName="h-[32px] w-24"
+        className="text-xl font-heading font-bold"
         aria-label={`Initiative for ${creature.name}`}
       />
     )

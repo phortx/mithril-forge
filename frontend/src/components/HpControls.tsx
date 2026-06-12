@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Minus, Plus, Shield } from 'lucide-react'
+import { NumberInput } from './NumberInput'
 
 type HpControlsProps = {
   creatureId: string
@@ -33,17 +34,15 @@ export function HpControls({
         <Minus size={12} />
         Dmg
       </button>
-      <input
-        type="number"
-        min="1"
+      <NumberInput
+        min={1}
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(v) => setAmount(v.toString())}
         placeholder="0"
-        className="input-forge rounded px-2 py-1 text-sm w-16 text-center tabular-nums"
+        containerClassName="w-24 h-[28px]"
+        className="text-sm"
         aria-label="HP amount"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') apply(onDamage)
-        }}
+        onEnter={() => apply(onDamage)}
       />
       <button
         onClick={() => apply(onHeal)}

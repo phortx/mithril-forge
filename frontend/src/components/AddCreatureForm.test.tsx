@@ -114,7 +114,7 @@ describe('AddCreatureForm', () => {
       render(<AddCreatureForm onAdd={jest.fn()} />)
 
       expect(screen.getByText('Qty')).toBeInTheDocument()
-      expect(screen.getByText('1')).toBeInTheDocument()
+      expect(screen.getAllByRole('spinbutton')[3]).toHaveValue(1) // Qty is the 4th number input
     })
 
     it('hides quantity control for party type', async () => {
@@ -130,24 +130,21 @@ describe('AddCreatureForm', () => {
       const user = userEvent.setup()
       render(<AddCreatureForm onAdd={jest.fn()} />)
 
-      const [minusBtn, plusBtn] = screen.getAllByRole('button').filter(
-        (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
-      )
+      const minusBtn = screen.getByRole('button', { name: 'Decrease qty' })
+      const plusBtn = screen.getByRole('button', { name: 'Increase qty' })
 
       await user.click(plusBtn)
       await user.click(plusBtn)
-      expect(screen.getByText('3')).toBeInTheDocument()
+      expect(screen.getAllByRole('spinbutton')[3]).toHaveValue(3)
 
       await user.click(minusBtn)
-      expect(screen.getByText('2')).toBeInTheDocument()
+      expect(screen.getAllByRole('spinbutton')[3]).toHaveValue(2)
     })
 
     it('does not go below 1', () => {
       render(<AddCreatureForm onAdd={jest.fn()} />)
 
-      const minusBtn = screen.getAllByRole('button').find(
-        (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]') && (btn as HTMLButtonElement).disabled,
-      )
+      const minusBtn = screen.getByRole('button', { name: 'Decrease qty' })
 
       expect(minusBtn).toBeDisabled()
     })
@@ -159,9 +156,7 @@ describe('AddCreatureForm', () => {
 
       await user.type(screen.getByLabelText('Name'), 'Goblin')
 
-      const plusBtn = screen.getAllByRole('button').filter(
-        (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
-      )[1]
+      const plusBtn = screen.getByRole('button', { name: 'Increase qty' })
       await user.click(plusBtn)
       await user.click(plusBtn)
 
@@ -189,25 +184,21 @@ describe('AddCreatureForm', () => {
       const user = userEvent.setup()
       render(<AddCreatureForm onAdd={jest.fn()} />)
 
-      const plusBtn = screen.getAllByRole('button').filter(
-        (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
-      )[1]
+      const plusBtn = screen.getByRole('button', { name: 'Increase qty' })
       await user.click(plusBtn)
       await user.click(plusBtn)
 
       await user.type(screen.getByLabelText('Name'), 'Goblin')
       await user.click(screen.getByRole('button', { name: /Add/ }))
 
-      expect(screen.getByText('1')).toBeInTheDocument()
+      expect(screen.getAllByRole('spinbutton')[3]).toHaveValue(1)
     })
 
     it('shows count on Add button when qty > 1', async () => {
       const user = userEvent.setup()
       render(<AddCreatureForm onAdd={jest.fn()} />)
 
-      const plusBtn = screen.getAllByRole('button').filter(
-        (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
-      )[1]
+      const plusBtn = screen.getByRole('button', { name: 'Increase qty' })
       await user.click(plusBtn)
       await user.click(plusBtn)
 
@@ -218,16 +209,14 @@ describe('AddCreatureForm', () => {
       const user = userEvent.setup()
       render(<AddCreatureForm onAdd={jest.fn()} />)
 
-      const plusBtn = screen.getAllByRole('button').filter(
-        (btn) => btn.querySelector('svg') && btn.closest('[class*="border-forge-leather"]'),
-      )[1]
+      const plusBtn = screen.getByRole('button', { name: 'Increase qty' })
       await user.click(plusBtn)
       await user.click(plusBtn)
 
       await user.click(screen.getByText('Party'))
       await user.click(screen.getByText('Enemy'))
 
-      expect(screen.getByText('1')).toBeInTheDocument()
+      expect(screen.getAllByRole('spinbutton')[3]).toHaveValue(1)
     })
   })
 })

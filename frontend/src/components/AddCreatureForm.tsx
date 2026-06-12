@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Plus, Minus, Users, Swords } from 'lucide-react'
+import { Plus, Users, Swords } from 'lucide-react'
 import type { CreatureType } from '../types/creature'
 import type { MonsterSearchResult } from '../types/statBlock'
 import { MonsterAutocomplete } from './MonsterAutocomplete'
 import { abilityModifier } from '../api/open5e'
+import { NumberInput } from './NumberInput'
 
 type AddCreatureFormProps = {
   onAdd: (name: string, initiativeModifier: number, creatureType: CreatureType, maxHp: number, ac: number, monsterSlug?: string | null) => void
@@ -109,67 +110,52 @@ export function AddCreatureForm({ onAdd }: AddCreatureFormProps) {
           <label htmlFor="initiative-modifier" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
             Init Mod
           </label>
-          <input
+          <NumberInput
             id="initiative-modifier"
-            type="number"
             value={modifier}
-            onChange={(e) => setModifier(Number(e.target.value))}
-            className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
+            onChange={(v) => setModifier(Number(v))}
+            containerClassName="h-[42px] w-28"
+            className="text-base font-body"
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="max-hp" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
             Max HP
           </label>
-          <input
+          <NumberInput
             id="max-hp"
-            type="number"
-            min="1"
+            min={1}
             value={maxHp}
-            onChange={(e) => setMaxHp(Number(e.target.value))}
-            className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
+            onChange={(v) => setMaxHp(Number(v))}
+            containerClassName="h-[42px] w-28"
+            className="text-base font-body"
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="ac" className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">
             AC
           </label>
-          <input
+          <NumberInput
             id="ac"
-            type="number"
-            min="0"
+            min={0}
             value={ac}
-            onChange={(e) => setAc(Number(e.target.value))}
-            className="input-forge rounded px-3 py-[9px] font-body text-base w-24 text-center"
+            onChange={(v) => setAc(Number(v))}
+            containerClassName="h-[42px] w-28"
+            className="text-base font-body"
           />
         </div>
         {creatureType === 'enemy' && (
           <div className="flex flex-col gap-1.5">
             <span className="font-heading text-xs text-forge-gold-dim uppercase tracking-wider">Qty</span>
-            <div className="flex items-center h-[42px] rounded border border-forge-leather bg-[rgba(13,10,7,0.6)]">
-              <button
-                type="button"
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                disabled={quantity <= 1}
-                className="px-2 h-full flex items-center text-forge-gold hover:text-forge-gold-bright disabled:text-forge-leather disabled:cursor-default transition-colors"
-              >
-                <Minus size={14} strokeWidth={2.5} />
-              </button>
-              <span
-                key={quantity}
-                className="w-8 text-center font-heading text-base text-forge-parchment-light tabular-nums qty-bump"
-              >
-                {quantity}
-              </span>
-              <button
-                type="button"
-                onClick={() => setQuantity((q) => Math.min(99, q + 1))}
-                disabled={quantity >= 99}
-                className="px-2 h-full flex items-center text-forge-gold hover:text-forge-gold-bright disabled:text-forge-leather disabled:cursor-default transition-colors"
-              >
-                <Plus size={14} strokeWidth={2.5} />
-              </button>
-            </div>
+            <NumberInput
+              aria-label="qty"
+              value={quantity}
+              onChange={(v) => setQuantity(Number(v))}
+              min={1}
+              max={99}
+              containerClassName="h-[42px] w-28"
+              className="text-base font-heading qty-bump"
+            />
           </div>
         )}
         <button
