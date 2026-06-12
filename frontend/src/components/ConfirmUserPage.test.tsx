@@ -39,7 +39,7 @@ describe('ConfirmUserPage', () => {
     )
 
     // Wait for the toast to appear
-    expect(await screen.findByText('Kein Token in der Anfrage gefunden.')).toBeInTheDocument()
+    expect(await screen.findByText('No token found in the request.')).toBeInTheDocument()
     
     // Wait for navigation to /
     expect(await screen.findByTestId('home-page')).toBeInTheDocument()
@@ -66,7 +66,7 @@ describe('ConfirmUserPage', () => {
     })
 
     // Wait for the toast to appear
-    expect(await screen.findByText('Konto erfolgreich bestätigt! Willkommen bei Mithril Forge!')).toBeInTheDocument()
+    expect(await screen.findByText('Account successfully confirmed! Welcome to Mithril Forge!')).toBeInTheDocument()
     
     // Wait for navigation to /
     expect(await screen.findByTestId('home-page')).toBeInTheDocument()
@@ -95,7 +95,7 @@ describe('ConfirmUserPage', () => {
     )
 
     // Wait for the toast to appear
-    expect(await screen.findByText('Fehler bei der Bestätigung: token invalid')).toBeInTheDocument()
+    expect(await screen.findByText('Confirmation error: token invalid')).toBeInTheDocument()
     
     // Wait for navigation to /
     expect(await screen.findByTestId('home-page')).toBeInTheDocument()
@@ -115,7 +115,7 @@ describe('ConfirmUserPage', () => {
     )
 
     // Wait for the toast to appear
-    expect(await screen.findByText('Netzwerkfehler bei der Konto-Bestätigung.')).toBeInTheDocument()
+    expect(await screen.findByText('Network error during account confirmation.')).toBeInTheDocument()
     
     // Wait for navigation to /
     expect(await screen.findByTestId('home-page')).toBeInTheDocument()

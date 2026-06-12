@@ -16,7 +16,7 @@ export function ConfirmUserPage() {
     effectRan.current = true
 
     if (!token) {
-      toast.error('Kein Token in der Anfrage gefunden.', {
+      toast.error('No token found in the request.', {
         id: 'confirm-error',
       })
       navigate('/')
@@ -30,20 +30,20 @@ export function ConfirmUserPage() {
         })
 
         if (response.ok) {
-          toast.success('Konto erfolgreich bestätigt! Willkommen bei Mithril Forge!', {
+          toast.success('Account successfully confirmed! Welcome to Mithril Forge!', {
             id: 'confirm-success',
             duration: 5000,
           })
         } else {
           const data = await response.json().catch(() => ({}))
-          const errorMessage = data.error || 'Bestätigung fehlgeschlagen.'
-          toast.error(`Fehler bei der Bestätigung: ${errorMessage}`, {
+          const errorMessage = data.error || 'Confirmation failed.'
+          toast.error(`Confirmation error: ${errorMessage}`, {
             id: 'confirm-error',
             duration: 6000,
           })
         }
       } catch {
-        toast.error('Netzwerkfehler bei der Konto-Bestätigung.', {
+        toast.error('Network error during account confirmation.', {
           id: 'confirm-error',
           duration: 6000,
         })
@@ -69,10 +69,10 @@ export function ConfirmUserPage() {
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="animate-spin text-forge-gold" size={48} />
             <p className="font-heading text-lg text-forge-parchment-light tracking-wide uppercase">
-              Siegel wird geprüft...
+              Verifying seal...
             </p>
             <p className="text-forge-tan text-sm italic">
-              Bitte warte einen Moment, während dein Account aktiviert wird.
+              Please wait a moment while your account is activated.
             </p>
           </div>
         </div>
