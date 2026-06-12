@@ -74,7 +74,7 @@ test.describe('Registration and Confirmation', () => {
     // Wait for the confirmation logic to complete and show the success toast
     await expect(page.getByText(/Account successfully confirmed!/i)).toBeVisible({ timeout: 10000 });
     
-    // Verify it navigates back to home (DM Screen or Player Screen)
-    await expect(page).toHaveURL(/.*\/dm.*/);
+    // Verify it navigates back to login
+    await expect(page).toHaveURL(/.*\/login/);
   });
 });

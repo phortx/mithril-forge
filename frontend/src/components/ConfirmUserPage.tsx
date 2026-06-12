@@ -19,7 +19,7 @@ export function ConfirmUserPage() {
       toast.error('No token found in the request.', {
         id: 'confirm-error',
       })
-      navigate('/')
+      navigate('/login')
       return
     }
 
@@ -48,7 +48,7 @@ export function ConfirmUserPage() {
           duration: 6000,
         })
       } finally {
-        navigate('/')
+        navigate('/login')
       }
     }
 
