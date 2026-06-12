@@ -6,3 +6,5 @@ spring:
     url: jdbc:postgresql://localhost:5433/e2edatabase
   mail:
     port: 1026
+server:
+  port: 8081
