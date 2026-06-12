@@ -33,8 +33,6 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
   const glassGradId = `glass-grad-${id}`
   const innerShadowId = `inner-shadow-${id}`
   const liquidGlowId = `liquid-glow-${id}`
-  const crackFilterId = `crack-filter-${id}`
-  const crackDispId = `crack-disp-${id}`
   const shardGradId = `shard-grad-${id}`
 
   const liquidY = FILL_BOTTOM - (FILL_HEIGHT * totalFill) / 100
@@ -44,7 +42,13 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
 
   return (
     <div className="relative h-full">
-      <svg viewBox={`0 0 ${VB} ${VB}`} className={`h-full aspect-square min-h-[70px] -translate-x-1/2 ${isReviveHover ? 'drop-shadow-[0_0_20px_rgba(58,138,74,0.6)]' : isActive ? 'drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]' : 'drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)]'} transition-[filter] duration-300`} aria-hidden="true">
+      {/* Hardware-accelerated background glow instead of SVG drop-shadow filter */}
+      <div 
+        className={`absolute top-0 bottom-0 left-0 aspect-square min-h-[70px] -translate-x-1/2 rounded-full transition-all duration-300 blur-[10px] ${
+          isReviveHover ? 'bg-[#3a8a4a]/60 scale-110' : isActive ? 'bg-[#d4af37]/50 scale-110' : 'bg-black/70 scale-100 translate-y-1'
+        }`} 
+      />
+      <svg viewBox={`0 0 ${VB} ${VB}`} className="relative z-10 h-full aspect-square min-h-[70px] -translate-x-1/2" aria-hidden="true">
         <defs>
           <clipPath id={clipId}>
             <circle cx={CX} cy={CY} r={IR} />
@@ -86,7 +90,7 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
               x={0}
               y={tempBoundaryY}
               width={VB}
-              height={FILL_BOTTOM - tempBoundaryY}
+              height={Math.max(0, FILL_BOTTOM - tempBoundaryY)}
               fill={`url(#${gradientId})`}
               style={{ transition: 'y 500ms ease, height 500ms ease' }}
             />
@@ -98,7 +102,7 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
               x={0}
               y={liquidY}
               width={VB}
-              height={tempBoundaryY - liquidY}
+              height={Math.max(0, tempBoundaryY - liquidY)}
               fill="var(--color-forge-ember)"
               opacity={0.65}
               style={{ transition: 'y 500ms ease, height 500ms ease' }}
@@ -296,16 +300,6 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
         {isDead && (
           <g className="shattered-glass-effect">
             <defs>
-              {/* Subtle distortion filter for the entire orb when shattered */}
-              <filter id={crackFilterId} x="-5%" y="-5%" width="110%" height="110%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves={4} seed={42} result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale={1.5} xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-              {/* Displacement map for crack-area refraction */}
-              <filter id={crackDispId} x="-10%" y="-10%" width="120%" height="120%">
-                <feTurbulence type="turbulence" baseFrequency="0.08" numOctaves={2} seed={7} result="warp" />
-                <feDisplacementMap in="SourceGraphic" in2="warp" scale={0.8} />
-              </filter>
               {/* Gradient for shard edge highlights */}
               <linearGradient id={shardGradId} x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />

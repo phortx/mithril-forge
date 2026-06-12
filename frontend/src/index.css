@@ -24,59 +24,49 @@
 }
 
 /* Active creature golden pulse */
-@keyframes active-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 8px rgba(201, 168, 76, 0.4),
-      0 0 20px rgba(201, 168, 76, 0.15),
-      inset 0 1px 0 rgba(201, 168, 76, 0.1);
-  }
-  50% {
-    box-shadow:
-      0 0 14px rgba(201, 168, 76, 0.6),
-      0 0 35px rgba(201, 168, 76, 0.25),
-      inset 0 1px 0 rgba(201, 168, 76, 0.2);
-  }
+@keyframes active-pulse-opacity {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
 /* Revive pulse for dead creatures on hover */
-@keyframes revive-pulse-glow {
-  0%, 100% {
-    box-shadow:
-      0 0 8px rgba(45, 107, 58, 0.3),
-      0 0 20px rgba(45, 107, 58, 0.1),
-      inset 0 0 30px rgba(45, 107, 58, 0.05);
-  }
-  50% {
-    box-shadow:
-      0 0 16px rgba(45, 107, 58, 0.5),
-      0 0 40px rgba(45, 107, 58, 0.2),
-      inset 0 0 40px rgba(45, 107, 58, 0.1);
-  }
+@keyframes revive-pulse-opacity {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
 .revive-pulse {
-  animation: revive-pulse-glow 1.2s ease-in-out infinite;
   border-color: var(--color-forge-green) !important;
   opacity: 1 !important;
+  position: relative;
+}
+
+.revive-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow:
+    0 0 16px rgba(45, 107, 58, 0.5),
+    0 0 40px rgba(45, 107, 58, 0.2),
+    inset 0 0 40px rgba(45, 107, 58, 0.1);
+  pointer-events: none;
+  animation: revive-pulse-opacity 1.2s ease-in-out infinite;
 }
 
 /* Subtle float for Start Encounter button */
 @keyframes epic-breathe {
   0%, 100% {
     transform: translateY(0);
-    box-shadow:
-      0 0 12px rgba(45, 107, 58, 0.5),
-      0 0 30px rgba(45, 107, 58, 0.2),
-      0 4px 12px rgba(0, 0, 0, 0.4);
   }
   50% {
     transform: translateY(-2px);
-    box-shadow:
-      0 0 18px rgba(45, 107, 58, 0.7),
-      0 0 45px rgba(45, 107, 58, 0.3),
-      0 8px 20px rgba(0, 0, 0, 0.3);
   }
+}
+
+@keyframes epic-glow-opacity {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 /* Ornamental divider */
@@ -148,7 +138,20 @@
       rgb(26, 20, 16) 100%
     );
   border: 1px solid var(--color-forge-gold);
-  animation: active-pulse 2.5s ease-in-out infinite;
+  position: relative;
+}
+
+.creature-card-active::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow:
+    0 0 14px rgba(201, 168, 76, 0.6),
+    0 0 35px rgba(201, 168, 76, 0.25),
+    inset 0 1px 0 rgba(201, 168, 76, 0.2);
+  pointer-events: none;
+  animation: active-pulse-opacity 2.5s ease-in-out infinite;
 }
 
 /* Fantasy input fields */
@@ -213,17 +216,40 @@ input[type="number"] {
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: 0.1em;
+  position: relative;
   animation: epic-breathe 3s ease-in-out infinite;
+  box-shadow:
+    0 0 12px rgba(45, 107, 58, 0.5),
+    0 0 30px rgba(45, 107, 58, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn-epic::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow:
+    0 0 18px rgba(45, 107, 58, 0.7),
+    0 0 45px rgba(45, 107, 58, 0.3),
+    0 8px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  animation: epic-glow-opacity 3s ease-in-out infinite;
 }
 
 .btn-epic:hover {
   background: linear-gradient(180deg, #4a9a5a 0%, #3a8a4a 100%);
   animation: none;
+  transform: translateY(-2px);
   box-shadow:
     0 0 25px rgba(45, 107, 58, 0.7),
     0 0 50px rgba(45, 107, 58, 0.3),
     0 8px 20px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
+}
+
+.btn-epic:hover::after {
+  animation: none;
+  opacity: 0;
 }
 
 /* Secondary muted button */
@@ -301,14 +327,15 @@ input[type="number"] {
 
 /* Liquid surface wobble */
 @keyframes surface-wobble {
-  0%, 100% { rx: 21; ry: 2; }
-  25% { rx: 17; ry: 4.5; }
-  50% { rx: 22; ry: 1.5; }
-  75% { rx: 18; ry: 4; }
+  0%, 100% { transform: scaleY(1); }
+  25% { transform: scaleY(2.2); }
+  50% { transform: scaleY(0.8); }
+  75% { transform: scaleY(1.8); }
 }
 
 .liquid-surface {
   animation: surface-wobble 3.5s ease-in-out infinite;
+  transform-origin: center;
 }
 
 /* Glass dust shimmer — tiny bright particles that catch light */
@@ -329,24 +356,7 @@ input[type="number"] {
 .glass-dust-4 { animation: glass-dust-twinkle-alt 3.5s ease-in-out 0.3s infinite; }
 .glass-dust-5 { animation: glass-dust-twinkle 2.2s ease-in-out 2s infinite; }
 
-/* Slow forge glow pulse */
-@keyframes forge-glow {
-  0%, 100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes forge-glow-alt {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
+/* Static forge glow */
 
 /* Page background — base layer with forge glow from below */
 .page-texture {
@@ -358,6 +368,7 @@ input[type="number"] {
     /* Base color */
     var(--color-forge-darkest);
   background-size: 40px 40px, 100% 100%, 100% 100%;
+  background-attachment: fixed;
 }
 
 /* Ambient light + forge glow (animated) */
@@ -376,9 +387,8 @@ input[type="number"] {
     radial-gradient(ellipse at 15% 15%, rgba(107, 29, 29, 0.14) 0%, transparent 50%),
     /* Top-right gold whisper */
     radial-gradient(ellipse at 85% 10%, rgba(201, 168, 76, 0.09) 0%, transparent 40%),
-    /* Center subtle warmth */
     radial-gradient(ellipse at 50% 40%, rgba(61, 46, 31, 0.37) 0%, transparent 60%);
-  animation: forge-glow 8s ease-in-out infinite;
+  opacity: 0.8;
 }
 
 /* Noise grain + secondary glow layer */
@@ -398,7 +408,6 @@ input[type="number"] {
   background-repeat: repeat, no-repeat, no-repeat;
   opacity: 0.52;
   mix-blend-mode: soft-light;
-  animation: forge-glow-alt 12s ease-in-out infinite;
 }
 
 /* Corner ornaments */
@@ -460,17 +469,9 @@ input[type="number"] {
   animation: qty-bump 0.2s ease-out;
 }
 
-@keyframes fab-glow {
-  0%, 100% {
-    box-shadow:
-      0 4px 16px rgba(201, 168, 76, 0.4),
-      0 0 24px rgba(201, 168, 76, 0.15);
-  }
-  50% {
-    box-shadow:
-      0 4px 20px rgba(201, 168, 76, 0.6),
-      0 0 36px rgba(201, 168, 76, 0.25);
-  }
+@keyframes fab-glow-opacity {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 .floating-next-turn {
@@ -492,22 +493,45 @@ input[type="number"] {
   transform: translateY(16px);
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow:
+    0 4px 16px rgba(201, 168, 76, 0.4),
+    0 0 24px rgba(201, 168, 76, 0.15);
+}
+
+.floating-next-turn::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow:
+    0 4px 20px rgba(201, 168, 76, 0.6),
+    0 0 36px rgba(201, 168, 76, 0.25);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .floating-next-turn--visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  animation: fab-glow 2.5s ease-in-out infinite;
+}
+
+.floating-next-turn--visible::after {
+  animation: fab-glow-opacity 2.5s ease-in-out infinite;
 }
 
 .floating-next-turn--visible:hover {
-  animation: none;
   transform: translateY(-2px);
   box-shadow:
     0 6px 24px rgba(201, 168, 76, 0.7),
     0 0 40px rgba(201, 168, 76, 0.3);
   background: linear-gradient(180deg, var(--color-forge-gold-bright) 0%, var(--color-forge-gold) 100%);
+}
+
+.floating-next-turn--visible:hover::after {
+  animation: none;
+  opacity: 0;
 }
 
 .disable-animations,
