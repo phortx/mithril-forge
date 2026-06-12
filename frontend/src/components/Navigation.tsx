@@ -1,14 +1,50 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp, Book } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp, Book, LogOut, User } from 'lucide-react'
+import { useLocalStorage } from 'usehooks-ts'
+import toast from 'react-hot-toast'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [isMetaOpen, setIsMetaOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false)
+  const [userEmail, setUserEmail] = useLocalStorage('userEmail', '')
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch('/api/session')
+        if (response.ok) {
+          const data = await response.json()
+          setIsLoggedIn(true)
+          setUserEmail(data.email)
+        } else {
+          setIsLoggedIn(false)
+          setUserEmail('')
+        }
+      } catch {
+        // Ignore network errors on session check
+      }
+    }
+    checkSession()
+  }, [setIsLoggedIn, setUserEmail])
 
   const toggleNav = () => setIsOpen(!isOpen)
   const closeNav = () => setIsOpen(false)
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/session', { method: 'DELETE' })
+      setIsLoggedIn(false)
+      setUserEmail('')
+      closeNav()
+      navigate('/login')
+    } catch {
+      toast.error('Network error during logout.', { id: 'logout-error' })
+    }
+  }
 
   // Only show navigation on non-confirm routes (optional, but good practice)
   if (location.pathname === '/users/confirm') {
@@ -89,25 +125,44 @@ export function Navigation() {
         {/* Footer Area */}
         <div className="flex flex-col gap-4 pt-6 border-t border-forge-leather mt-auto">
           {/* Account Actions */}
-          <div className="flex gap-2 w-full">
-            <Link
-              to="/login"
-              onClick={closeNav}
-              className="flex-1 flex items-center justify-center gap-2 px-2 py-2.5 rounded bg-forge-brown/50 text-forge-tan border border-forge-leather hover:text-forge-gold hover:border-forge-gold-dim/50 hover:bg-forge-brown/80 transition-all font-sans text-sm font-medium cursor-pointer group"
-              data-testid="nav-sign-in"
-            >
-              <LogIn size={16} className="text-forge-parchment/60 group-hover:text-forge-gold transition-colors" />
-              Sign in
-            </Link>
-            <Link
-              to="/signup"
-              onClick={closeNav}
-              className="flex-1 flex items-center justify-center gap-2 px-2 py-2.5 rounded bg-forge-brown/50 text-forge-tan border border-forge-leather hover:text-forge-gold hover:border-forge-gold-dim/50 hover:bg-forge-brown/80 transition-all font-sans text-sm font-medium cursor-pointer group"
-              data-testid="nav-sign-up"
-            >
-              <UserPlus size={16} className="text-forge-parchment/60 group-hover:text-forge-gold transition-colors" />
-              Sign up
-            </Link>
+          <div className="flex flex-col gap-2 w-full">
+            {isLoggedIn ? (
+              <>
+                <div className="flex items-center gap-2 px-2 py-1.5 text-forge-parchment/70 font-sans text-sm" data-testid="nav-user-email">
+                  <User size={14} />
+                  <span className="truncate">{userEmail}</span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex-1 flex items-center justify-center gap-2 px-2 py-2.5 rounded bg-forge-brown/50 text-forge-tan border border-forge-leather hover:text-forge-gold hover:border-forge-gold-dim/50 hover:bg-forge-brown/80 transition-all font-sans text-sm font-medium cursor-pointer group"
+                  data-testid="nav-log-out"
+                >
+                  <LogOut size={16} className="text-forge-parchment/60 group-hover:text-forge-gold transition-colors" />
+                  Log out
+                </button>
+              </>
+            ) : (
+              <div className="flex gap-2 w-full">
+                <Link
+                  to="/login"
+                  onClick={closeNav}
+                  className="flex-1 flex items-center justify-center gap-2 px-2 py-2.5 rounded bg-forge-brown/50 text-forge-tan border border-forge-leather hover:text-forge-gold hover:border-forge-gold-dim/50 hover:bg-forge-brown/80 transition-all font-sans text-sm font-medium cursor-pointer group"
+                  data-testid="nav-sign-in"
+                >
+                  <LogIn size={16} className="text-forge-parchment/60 group-hover:text-forge-gold transition-colors" />
+                  Sign in
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={closeNav}
+                  className="flex-1 flex items-center justify-center gap-2 px-2 py-2.5 rounded bg-forge-brown/50 text-forge-tan border border-forge-leather hover:text-forge-gold hover:border-forge-gold-dim/50 hover:bg-forge-brown/80 transition-all font-sans text-sm font-medium cursor-pointer group"
+                  data-testid="nav-sign-up"
+                >
+                  <UserPlus size={16} className="text-forge-parchment/60 group-hover:text-forge-gold transition-colors" />
+                  Sign up
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Meta Links Submenu */}

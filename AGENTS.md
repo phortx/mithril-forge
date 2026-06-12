@@ -33,6 +33,7 @@ just check
 ```
 
 Never commit code that fails these checks.
+**CRITICAL AI AGENT RULE**: You MUST run `just check` after making ANY code modifications to ensure you haven't broken the build, tests, or linting. Do not report completion to the user until `just check` passes.
 
 ## Code Style & Common Patterns
 

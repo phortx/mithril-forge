@@ -157,7 +157,8 @@ describe('SignUpPage', () => {
     
     await user.click(screen.getByRole('button', { name: /create account/i }))
 
-    expect(mockFetch).not.toHaveBeenCalled()
+    const usersCall = mockFetch.mock.calls.find((call: unknown[]) => String(call[0]).includes('/api/users'))
+    expect(usersCall).toBeUndefined()
     expect(await screen.findByText(/Please provide an email and password./i)).toBeInTheDocument()
   })
 })

@@ -1,10 +1,19 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { Navigation } from './Navigation'
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it, mock, afterEach } from 'bun:test'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const mockFetch = mock((_url?: string | URL | Request, _options?: RequestInit) => Promise.resolve({ ok: false } as Response))
+globalThis.fetch = mockFetch as unknown as typeof fetch
 
 describe('Navigation', () => {
+  afterEach(() => {
+    mockFetch.mockReset()
+    localStorage.clear()
+  })
+
   it('renders the hamburger toggle button', () => {
     render(
       <MemoryRouter>
@@ -143,5 +152,76 @@ describe('Navigation', () => {
     // Verify closed
     const drawer = screen.getByTestId('nav-drawer')
     expect(drawer).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('shows Sign in and Sign up when not logged in', async () => {
+    mockFetch.mockImplementation(() => Promise.resolve({ ok: false } as Response))
+
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <Navigation />
+      </MemoryRouter>
+    )
+
+    // Wait for the useEffect fetch to complete
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/session')
+    })
+
+    const toggleBtn = screen.getByTestId('nav-toggle')
+    await user.click(toggleBtn)
+
+    expect(screen.getByText('Sign in')).toBeInTheDocument()
+    expect(screen.getByText('Sign up')).toBeInTheDocument()
+    expect(screen.queryByText('Log out')).not.toBeInTheDocument()
+  })
+
+  it('shows Log out and email when logged in and calls logout API on click', async () => {
+    mockFetch.mockImplementation((url?: string | URL | Request, options?: RequestInit) => {
+      if (url === '/api/session' && (!options || options.method === 'GET')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ email: 'test@example.com' })
+        } as Response)
+      }
+      if (url === '/api/session' && options?.method === 'DELETE') {
+        return Promise.resolve({ ok: true } as Response)
+      }
+      return Promise.resolve({ ok: false } as Response)
+    })
+
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <Navigation />
+      </MemoryRouter>
+    )
+
+    const toggleBtn = screen.getByTestId('nav-toggle')
+    await user.click(toggleBtn)
+
+    // Wait for the email to appear which means the fetch has completed
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument()
+    })
+
+    expect(screen.queryByText('Sign in')).not.toBeInTheDocument()
+    expect(screen.queryByText('Sign up')).not.toBeInTheDocument()
+    
+    const logoutBtn = screen.getByText('Log out')
+    expect(logoutBtn).toBeInTheDocument()
+
+    await user.click(logoutBtn)
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/session', expect.objectContaining({
+        method: 'DELETE'
+      }))
+    })
+
+    // Should clear local storage
+    expect(localStorage.getItem('isLoggedIn')).toBe('false')
+    expect(localStorage.getItem('userEmail')).toBe('""')
   })
 })

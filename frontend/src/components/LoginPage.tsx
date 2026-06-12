@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { UserPlus } from 'lucide-react'
+import { useLocalStorage } from 'usehooks-ts'
 import { AuthForm } from './AuthForm'
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const [, setIsLoggedIn] = useLocalStorage('isLoggedIn', false)
+  const [, setUserEmail] = useLocalStorage('userEmail', '')
 
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -17,6 +20,9 @@ export function LoginPage() {
       })
 
       if (response.ok) {
+        const data = await response.json()
+        setIsLoggedIn(true)
+        setUserEmail(data.email)
         toast.success('Successfully entered the Forge.', {
           id: 'login-success',
         })

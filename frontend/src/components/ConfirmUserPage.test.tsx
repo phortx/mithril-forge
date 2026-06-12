@@ -60,11 +60,11 @@ describe('ConfirmUserPage', () => {
 
     // Wait for the API to be called
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalled()
-      // Check the URL has the correct token
-      const callArgs = mockFetch.mock.calls[0]
-      expect(callArgs[0]).toContain('token=valid-token')
-      expect(callArgs[1].method).toBe('POST')
+      // Find the specific call we care about, ignoring leaked calls from other async tests
+      const callArgs = mockFetch.mock.calls.find(call => typeof call[0] === 'string' && call[0].includes('token='))
+      expect(callArgs).toBeDefined()
+      expect(callArgs![0]).toContain('token=valid-token')
+      expect(callArgs![1].method).toBe('POST')
     })
 
     // Wait for the toast to appear
