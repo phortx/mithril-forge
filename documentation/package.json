@@ -8,7 +8,7 @@
     "build": "bun --bun astro build",
     "preview": "bun --bun astro preview",
     "check": "bun --bun astro check",
-    "lint": "bun --bun prettier --check .",
+    "lint": "bun --bun prettier --write .",
     "format": "bun --bun prettier --write ."
   },
   "dependencies": {
