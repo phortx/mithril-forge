@@ -107,26 +107,26 @@ export function CreatureCard({
         {/* Active turn indicator (screen-reader accessible) */}
         {isActive && <span className="sr-only" aria-label="Active turn">Active turn</span>}
         {/* Health orb — centered on card edge via negative margins */}
-        {showStats && (
-          <div
-            className="shrink-0 self-stretch w-0 relative z-10 -my-2"
-            onMouseEnter={() => isDead && !readOnly && onSetHoveredDeadId(creature.id)}
-            onMouseLeave={() => isDead && onSetHoveredDeadId(null)}
-            onClick={() => {
-              if (isDead && !readOnly) {
-                onHeal(creature.id, 1)
-                onSetHoveredDeadId(null)
-              }
-            }}
-            style={{ cursor: isDead && !readOnly ? 'pointer' : undefined }}
-          >
-            <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} id={creature.id} isActive={isActive} isDead={isDead} isReviveHover={isReviveHover} />
-            <span className="sr-only">{creature.hp}/{creature.maxHp}</span>
-          </div>
-        )}
+        <div
+          className="shrink-0 self-stretch w-0 relative z-10 -my-2"
+          onMouseEnter={() => isDead && !readOnly && onSetHoveredDeadId(creature.id)}
+          onMouseLeave={() => isDead && onSetHoveredDeadId(null)}
+          onClick={() => {
+            if (isDead && !readOnly) {
+              onHeal(creature.id, 1)
+              onSetHoveredDeadId(null)
+            }
+          }}
+          style={{ cursor: isDead && !readOnly ? 'pointer' : undefined }}
+        >
+          <HealthBar hp={creature.hp} maxHp={creature.maxHp} tempHp={creature.tempHp} id={creature.id} isActive={isActive} isDead={isDead} isReviveHover={isReviveHover} isUnknown={!showStats} />
+          <span className="sr-only">
+            {!showStats ? 'Unknown HP' : `${creature.hp}/${creature.maxHp}`}
+          </span>
+        </div>
         {/* Card body */}
         <div
-          className={`relative overflow-visible flex-1 min-w-0 rounded-lg ${showStats ? 'pl-20' : 'pl-5'} pr-5 py-4 ${
+          className={`relative overflow-visible flex-1 min-w-0 rounded-lg pl-20 pr-5 py-4 ${
             isActive ? 'creature-card-active' : 'creature-card'
           } ${!isActive ? 'cursor-pointer' : ''}`}
         >
@@ -151,12 +151,6 @@ export function CreatureCard({
               <span className={`font-heading text-lg font-semibold truncate flex-1 min-w-0 ${isDead ? 'text-forge-tan/60 line-through' : 'text-forge-parchment-light'}`}>
                 {creature.name}
               </span>
-              {isDead && !showStats && (
-                <span className="text-xs font-heading uppercase tracking-wider px-2 py-1 rounded shrink-0 flex items-center gap-1 bg-forge-burgundy/40 text-forge-burgundy-light">
-                  <Skull size={12} />
-                  Dead
-                </span>
-              )}
               {!readOnly && creature.monsterSlug && onShowStatBlock && (
                 <button
                   onClick={() => onShowStatBlock(creature.monsterSlug!)}

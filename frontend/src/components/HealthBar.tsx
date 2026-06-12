@@ -8,6 +8,7 @@ type HealthBarProps = {
   isActive?: boolean
   isDead?: boolean
   isReviveHover?: boolean
+  isUnknown?: boolean
 }
 
 const R = 28 // orb outer radius
@@ -22,9 +23,9 @@ const FILL_TOP = CY - IR
 const FILL_BOTTOM = CY + IR
 const FILL_HEIGHT = FILL_BOTTOM - FILL_TOP
 
-export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = false, isReviveHover = false }: HealthBarProps) {
-  const hpPercent = Math.max(0, Math.min(100, (hp / maxHp) * 100))
-  const tempPercent = Math.min(100 - hpPercent, (tempHp / maxHp) * 100)
+export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = false, isReviveHover = false, isUnknown = false }: HealthBarProps) {
+  const hpPercent = isUnknown ? 0 : Math.max(0, Math.min(100, (hp / maxHp) * 100))
+  const tempPercent = isUnknown ? 0 : Math.min(100 - hpPercent, (tempHp / maxHp) * 100)
   const totalFill = hpPercent + tempPercent
 
   const clipId = `orb-clip-${id}`
@@ -184,7 +185,7 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
         />
 
         {/* HP fraction text — centered in orb (hidden when dead) */}
-        {!isDead && (
+        {!isDead && !isUnknown && (
           <>
             <text
               x={CX}
@@ -227,6 +228,24 @@ export function HealthBar({ hp, maxHp, tempHp, id, isActive = false, isDead = fa
           </>
         )}
 
+        {/* Unknown state - question mark */}
+        {!isDead && isUnknown && (
+          <text
+            x={CX}
+            y={CY}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontFamily="Cinzel, serif"
+            fontWeight={600}
+            fontSize={28}
+            fill="rgba(255,255,255,0.3)"
+            stroke="rgba(0,0,0,0.5)"
+            strokeWidth={1.5}
+            paintOrder="stroke"
+          >
+            ?
+          </text>
+        )}
 
         {/* Dark overlay for dead creatures — renders UNDER skull */}
         {isDead && (
