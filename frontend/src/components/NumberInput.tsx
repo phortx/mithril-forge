@@ -94,6 +94,7 @@ export function NumberInput({
 
   const [isAltDown, setIsAltDown] = useState(false)
   const dragStartInfo = useRef<{ y: number; val: number } | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Alt') setIsAltDown(true) }
@@ -109,6 +110,26 @@ export function NumberInput({
       window.removeEventListener('blur', handleBlur)
     }
   }, [])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleNativeWheel = (e: WheelEvent) => {
+      if (e.altKey) {
+        e.preventDefault()
+        const current = parseInt(localValue || '0', 10)
+        if (!isNaN(current)) {
+          const currentStep = e.shiftKey ? shiftStep : step
+          const direction = e.deltaY > 0 ? -1 : 1
+          commitValue((current + direction * currentStep).toString())
+        }
+      }
+    }
+
+    container.addEventListener('wheel', handleNativeWheel, { passive: false })
+    return () => container.removeEventListener('wheel', handleNativeWheel)
+  }, [localValue, shiftStep, step, min, max, value, onChange])
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.altKey) {
@@ -142,6 +163,7 @@ export function NumberInput({
 
   return (
     <div 
+      ref={containerRef}
       className={`relative flex items-center bg-[rgba(13,10,7,0.6)] border border-forge-leather rounded focus-within:border-forge-gold-dim focus-within:ring-1 focus-within:ring-forge-gold/20 transition-all ${isAltDown ? 'cursor-ns-resize' : ''} ${containerClassName}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
