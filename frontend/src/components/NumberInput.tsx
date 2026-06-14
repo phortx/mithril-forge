@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { Minus, Plus } from 'lucide-react'
 
 type NumberInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> & {
@@ -32,7 +32,7 @@ export function NumberInput({
     setPrevValue(value)
   }
 
-  const commitValue = (newValue: string) => {
+  const commitValue = useCallback((newValue: string) => {
     let parsed = parseInt(newValue, 10)
     if (isNaN(parsed)) {
       if (newValue === '' || newValue === '-') {
@@ -44,7 +44,7 @@ export function NumberInput({
     const clamped = Math.max(min, Math.min(max, parsed))
     setLocalValue(clamped.toString())
     onChange(clamped)
-  }
+  }, [min, max, onChange, value])
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     commitValue(localValue)
@@ -129,7 +129,7 @@ export function NumberInput({
 
     container.addEventListener('wheel', handleNativeWheel, { passive: false })
     return () => container.removeEventListener('wheel', handleNativeWheel)
-  }, [localValue, shiftStep, step, min, max, value, onChange])
+  }, [localValue, shiftStep, step, commitValue])
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.altKey) {
