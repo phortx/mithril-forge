@@ -8,25 +8,14 @@ mock.module('vanilla-cookieconsent', () => {
   }
 })
 
-const posthogOptInMock = jest.fn()
-const posthogOptOutMock = jest.fn()
-mock.module('posthog-js', () => {
-  return {
-    default: {
-      opt_in_capturing: posthogOptInMock,
-      opt_out_capturing: posthogOptOutMock,
-    }
-  }
-})
-
-// Import after the mock
+import posthog from 'posthog-js'
 import { CookieConsentBanner } from './CookieConsentBanner'
 
 describe('CookieConsentBanner', () => {
   beforeEach(() => {
     runMock.mockClear()
-    posthogOptInMock.mockClear()
-    posthogOptOutMock.mockClear()
+    ;(posthog.opt_in_capturing as ReturnType<typeof mock>).mockClear()
+    ;(posthog.opt_out_capturing as ReturnType<typeof mock>).mockClear()
   })
 
   it('calls CookieConsent.run with expected configuration on mount', () => {
@@ -52,8 +41,8 @@ describe('CookieConsentBanner', () => {
     
     // Simulate consent for analytics
     runCallArg.onConsent({ cookie: { categories: ['necessary', 'analytics'] } })
-    expect(posthogOptInMock).toHaveBeenCalled()
-    expect(posthogOptOutMock).not.toHaveBeenCalled()
+    expect(posthog.opt_in_capturing).toHaveBeenCalled()
+    expect(posthog.opt_out_capturing).not.toHaveBeenCalled()
   })
 
   it('opts out of posthog when analytics is rejected', () => {
@@ -62,10 +51,10 @@ describe('CookieConsentBanner', () => {
     
     // Simulate consent change to reject analytics
     runCallArg.onChange({ cookie: { categories: ['necessary'] } })
-    expect(posthogOptOutMock).toHaveBeenCalled()
+    expect(posthog.opt_out_capturing).toHaveBeenCalled()
     
     // Simulate consent change to accept analytics
     runCallArg.onChange({ cookie: { categories: ['necessary', 'analytics'] } })
-    expect(posthogOptInMock).toHaveBeenCalled()
+    expect(posthog.opt_in_capturing).toHaveBeenCalled()
   })
 })

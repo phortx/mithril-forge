@@ -11,6 +11,8 @@ mock.module('posthog-js', () => ({
     capture: mock(),
     identify: mock(),
     reset: mock(),
+    opt_in_capturing: mock(),
+    opt_out_capturing: mock(),
   }
 }))
 
