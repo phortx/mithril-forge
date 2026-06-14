@@ -14,10 +14,17 @@ describe('ConfirmUserPage', () => {
       if (urlStr.includes('/api/users/confirm')) {
         return Promise.resolve({
           ok: true,
+          status: 200,
           json: async () => ({ isConfirmed: "true" }),
+          text: async () => "",
         }) as Promise<Response>
       }
-      return Promise.resolve({ ok: false }) as Promise<Response>
+      return Promise.resolve({ 
+        ok: false, 
+        status: 400,
+        json: async () => ({}),
+        text: async () => "",
+      }) as Promise<Response>
     }) as unknown as typeof fetch)
   })
 

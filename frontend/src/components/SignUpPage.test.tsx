@@ -15,10 +15,17 @@ describe('SignUpPage', () => {
       if (urlStr.includes('/api/users')) {
         return Promise.resolve({
           ok: true,
+          status: 200,
           json: async () => ({ email: "test@example.com" }),
+          text: async () => "",
         }) as Promise<Response>
       }
-      return Promise.resolve({ ok: false }) as Promise<Response>
+      return Promise.resolve({ 
+        ok: false, 
+        status: 400,
+        json: async () => ({}),
+        text: async () => "",
+      }) as Promise<Response>
     }) as unknown as typeof fetch)
   })
 

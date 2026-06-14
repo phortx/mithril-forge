@@ -2,15 +2,22 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { Navigation } from './Navigation'
-import { describe, expect, it, mock, afterEach } from 'bun:test'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mockFetch = mock((_url?: string | URL | Request, _options?: RequestInit) => Promise.resolve({ ok: false } as Response))
-globalThis.fetch = mockFetch as unknown as typeof fetch
+import { describe, expect, it, spyOn, afterEach, beforeEach } from 'bun:test'
 
 describe('Navigation', () => {
+  let mockFetch: ReturnType<typeof spyOn>
+
+  beforeEach(() => {
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => Promise.resolve({ 
+      ok: false,
+      status: 400,
+      json: async () => ({}),
+      text: async () => "",
+    } as Response)) as unknown as typeof fetch)
+  })
+
   afterEach(() => {
-    mockFetch.mockReset()
+    mockFetch.mockRestore()
     localStorage.clear()
   })
 
@@ -155,7 +162,12 @@ describe('Navigation', () => {
   })
 
   it('shows Sign in and Sign up when not logged in', async () => {
-    mockFetch.mockImplementation(() => Promise.resolve({ ok: false } as Response))
+    mockFetch.mockImplementation(() => Promise.resolve({ 
+      ok: false,
+      status: 400,
+      json: async () => ({}),
+      text: async () => "",
+    } as Response))
 
     const user = userEvent.setup()
     render(
@@ -182,13 +194,25 @@ describe('Navigation', () => {
       if (url === '/api/session' && (!options || options.method === 'GET')) {
         return Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ email: 'test@example.com' })
+          status: 200,
+          json: () => Promise.resolve({ email: 'test@example.com' }),
+          text: async () => "",
         } as Response)
       }
       if (url === '/api/session' && options?.method === 'DELETE') {
-        return Promise.resolve({ ok: true } as Response)
+        return Promise.resolve({ 
+          ok: true,
+          status: 200,
+          json: async () => ({}),
+          text: async () => "",
+        } as Response)
       }
-      return Promise.resolve({ ok: false } as Response)
+      return Promise.resolve({ 
+        ok: false,
+        status: 400,
+        json: async () => ({}),
+        text: async () => "",
+      } as Response)
     })
 
     const user = userEvent.setup()

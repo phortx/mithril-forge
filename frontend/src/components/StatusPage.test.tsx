@@ -1,32 +1,31 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { StatusPage } from './StatusPage'
-import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test'
-
-const originalFetch = globalThis.fetch
+import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test'
 
 describe('StatusPage', () => {
-  let mockFetch: ReturnType<typeof jest.fn>
+  let mockFetch: ReturnType<typeof spyOn>
 
   beforeEach(() => {
-    mockFetch = jest.fn((url: string | URL | Request) => {
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation(((url: string | URL | Request) => {
       const urlStr = url.toString()
       if (urlStr === '/api/status') {
         return Promise.resolve({
           ok: true,
+          status: 200,
           json: async () => ({ status: 'ok' }),
-        })
+          text: async () => "",
+        }) as Promise<Response>
       }
       if (urlStr === 'https://api.open5e.com/v1/monsters/?limit=1') {
-        return Promise.resolve({ ok: true })
+        return Promise.resolve({ ok: true, status: 200, json: async () => ({}), text: async () => "" }) as Promise<Response>
       }
-      return Promise.resolve({ ok: false })
-    })
-    globalThis.fetch = mockFetch as unknown as typeof fetch
+      return Promise.resolve({ ok: false, status: 400, json: async () => ({}), text: async () => "" }) as Promise<Response>
+    }) as unknown as typeof fetch)
   })
 
   afterEach(() => {
-    globalThis.fetch = originalFetch
+    mockFetch.mockRestore()
   })
 
   it('renders system status title', async () => {

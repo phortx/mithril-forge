@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test'
 import { abilityModifier, clearMonsterCache, getCachedMonster, getMonster, searchMonsters } from './open5e'
 import type { MonsterData } from '../types/statBlock'
 
@@ -73,19 +73,23 @@ function makeMonster(overrides: Partial<MonsterData> = {}): MonsterData {
   }
 }
 
-const originalFetch = globalThis.fetch
-
 describe('searchMonsters', () => {
-  const mockFetch = jest.fn()
+  let mockFetch: ReturnType<typeof spyOn>
 
   beforeEach(() => {
     clearMonsterCache()
-    globalThis.fetch = mockFetch as unknown as typeof fetch
-    mockFetch.mockReset()
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => {
+      return Promise.resolve({ 
+        ok: false, 
+        status: 400,
+        json: async () => ({}),
+        text: async () => "",
+      }) as Promise<Response>
+    }) as unknown as typeof fetch)
   })
 
   afterEach(() => {
-    globalThis.fetch = originalFetch
+    mockFetch.mockRestore()
   })
 
   it('returns empty array for query shorter than 2 chars', async () => {
@@ -145,16 +149,22 @@ describe('searchMonsters', () => {
 })
 
 describe('getMonster', () => {
-  const mockFetch = jest.fn()
+  let mockFetch: ReturnType<typeof spyOn>
 
   beforeEach(() => {
     clearMonsterCache()
-    globalThis.fetch = mockFetch as unknown as typeof fetch
-    mockFetch.mockReset()
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => {
+      return Promise.resolve({ 
+        ok: false, 
+        status: 400,
+        json: async () => ({}),
+        text: async () => "",
+      }) as Promise<Response>
+    }) as unknown as typeof fetch)
   })
 
   afterEach(() => {
-    globalThis.fetch = originalFetch
+    mockFetch.mockRestore()
   })
 
   it('fetches monster by slug and returns data', async () => {
