@@ -12,19 +12,9 @@ describe('ConfirmUserPage', () => {
     mockFetch = spyOn(globalThis, 'fetch').mockImplementation(((url: string | URL | Request) => {
       const urlStr = url.toString()
       if (urlStr.includes('/api/users/confirm')) {
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          json: async () => ({ isConfirmed: "true" }),
-          text: async () => "",
-        }) as Promise<Response>
+        return Promise.resolve(new Response(JSON.stringify({ isConfirmed: "true" }), { status: 200 }))
       }
-      return Promise.resolve({ 
-        ok: false, 
-        status: 400,
-        json: async () => ({}),
-        text: async () => "",
-      }) as Promise<Response>
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
     }) as unknown as typeof fetch)
   })
 

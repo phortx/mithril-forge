@@ -8,12 +8,9 @@ describe('Navigation', () => {
   let mockFetch: ReturnType<typeof spyOn>
 
   beforeEach(() => {
-    mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => Promise.resolve({ 
-      ok: false,
-      status: 400,
-      json: async () => ({}),
-      text: async () => "",
-    } as Response)) as unknown as typeof fetch)
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => {
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
+    }) as unknown as typeof fetch)
   })
 
   afterEach(() => {
@@ -162,12 +159,7 @@ describe('Navigation', () => {
   })
 
   it('shows Sign in and Sign up when not logged in', async () => {
-    mockFetch.mockImplementation(() => Promise.resolve({ 
-      ok: false,
-      status: 400,
-      json: async () => ({}),
-      text: async () => "",
-    } as Response))
+    mockFetch.mockImplementation(() => Promise.resolve(new Response(JSON.stringify({}), { status: 400 })))
 
     const user = userEvent.setup()
     render(
@@ -192,27 +184,12 @@ describe('Navigation', () => {
   it('shows Log out and email when logged in and calls logout API on click', async () => {
     mockFetch.mockImplementation((url?: string | URL | Request, options?: RequestInit) => {
       if (url === '/api/session' && (!options || options.method === 'GET')) {
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve({ email: 'test@example.com' }),
-          text: async () => "",
-        } as Response)
+        return Promise.resolve(new Response(JSON.stringify({ email: 'test@example.com' }), { status: 200 }))
       }
       if (url === '/api/session' && options?.method === 'DELETE') {
-        return Promise.resolve({ 
-          ok: true,
-          status: 200,
-          json: async () => ({}),
-          text: async () => "",
-        } as Response)
+        return Promise.resolve(new Response(JSON.stringify({}), { status: 200 }))
       }
-      return Promise.resolve({ 
-        ok: false,
-        status: 400,
-        json: async () => ({}),
-        text: async () => "",
-      } as Response)
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
     })
 
     const user = userEvent.setup()

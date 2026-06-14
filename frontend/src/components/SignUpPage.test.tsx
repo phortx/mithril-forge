@@ -13,19 +13,9 @@ describe('SignUpPage', () => {
     mockFetch = spyOn(globalThis, 'fetch').mockImplementation(((url: string | URL | Request) => {
       const urlStr = url.toString()
       if (urlStr.includes('/api/users')) {
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          json: async () => ({ email: "test@example.com" }),
-          text: async () => "",
-        }) as Promise<Response>
+        return Promise.resolve(new Response(JSON.stringify({ email: "test@example.com" }), { status: 200 }))
       }
-      return Promise.resolve({ 
-        ok: false, 
-        status: 400,
-        json: async () => ({}),
-        text: async () => "",
-      }) as Promise<Response>
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
     }) as unknown as typeof fetch)
   })
 

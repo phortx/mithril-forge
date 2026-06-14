@@ -79,12 +79,7 @@ describe('searchMonsters', () => {
   beforeEach(() => {
     clearMonsterCache()
     mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => {
-      return Promise.resolve({ 
-        ok: false, 
-        status: 400,
-        json: async () => ({}),
-        text: async () => "",
-      }) as Promise<Response>
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
     }) as unknown as typeof fetch)
   })
 
@@ -154,12 +149,7 @@ describe('getMonster', () => {
   beforeEach(() => {
     clearMonsterCache()
     mockFetch = spyOn(globalThis, 'fetch').mockImplementation((() => {
-      return Promise.resolve({ 
-        ok: false, 
-        status: 400,
-        json: async () => ({}),
-        text: async () => "",
-      }) as Promise<Response>
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
     }) as unknown as typeof fetch)
   })
 
