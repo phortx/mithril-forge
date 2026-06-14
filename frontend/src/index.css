@@ -1,4 +1,60 @@
+@import "vanilla-cookieconsent/dist/cookieconsent.css";
 @import "tailwindcss";
+
+:root {
+  --cc-bg: var(--color-forge-dark);
+  --cc-text: var(--color-forge-parchment-light);
+  --cc-btn-primary-bg: var(--color-forge-leather);
+  --cc-btn-primary-text: var(--color-forge-parchment-light);
+  --cc-btn-primary-hover-bg: var(--color-forge-brown);
+  --cc-btn-secondary-bg: transparent;
+  --cc-btn-secondary-text: var(--color-forge-parchment);
+  --cc-btn-secondary-hover-bg: rgba(61, 46, 31, 0.4);
+  --cc-toggle-on-bg: var(--color-forge-gold-dim);
+  --cc-toggle-off-bg: var(--color-forge-brown);
+  --cc-cookie-category-block-bg: rgba(0, 0, 0, 0.2);
+  --cc-cookie-category-block-border: var(--color-forge-leather);
+  --cc-cookie-category-block-bg-hover: rgba(0, 0, 0, 0.4);
+  --cc-font-family: var(--font-body);
+  --cc-modal-border-radius: 0.5rem;
+  --cc-btn-border-radius: 0.25rem;
+  --cc-primary-color: var(--color-forge-parchment);
+  --cc-secondary-color: var(--color-forge-tan);
+  --cc-separator-border-color: var(--color-forge-leather);
+  --cc-overlay-bg: rgba(13, 10, 7, 0.85);
+}
+
+/* Custom overrides to match Mithril Forge aesthetic and improve legibility */
+#cc-main {
+  font-size: 1.15rem; /* Serif fonts need a bit more size to be legible */
+  letter-spacing: 0.02em;
+}
+
+#cc-main .cm__title,
+#cc-main .pm__title {
+  font-family: var(--font-heading);
+  color: var(--color-forge-gold);
+  letter-spacing: 0.05em;
+  font-size: 1.4rem;
+}
+
+#cc-main .cc__btn {
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-forge-leather);
+  transition: all 0.2s ease;
+}
+
+#cc-main .cc__btn--primary {
+  border-color: var(--color-forge-gold-dim);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+#cc-main .cc__btn--primary:hover {
+  border-color: var(--color-forge-gold);
+}
 
 @theme {
   --font-title: "Cinzel Decorative", serif;

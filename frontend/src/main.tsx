@@ -8,6 +8,7 @@ import { StatusPage } from './components/StatusPage.tsx'
 import { ConfirmUserPage } from './components/ConfirmUserPage.tsx'
 import { SignUpPage } from './components/SignUpPage.tsx'
 import { LoginPage } from './components/LoginPage.tsx'
+import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/login" element={<LoginPage />} />
         <Route path="/*" element={<App />} />
       </Routes>
+      <CookieConsentBanner />
       <Toaster
         position="bottom-right"
         toastOptions={{
