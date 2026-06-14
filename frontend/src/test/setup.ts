@@ -1,9 +1,18 @@
 import { GlobalRegistrator } from '@happy-dom/global-registrator'
-import { afterEach, expect } from 'bun:test'
+import { afterEach, expect, mock } from 'bun:test'
 import * as matchers from '@testing-library/jest-dom/matchers'
 
 GlobalRegistrator.register()
 expect.extend(matchers as Parameters<typeof expect.extend>[0])
+
+mock.module('posthog-js', () => ({
+  default: {
+    init: mock(),
+    capture: mock(),
+    identify: mock(),
+    reset: mock(),
+  }
+}))
 
 // usehooks-ts' `useLocalStorage` dispatches a custom "local-storage" event on
 // `window` to synchronise multiple hooks of the same key within one window.
