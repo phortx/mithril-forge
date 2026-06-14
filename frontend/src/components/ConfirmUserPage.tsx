@@ -44,7 +44,8 @@ export function ConfirmUserPage() {
             duration: 6000,
           })
         }
-      } catch {
+      } catch (err) {
+        console.error("FATAL ERROR IN CONFIRM TRY BLOCK:", err)
         toast.error('Network error during account confirmation.', {
           id: 'confirm-error',
           duration: 6000,

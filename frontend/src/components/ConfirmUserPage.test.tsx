@@ -74,12 +74,9 @@ describe('ConfirmUserPage', () => {
     mockFetch.mockImplementation((url: string | URL | Request) => {
       const urlStr = url.toString()
       if (urlStr.includes('/api/users/confirm')) {
-        return Promise.resolve({
-          ok: false,
-          json: async () => ({ error: "token invalid" }),
-        })
+        return Promise.resolve(new Response(JSON.stringify({ error: "token invalid" }), { status: 400 }))
       }
-      return Promise.resolve({ ok: false })
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 400 }))
     })
 
     render(

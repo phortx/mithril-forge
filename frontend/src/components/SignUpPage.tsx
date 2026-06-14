@@ -36,7 +36,8 @@ export function SignUpPage() {
           id: 'signup-error',
         })
       }
-    } catch {
+    } catch (err) {
+      console.error("FATAL ERROR IN SIGNUP TRY BLOCK:", err)
       toast.error('Network error during registration.', {
         id: 'signup-error',
       })

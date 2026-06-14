@@ -75,10 +75,7 @@ describe('SignUpPage', () => {
   it('displays error toast when user already exists (409)', async () => {
     const user = userEvent.setup()
     mockFetch.mockImplementation(() => {
-      return Promise.resolve({
-        ok: false,
-        status: 409,
-      })
+      return Promise.resolve(new Response(JSON.stringify({}), { status: 409 }))
     })
 
     render(
@@ -102,11 +99,7 @@ describe('SignUpPage', () => {
   it('displays error toast when API returns 400', async () => {
     const user = userEvent.setup()
     mockFetch.mockImplementation(() => {
-      return Promise.resolve({
-        ok: false,
-        status: 400,
-        json: async () => ({ error: 'Invalid password' })
-      })
+      return Promise.resolve(new Response(JSON.stringify({ error: 'Invalid password' }), { status: 400 }))
     })
 
     render(
