@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp, Book, LogOut, User } from 'lucide-react'
 import { useLocalStorage } from 'usehooks-ts'
+import posthog from 'posthog-js'
 import toast from 'react-hot-toast'
 
 export function Navigation() {
@@ -37,6 +38,8 @@ export function Navigation() {
   const handleLogout = async () => {
     try {
       await fetch('/api/session', { method: 'DELETE' })
+      posthog.capture('user_logged_out')
+      posthog.reset()
       setIsLoggedIn(false)
       setUserEmail('')
       closeNav()

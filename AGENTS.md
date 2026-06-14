@@ -44,6 +44,7 @@ Never commit code that fails these checks.
 - Co-locate tests (`Foo.test.tsx` next to `Foo.tsx`).
 - Relative imports only. No barrel exports. No Prettier (ESLint only). **CRITICAL: English UI and texts only. Never use German or any other language.**
 - Maintain high test coverage; always test new code.
+- **Analytics & Tracking:** When adding new interactive features (buttons, forms, significant state changes), always implement tracking events using `posthog.capture('event_name', { properties })`.
 
 ### Backend
 - Kotlin idioms (data classes, extension functions). Spring conventions (`@RestController`, `@Service`, `@Repository`).

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { Loader2 } from 'lucide-react'
+import posthog from 'posthog-js'
 import { Navigation } from './Navigation'
 
 export function ConfirmUserPage() {
@@ -30,6 +31,7 @@ export function ConfirmUserPage() {
         })
 
         if (response.ok) {
+          posthog.capture('account_confirmed')
           toast.success('Account successfully confirmed! Welcome to Mithril Forge!', {
             id: 'confirm-success',
             duration: 5000,

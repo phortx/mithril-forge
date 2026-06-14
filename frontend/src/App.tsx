@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useLocation, Navigate, Link } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useEncounter } from './hooks/useEncounter'
 import { useEncounterSettings } from './hooks/useEncounterSettings'
 import { useTurnTracker } from './hooks/useTurnTracker'
@@ -131,7 +132,15 @@ function App() {
 
         {isDM && (creatures.length === 0 || showAddForm) && (
           <div className="panel-parchment panel-ornate rounded-lg p-6">
-            <AddCreatureForm onAdd={addCreature} />
+            <AddCreatureForm
+              onAdd={(name, initiativeModifier, creatureType, maxHp, ac, monsterSlug) => {
+                addCreature(name, initiativeModifier, creatureType, maxHp, ac, monsterSlug)
+                posthog.capture('creature_added', {
+                  creature_type: creatureType,
+                  from_monster_db: !!monsterSlug,
+                })
+              }}
+            />
           </div>
         )}
 
@@ -144,11 +153,18 @@ function App() {
             hasCreaturesWithoutInitiative={creatures.some(c => c.initiative === null)}
             showAddForm={showAddForm}
             onToggleAddForm={() => setShowAddForm((v) => !v)}
-            onStart={startEncounter}
+            onStart={() => {
+              startEncounter()
+              posthog.capture('encounter_started', { creature_count: creatures.length })
+            }}
             onNextTurn={nextTurn}
-            onEndEncounter={endEncounter}
+            onEndEncounter={() => {
+              endEncounter()
+              posthog.capture('encounter_ended', { round: turnState?.round ?? null })
+            }}
             onRollAll={rollAllInitiative}
             onReset={() => {
+              posthog.capture('encounter_reset', { creature_count: creatures.length })
               resetEncounter()
               endEncounter()
             }}
@@ -177,7 +193,10 @@ function App() {
           onDamage={applyDamage}
           onHeal={applyHealing}
           onSetTempHp={setTempHp}
-          onShowStatBlock={isDM ? setStatBlockSlug : undefined}
+          onShowStatBlock={isDM ? (slug) => {
+            setStatBlockSlug(slug)
+            posthog.capture('stat_block_viewed', { monster_slug: slug })
+          } : undefined}
         />
       </div>
 

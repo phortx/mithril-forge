@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import * as CookieConsent from 'vanilla-cookieconsent'
+import posthog from 'posthog-js'
 
 export function CookieConsentBanner() {
   useEffect(() => {
@@ -12,6 +13,19 @@ export function CookieConsentBanner() {
         analytics: {
           enabled: false,
         },
+      },
+
+      onConsent: ({ cookie }) => {
+        if (cookie.categories.includes('analytics')) {
+          posthog.opt_in_capturing()
+        }
+      },
+      onChange: ({ cookie }) => {
+        if (cookie.categories.includes('analytics')) {
+          posthog.opt_in_capturing()
+        } else {
+          posthog.opt_out_capturing()
+        }
       },
 
       language: {

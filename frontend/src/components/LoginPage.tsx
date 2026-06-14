@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { UserPlus } from 'lucide-react'
 import { useLocalStorage } from 'usehooks-ts'
+import posthog from 'posthog-js'
 import { AuthForm } from './AuthForm'
 
 export function LoginPage() {
@@ -23,6 +24,8 @@ export function LoginPage() {
         const data = await response.json()
         setIsLoggedIn(true)
         setUserEmail(data.email)
+        posthog.identify(data.email, { email: data.email })
+        posthog.capture('user_logged_in', { email: data.email })
         toast.success('Successfully entered the Forge.', {
           id: 'login-success',
         })

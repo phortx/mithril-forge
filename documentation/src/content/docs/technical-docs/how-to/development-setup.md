@@ -19,3 +19,12 @@ We recommend using [mise](https://mise.jdx.dev) or [asdf](https://asdf-vm.com) w
 ```bash
 just install    # bun install + verify gradlew
 ```
+
+### Environment Variables
+
+For frontend tracking (PostHog), the following environment variables need to be set in a `.env` file in the `frontend` directory, and provided during deployment:
+
+| Variable                   | Description                                                    |
+| -------------------------- | -------------------------------------------------------------- |
+| `VITE_PUBLIC_POSTHOG_KEY`  | The public project API key from your PostHog project settings. |
+| `VITE_PUBLIC_POSTHOG_HOST` | The PostHog instance host (e.g., `https://eu.i.posthog.com`).  |

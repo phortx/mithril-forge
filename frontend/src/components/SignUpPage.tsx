@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { LogIn } from 'lucide-react'
+import posthog from 'posthog-js'
 import { AuthForm } from './AuthForm'
 
 export function SignUpPage() {
@@ -18,6 +19,7 @@ export function SignUpPage() {
 
 
       if (response.ok) {
+        posthog.capture('user_signed_up', { email })
         toast.success('Registration successful! Please check your email to confirm your account.', {
           id: 'signup-success',
           duration: 6000,
