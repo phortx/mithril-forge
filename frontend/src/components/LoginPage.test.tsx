@@ -2,15 +2,20 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { LoginPage } from './LoginPage'
-import { describe, expect, it, mock, afterEach } from 'bun:test'
-
-const mockFetch = mock()
-globalThis.fetch = mockFetch as unknown as typeof fetch
+import { describe, expect, it, spyOn, afterEach, beforeEach } from 'bun:test'
+import toast from 'react-hot-toast'
 
 describe('LoginPage', () => {
+  let mockFetch: ReturnType<typeof spyOn>
+
+  beforeEach(() => {
+    mockFetch = spyOn(globalThis, 'fetch')
+  })
+
   afterEach(() => {
-    mockFetch.mockReset()
+    mockFetch.mockRestore()
     localStorage.clear()
+    toast.remove()
   })
 
   it('renders the login form', () => {

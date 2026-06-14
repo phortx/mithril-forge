@@ -3,29 +3,28 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import userEvent from '@testing-library/user-event'
 import { SignUpPage } from './SignUpPage'
-import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test'
-
-const originalFetch = globalThis.fetch
+import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test'
+import toast from 'react-hot-toast'
 
 describe('SignUpPage', () => {
-  let mockFetch: ReturnType<typeof jest.fn>
+  let mockFetch: ReturnType<typeof spyOn>
 
   beforeEach(() => {
-    mockFetch = jest.fn((url: string | URL | Request) => {
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation(((url: string | URL | Request) => {
       const urlStr = url.toString()
       if (urlStr.includes('/api/users')) {
         return Promise.resolve({
           ok: true,
           json: async () => ({ email: "test@example.com" }),
-        })
+        }) as Promise<Response>
       }
-      return Promise.resolve({ ok: false })
-    })
-    globalThis.fetch = mockFetch as unknown as typeof fetch
+      return Promise.resolve({ ok: false }) as Promise<Response>
+    }) as unknown as typeof fetch)
   })
 
   afterEach(() => {
-    globalThis.fetch = originalFetch
+    mockFetch.mockRestore()
+    toast.remove()
   })
 
   it('renders the sign up form', () => {

@@ -2,29 +2,28 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { ConfirmUserPage } from './ConfirmUserPage'
-import { afterEach, beforeEach, describe, expect, it, jest } from 'bun:test'
-
-const originalFetch = globalThis.fetch
+import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test'
+import toast from 'react-hot-toast'
 
 describe('ConfirmUserPage', () => {
-  let mockFetch: ReturnType<typeof jest.fn>
+  let mockFetch: ReturnType<typeof spyOn>
 
   beforeEach(() => {
-    mockFetch = jest.fn((url: string | URL | Request) => {
+    mockFetch = spyOn(globalThis, 'fetch').mockImplementation(((url: string | URL | Request) => {
       const urlStr = url.toString()
       if (urlStr.includes('/api/users/confirm')) {
         return Promise.resolve({
           ok: true,
           json: async () => ({ isConfirmed: "true" }),
-        })
+        }) as Promise<Response>
       }
-      return Promise.resolve({ ok: false })
-    })
-    globalThis.fetch = mockFetch as unknown as typeof fetch
+      return Promise.resolve({ ok: false }) as Promise<Response>
+    }) as unknown as typeof fetch)
   })
 
   afterEach(() => {
-    globalThis.fetch = originalFetch
+    mockFetch.mockRestore()
+    toast.remove()
   })
 
   it('shows error and redirects to home if no token is provided', async () => {
@@ -61,7 +60,7 @@ describe('ConfirmUserPage', () => {
     // Wait for the API to be called
     await waitFor(() => {
       // Find the specific call we care about, ignoring leaked calls from other async tests
-      const callArgs = mockFetch.mock.calls.find(call => typeof call[0] === 'string' && call[0].includes('token='))
+      const callArgs = mockFetch.mock.calls.find((call: unknown[]) => typeof call[0] === 'string' && call[0].includes('token='))
       expect(callArgs).toBeDefined()
       expect(callArgs![0]).toContain('token=valid-token')
       expect(callArgs![1].method).toBe('POST')
