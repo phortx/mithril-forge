@@ -14,6 +14,7 @@ import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 
 posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY || '', {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+  ui_host: 'https://eu.i.posthog.com',
   person_profiles: 'identified_only',
   opt_out_capturing_by_default: true,
 })

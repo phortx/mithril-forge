@@ -12,6 +12,7 @@ class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .cors { } // Enable CORS globally
             .csrf { it.disable() } // For now, disable CSRF for API endpoints
             .authorizeHttpRequests { auth ->
                 auth
