@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.HttpStatusCodeException
@@ -12,14 +13,15 @@ import org.springframework.web.client.RestTemplate
 import java.net.URI
 
 @RestController
-class PostHogProxyController {
-    private val restTemplate = RestTemplate()
+class PostHogProxyController(
+    private val restTemplate: RestTemplate,
+) {
     private val postHogHost = "https://eu.i.posthog.com"
 
     @RequestMapping("/t/**")
     fun proxyToPostHog(
         request: HttpServletRequest,
-        body: ByteArray?,
+        @RequestBody(required = false) body: ByteArray?,
     ): ResponseEntity<ByteArray> {
         val path = request.requestURI.removePrefix("/t")
         val queryString = request.queryString?.let { "?$it" } ?: ""
