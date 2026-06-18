@@ -48,15 +48,11 @@ export default defineConfig({
             },
             {
               label: "Reference & Tips",
-              items: [
-                { slug: "user-manual/keyboard-shortcuts" },
-              ],
+              items: [{ slug: "user-manual/keyboard-shortcuts" }],
             },
             {
               label: "Help",
-              items: [
-                { slug: "user-manual/troubleshooting" },
-              ],
+              items: [{ slug: "user-manual/troubleshooting" }],
             },
           ],
         },

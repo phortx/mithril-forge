@@ -1,45 +1,22 @@
 ---
-title: Tracking and cookies
-description: How Mithril Forge handles analytics and user consent.
+title: Authentication, cookies, and security
+description: How Mithril Forge handles identity, data storage, and user consent.
 ---
 
-Mithril Forge uses PostHog for analytics. Only users who opt in are tracked.
+## Accounts and access
 
-## Cookie consent
+- **Optional accounts**: Accounts exist for specific features, but they are not mandatory. You can load the application and manage encounters without logging in, though you will miss out on account-specific features.
+- **No strict boundaries**: There is no security boundary between the DM and Player views. Players opening the DM view URL can see hidden data. The application assumes you control both screens physically.
 
-The app uses [Vanilla Cookie Consent](https://cookieconsent.orestbida.com/) by Orest Bida (npm package: `vanilla-cookieconsent`). New visitors see a banner with two consent categories:
+## Local storage
 
-| Category    | Default             | Purpose                                                                                                   |
-| ----------- | ------------------- | --------------------------------------------------------------------------------------------------------- |
-| `necessary` | Enabled (read-only) | Local Storage for encounter state sync between DM and Player views. The app cannot function without this. |
-| `analytics` | Disabled            | PostHog event tracking. Only activated when the user explicitly accepts.                                  |
+- **Sync mechanism**: The active encounter state lives in `localStorage`. Updates trigger `storage` events to sync the DM and Player tabs.
+- **Consent classification**: The cookie banner classifies `localStorage` usage as `necessary`.
 
-The consent banner lives in `CookieConsentBanner.tsx`. It calls `CookieConsent.run()` inside a `useEffect` and returns `null` because the library manages its own DOM.
+## Analytics and consent
 
-## Integration with PostHog
-
-PostHog is initialized in `main.tsx` with `opt_out_capturing_by_default: true`, so it stays dormant until the user opts in.
-
-The banner component toggles PostHog through two callbacks:
-
-- `onConsent` runs on page load when a consent decision already exists (or on first visit after the user interacts with the banner). If the stored cookie includes `analytics`, it calls `posthog.opt_in_capturing()`.
-- `onChange` runs when the user updates their preferences later, for example through the preferences modal. If `analytics` is now accepted, it calls `posthog.opt_in_capturing()`. If it was removed, it calls `posthog.opt_out_capturing()` to stop tracking and clear the cookies.
-
-## Development setup
-
-PostHog requires two environment variables:
-
-- `VITE_PUBLIC_POSTHOG_KEY`: the project API key.
-- `VITE_PUBLIC_POSTHOG_HOST`: the PostHog instance URL.
-
-To track new interactive features, call `posthog.capture()` with the event name and relevant properties.
-
-## Modifying the banner text
-
-All wording for the banner and preferences modal is defined in the `language.translations` object inside `CookieConsentBanner.tsx`. The object has two sections: `consentModal` (title, description, button labels for the initial banner) and `preferencesModal` (title, section descriptions, button labels for the detailed view).
-
-Edit the string values there and check the result in the browser.
-
-## Bypassing ad blockers
-
-Many ad blockers block tracking scripts even with a custom CNAME, because they uncloak the DNS record. Mithril Forge works around this by proxying all PostHog traffic through its Spring Boot backend at `/t/**`. The frontend points `api_host` at `/t`, which hides the traffic from blocklists and removes the need for DNS CNAME setup.
+- **Opt-in tracking**: We use PostHog for analytics. Users must explicitly opt in.
+- **Banner**: Uses `vanilla-cookieconsent`. It offers `necessary` (forced on) and `analytics` (off by default) categories.
+- **Initialization**: PostHog starts in `main.tsx` with `opt_out_capturing_by_default: true`.
+- **Toggle**: Accepting analytics calls `posthog.opt_in_capturing()`. Revoking it calls `posthog.opt_out_capturing()`.
+- **Ad blockers**: We proxy PostHog traffic through the Spring Boot backend (`/t/**`) to bypass blockers and avoid DNS CNAME setup.

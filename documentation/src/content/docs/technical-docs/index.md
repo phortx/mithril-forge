@@ -1,6 +1,8 @@
 ---
 title: Technical Documentation
 description: Technical documentation following the Diátaxis standard.
+sidebar:
+  order: 1
 ---
 
 Welcome to the Technical Documentation for Mithril Forge. This area is intended for developers, architects, and technically interested users.
