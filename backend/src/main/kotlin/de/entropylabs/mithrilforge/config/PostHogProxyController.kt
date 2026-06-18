@@ -68,9 +68,7 @@ class PostHogProxyController {
         val filtered = HttpHeaders()
         val excludedResponseHeaders = setOf("transfer-encoding", "content-length", "connection")
 
-        @Suppress("UNCHECKED_CAST")
-        val headersMap = originalHeaders as Map<String, List<String>>
-        for ((key, values) in headersMap) {
+        originalHeaders.forEach { key, values ->
             if (key.lowercase() !in excludedResponseHeaders) {
                 filtered.addAll(key, values)
             }
