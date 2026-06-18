@@ -17,6 +17,8 @@ export default defineConfig({
       // OpenAPI / Swagger UI for convenient debugging on the dev port
       '/v3/api-docs': { target: BACKEND_URL, changeOrigin: true },
       '/swagger-ui': { target: BACKEND_URL, changeOrigin: true },
+      // Tracking Proxy
+      '/t': { target: BACKEND_URL, changeOrigin: true },
     },
   },
 })

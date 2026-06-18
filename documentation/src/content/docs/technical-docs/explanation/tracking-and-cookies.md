@@ -3,30 +3,30 @@ title: Tracking and cookies
 description: How Mithril Forge handles analytics and user consent.
 ---
 
-Mithril Forge uses PostHog to collect usage data. PostHog tracks unique user sessions and processes IP addresses. Since we do not want to collect data without permission, and because privacy laws require explicit consent, we ask users before we track them.
+Mithril Forge uses PostHog for analytics. We only track users who give explicit permission.
 
-## The cookie banner
+## Cookie consent
 
-We use Vanilla CookieConsent to handle user permissions. The banner appears when a person visits the app for the first time. It offers two categories:
+The app uses Vanilla CookieConsent. New visitors see a banner with two choices:
 
-1. Necessary: This covers local storage for the encounter state. Users cannot opt out of this category because the app needs local storage to save data.
-2. Analytics: This covers PostHog tracking. It is disabled by default.
+1. Necessary: Saves the encounter state in local storage. This is required for the app to function.
+2. Analytics: Enables PostHog tracking. This is off by default.
 
-## How the integration works
+## Integration details
 
-We initialize PostHog in the main application file. We pass the `opt_out_capturing_by_default: true` flag in the configuration object. This forces PostHog to stay dormant. It will not set cookies or send events.
+PostHog is initialized in the main application file with `opt_out_capturing_by_default: true`. It stays completely dormant until the user opts in.
 
-The consent banner component handles the rest of the logic. When a user interacts with the banner, the component triggers specific callbacks.
+The banner component handles the state changes. If a user accepts analytics, we call `posthog.opt_in_capturing()`, and tracking begins. If they decline or revoke consent later, we call `posthog.opt_out_capturing()` to stop tracking and clear the cookies.
 
-If the user accepts the analytics category, the callback runs `posthog.opt_in_capturing()`. PostHog wakes up and begins tracking the session.
+## Development setup
 
-If the user declines the analytics category or revokes their consent later, the callback runs `posthog.opt_out_capturing()`. PostHog immediately stops tracking and clears its cookies.
+PostHog requires two environment variables:
 
-## Development
+- `VITE_PUBLIC_POSTHOG_KEY`: The project API key.
+- `VITE_PUBLIC_POSTHOG_HOST`: The PostHog instance URL.
 
-You need two environment variables to make PostHog work:
+To track new interactive features, call `posthog.capture()` with the event name and relevant properties.
 
-- `VITE_PUBLIC_POSTHOG_KEY`: The public API key for the project.
-- `VITE_PUBLIC_POSTHOG_HOST`: The URL of your PostHog instance.
+## Bypassing ad blockers
 
-When you build new interactive features, you should record the interaction. You do this by calling `posthog.capture()` with an event name and any relevant properties.
+Many ad blockers block tracking scripts even if you use a custom CNAME, because they uncloak the DNS record. To prevent this, Mithril Forge proxies all PostHog traffic through its own Spring Boot backend at `/t/**`. The frontend connects directly to this internal route (`api_host: '/t'`). This hides the traffic from blocklists and removes the need for DNS CNAME setup.

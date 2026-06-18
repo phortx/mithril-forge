@@ -13,8 +13,8 @@ import { LoginPage } from './components/LoginPage.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 
 posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY || '', {
-  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-  ui_host: 'https://eu.i.posthog.com',
+  api_host: '/t', // Use the internal Spring Boot reverse proxy to bypass uBlock CNAME uncloaking
+  ui_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
   person_profiles: 'identified_only',
   opt_out_capturing_by_default: true,
 })
