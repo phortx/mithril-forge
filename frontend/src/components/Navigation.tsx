@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp, Book, LogOut, User } from 'lucide-react'
+import { Menu, X, Code2, Bug, Heart, Activity, LogIn, UserPlus, Info, ChevronDown, ChevronUp, Book, LogOut, User, Shield, Scale } from 'lucide-react'
 import { useLocalStorage } from 'usehooks-ts'
 import posthog from 'posthog-js'
 import toast from 'react-hot-toast'
@@ -231,6 +231,30 @@ export function Navigation() {
                 >
                   <Activity size={14} />
                   System Status
+                </Link>
+                <Link
+                  to="/privacy"
+                  onClick={closeNav}
+                  className={
+                    location.pathname === '/privacy'
+                      ? 'flex items-center gap-3 px-4 py-2 rounded text-forge-gold bg-forge-brown/40 transition-all font-sans text-sm border border-forge-gold-dim/20'
+                      : 'flex items-center gap-3 px-4 py-2 rounded text-forge-parchment/70 hover:text-forge-gold hover:bg-forge-brown/30 transition-all font-sans text-sm'
+                  }
+                >
+                  <Shield size={14} />
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/imprint"
+                  onClick={closeNav}
+                  className={
+                    location.pathname === '/imprint'
+                      ? 'flex items-center gap-3 px-4 py-2 rounded text-forge-gold bg-forge-brown/40 transition-all font-sans text-sm border border-forge-gold-dim/20'
+                      : 'flex items-center gap-3 px-4 py-2 rounded text-forge-parchment/70 hover:text-forge-gold hover:bg-forge-brown/30 transition-all font-sans text-sm'
+                  }
+                >
+                  <Scale size={14} />
+                  Imprint
                 </Link>
               </div>
             )}

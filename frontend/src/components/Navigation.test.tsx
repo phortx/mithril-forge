@@ -89,6 +89,8 @@ describe('Navigation', () => {
     expect(screen.getByText('Report Bug')).toBeInTheDocument()
     expect(screen.getByText('Support on Ko-fi')).toBeInTheDocument()
     expect(screen.getByText('System Status')).toBeInTheDocument()
+    expect(screen.getByText('Privacy Policy')).toBeInTheDocument()
+    expect(screen.getByText('Imprint')).toBeInTheDocument()
   })
 
   it('closes the drawer when clicking the close button', async () => {

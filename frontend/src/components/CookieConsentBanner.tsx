@@ -35,7 +35,7 @@ export function CookieConsentBanner() {
             consentModal: {
               title: 'We use cookies',
               description:
-                'Mithril Forge uses Local Storage for core functionality (encounter state). We would also like to collect anonymous analytics data (PostHog) to help improve the app.',
+                'Mithril Forge uses Local Storage for core functionality (encounter state). We also collect anonymized analytics data (PostHog) to improve the app, but only with your consent. See our <a href="/privacy">privacy policy</a> for details.',
               acceptAllBtn: 'Accept all',
               acceptNecessaryBtn: 'Necessary only',
               showPreferencesBtn: 'Manage preferences',

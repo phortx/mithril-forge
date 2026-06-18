@@ -7,10 +7,12 @@ import './index.css'
 
 import App from './App.tsx'
 import { StatusPage } from './components/StatusPage.tsx'
+import { ImprintPage } from './components/ImprintPage.tsx'
 import { ConfirmUserPage } from './components/ConfirmUserPage.tsx'
 import { SignUpPage } from './components/SignUpPage.tsx'
 import { LoginPage } from './components/LoginPage.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
+import { PrivacyPolicyPage } from './components/PrivacyPolicyPage.tsx'
 
 posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY || '', {
   api_host: '/t', // Use the internal Spring Boot reverse proxy to bypass uBlock CNAME uncloaking
@@ -24,6 +26,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/status" element={<StatusPage />} />
+        <Route path="/imprint" element={<ImprintPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/users/confirm" element={<ConfirmUserPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
