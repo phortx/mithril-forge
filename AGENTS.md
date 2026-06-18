@@ -77,4 +77,9 @@ Never commit code that fails these checks.
 
 - [User Manual](documentation/src/content/docs/user-manual)
 - [Technical Documentation](documentation/src/content/docs/technical-docs)
+  - [Basic Architecture](documentation/src/content/docs/technical-docs/explanation/basic-architecture.md)
+  - [State Syncing (localStorage)](documentation/src/content/docs/technical-docs/explanation/localstorage-syncing.md)
+  - [Open5e Integration](documentation/src/content/docs/technical-docs/explanation/open5e-integration.md)
+  - [Testing Strategy](documentation/src/content/docs/technical-docs/explanation/testing-strategy.md)
+  - [Auth, Cookies & Security](documentation/src/content/docs/technical-docs/explanation/tracking-and-cookies.md)
 - [Development Setup](documentation/src/content/docs/technical-docs/how-to/development-setup.md)
