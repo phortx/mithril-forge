@@ -26,10 +26,10 @@ class PostHogProxyController {
         val targetUrl = "$postHogHost$path$queryString"
 
         val headers = HttpHeaders()
+        val excludedRequestHeaders = setOf("host", "connection", "content-length", "accept-encoding")
+
         request.headerNames.asSequence().forEach { headerName ->
-            // Do not forward the Host header, let RestTemplate set it to eu.i.posthog.com
-            // Do not forward Origin/Referer if you want to mask it, but usually fine
-            if (!headerName.equals("host", ignoreCase = true) && !headerName.equals("connection", ignoreCase = true)) {
+            if (headerName.lowercase() !in excludedRequestHeaders) {
                 headers.addAll(headerName, request.getHeaders(headerName).toList())
             }
         }
@@ -42,16 +42,39 @@ class PostHogProxyController {
         val entity = HttpEntity(body, headers)
 
         return try {
-            restTemplate.exchange(
-                URI(targetUrl),
-                HttpMethod.valueOf(request.method),
-                entity,
-                ByteArray::class.java,
-            )
+            val response =
+                restTemplate.exchange(
+                    URI(targetUrl),
+                    HttpMethod.valueOf(request.method),
+                    entity,
+                    ByteArray::class.java,
+                )
+            ResponseEntity
+                .status(response.statusCode)
+                .headers(filterResponseHeaders(response.headers))
+                .body(response.body)
         } catch (e: HttpStatusCodeException) {
-            ResponseEntity.status(e.statusCode).headers(e.responseHeaders).body(e.responseBodyAsByteArray)
+            ResponseEntity
+                .status(e.statusCode)
+                .headers(filterResponseHeaders(e.responseHeaders ?: HttpHeaders()))
+                .body(e.responseBodyAsByteArray)
         } catch (e: Exception) {
+            e.printStackTrace()
             ResponseEntity.internalServerError().build()
         }
+    }
+
+    private fun filterResponseHeaders(originalHeaders: HttpHeaders): HttpHeaders {
+        val filtered = HttpHeaders()
+        val excludedResponseHeaders = setOf("transfer-encoding", "content-length", "connection")
+
+        @Suppress("UNCHECKED_CAST")
+        val headersMap = originalHeaders as Map<String, List<String>>
+        for ((key, values) in headersMap) {
+            if (key.lowercase() !in excludedResponseHeaders) {
+                filtered.addAll(key, values)
+            }
+        }
+        return filtered
     }
 }
