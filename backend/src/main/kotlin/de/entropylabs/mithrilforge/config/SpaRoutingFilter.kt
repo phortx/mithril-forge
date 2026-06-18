@@ -22,7 +22,7 @@ class SpaRoutingFilter : Filter {
         val req = request as HttpServletRequest
         val uri = req.requestURI
 
-        if (uri.startsWith("/api")) {
+        if (uri.startsWith("/api") || uri.startsWith("/t/") || uri == "/t") {
             chain.doFilter(request, response)
             return
         }
