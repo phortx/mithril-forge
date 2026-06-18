@@ -30,7 +30,35 @@ export default defineConfig({
       sidebar: [
         {
           label: "User Manual",
-          items: [{ autogenerate: { directory: "user-manual" } }],
+          items: [
+            {
+              label: "Introduction",
+              items: [
+                { slug: "user-manual" },
+                { slug: "user-manual/getting-started" },
+              ],
+            },
+            {
+              label: "Guides & Workflows",
+              items: [
+                { slug: "user-manual/guides/encounter-tracking" },
+                { slug: "user-manual/guides/combat-turn-management" },
+                { slug: "user-manual/guides/dm-tools" },
+              ],
+            },
+            {
+              label: "Reference & Tips",
+              items: [
+                { slug: "user-manual/keyboard-shortcuts" },
+              ],
+            },
+            {
+              label: "Help",
+              items: [
+                { slug: "user-manual/troubleshooting" },
+              ],
+            },
+          ],
         },
         {
           label: "Technical Documentation",
