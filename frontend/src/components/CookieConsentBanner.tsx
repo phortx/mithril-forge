@@ -29,38 +29,38 @@ export function CookieConsentBanner() {
       },
 
       language: {
-        default: 'de',
+        default: 'en',
         translations: {
-          de: {
+          en: {
             consentModal: {
-              title: 'Wir nutzen Cookies',
+              title: 'We use cookies',
               description:
-                'Mithril Forge nutzt Local Storage für die Kernfunktionen (Encounter State). Zusätzlich möchten wir gerne anonymisierte Analysedaten (PostHog) erheben, um die App zu verbessern.',
-              acceptAllBtn: 'Alle akzeptieren',
-              acceptNecessaryBtn: 'Nur notwendige',
-              showPreferencesBtn: 'Einstellungen verwalten',
+                'Mithril Forge uses Local Storage for core functionality (encounter state). We would also like to collect anonymous analytics data (PostHog) to help improve the app.',
+              acceptAllBtn: 'Accept all',
+              acceptNecessaryBtn: 'Necessary only',
+              showPreferencesBtn: 'Manage preferences',
             },
             preferencesModal: {
-              title: 'Cookie-Einstellungen',
-              acceptAllBtn: 'Alle akzeptieren',
-              acceptNecessaryBtn: 'Nur notwendige',
-              savePreferencesBtn: 'Einstellungen speichern',
-              closeIconLabel: 'Schließen',
+              title: 'Cookie preferences',
+              acceptAllBtn: 'Accept all',
+              acceptNecessaryBtn: 'Necessary only',
+              savePreferencesBtn: 'Save preferences',
+              closeIconLabel: 'Close',
               sections: [
                 {
-                  title: 'Cookie-Nutzung',
-                  description: 'Hier kannst du entscheiden, welche Daten wir speichern dürfen.',
+                  title: 'Cookie usage',
+                  description: 'Here you can choose which data we are allowed to store.',
                 },
                 {
-                  title: 'Technisch notwendig',
+                  title: 'Strictly necessary',
                   description:
-                    'Diese Speicherung (Local Storage) ist zwingend erforderlich, damit Mithril Forge deine Encounter laden und lokal im Browser speichern kann.',
+                    'This storage (Local Storage) is required for Mithril Forge to load and save your encounters locally in the browser.',
                   linkedCategory: 'necessary',
                 },
                 {
                   title: 'Analytics & Tracking',
                   description:
-                    'Wir nutzen PostHog, um anonymisiert zu verstehen, wie Mithril Forge genutzt wird. Das hilft uns bei der Weiterentwicklung.',
+                    'We use PostHog to anonymously understand how Mithril Forge is used. This helps us improve the app.',
                   linkedCategory: 'analytics',
                 },
               ],

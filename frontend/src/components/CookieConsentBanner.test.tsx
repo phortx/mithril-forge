@@ -30,9 +30,9 @@ describe('CookieConsentBanner', () => {
     expect(runCallArg.categories).toHaveProperty('analytics')
     expect(runCallArg.categories.analytics.enabled).toBe(false)
     
-    expect(runCallArg.language.default).toBe('de')
-    expect(runCallArg.language.translations.de.consentModal).toBeDefined()
-    expect(runCallArg.language.translations.de.preferencesModal).toBeDefined()
+    expect(runCallArg.language.default).toBe('en')
+    expect(runCallArg.language.translations.en.consentModal).toBeDefined()
+    expect(runCallArg.language.translations.en.preferencesModal).toBeDefined()
   })
 
   it('opts in to posthog when analytics is accepted', () => {
