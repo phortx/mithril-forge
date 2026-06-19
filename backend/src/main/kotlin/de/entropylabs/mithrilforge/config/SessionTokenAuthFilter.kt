@@ -38,10 +38,14 @@ class SessionTokenAuthFilter(
                         )
                     SecurityContextHolder.getContext().authentication = authentication
                 }
-            } catch (_: JWTVerificationException) {
-                // Invalid token — leave context anonymous
-            } catch (_: IllegalArgumentException) {
-                // Unknown subject — leave context anonymous
+            } catch (ex: JWTVerificationException) {
+                logger.debug("Rejected session token", ex)
+            } catch (ex: IllegalArgumentException) {
+                if (ex.message?.contains("Invalid UUID") == true) {
+                    logger.debug("Unknown token subject", ex)
+                } else {
+                    throw ex
+                }
             }
         }
 

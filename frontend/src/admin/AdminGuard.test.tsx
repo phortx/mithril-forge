@@ -32,9 +32,11 @@ describe('AdminGuard', () => {
 
   afterEach(() => {
     mockFetch.mockRestore()
+    localStorage.clear()
   })
 
   it('renders a loader while the auth check is pending', () => {
+    mockFetch.mockImplementationOnce((() => new Promise(() => {})) as unknown as typeof fetch)
     renderAt('/admin/dashboard')
     expect(screen.getByText(/Loading/i)).toBeInTheDocument()
     expect(screen.queryByTestId('protected')).not.toBeInTheDocument()
@@ -53,7 +55,7 @@ describe('AdminGuard', () => {
     })
 
     expect(mockFetch).toHaveBeenCalledWith(
-      '/api/admin/users/stats',
+      '/api/admin/users/auth-check',
       expect.objectContaining({ credentials: 'include' }),
     )
   })

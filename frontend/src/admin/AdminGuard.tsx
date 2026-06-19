@@ -11,7 +11,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     let cancelled = false
     const check = async () => {
       try {
-        const response = await fetch('/api/admin/users/stats', {
+        const response = await fetch('/api/admin/users/auth-check', {
           credentials: 'include',
         })
         if (cancelled) return

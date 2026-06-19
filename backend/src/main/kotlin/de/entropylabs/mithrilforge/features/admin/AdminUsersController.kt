@@ -36,6 +36,9 @@ class AdminUsersController(
     private val adminDashboardRepository: AdminDashboardRepository,
     private val userRepository: UserRepository,
 ) {
+    @GetMapping("/auth-check")
+    fun authCheck(): Map<String, String> = mapOf("status" to "ok")
+
     @GetMapping("/stats")
     fun stats(): UserStatsResponse {
         val stats = adminDashboardRepository.stats()
