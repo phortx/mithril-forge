@@ -33,8 +33,8 @@ export function PrivacyPolicyPage() {
               56244 Ötzingen<br />
               Germany<br />
               Email:{' '}
-              <a href="mailto:bk@itws.de" className="text-forge-gold hover:underline">
-                bk@itws.de
+              <a href="mailto:hello@mithril-forge.site" className="text-forge-gold hover:underline">
+                hello@mithril-forge.site
               </a>
             </p>
           </section>
@@ -77,8 +77,8 @@ export function PrivacyPolicyPage() {
             </h2>
             <p className="text-forge-tan text-sm leading-relaxed">
               Under the GDPR, you have the right to access, rectify, erase, restrict, and port your personal data, as well as object to its processing. Contact us at{' '}
-              <a href="mailto:bk@itws.de" className="text-forge-gold hover:underline">
-                bk@itws.de
+              <a href="mailto:hello@mithril-forge.site" className="text-forge-gold hover:underline">
+                hello@mithril-forge.site
               </a>{' '}
               to exercise these rights. You also have the right to lodge a complaint with a supervisory authority.
             </p>

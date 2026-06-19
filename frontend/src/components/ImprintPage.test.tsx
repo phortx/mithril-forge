@@ -54,6 +54,6 @@ describe('ImprintPage', () => {
       </MemoryRouter>
     )
 
-    expect(screen.getByText('bk@itws.de')).toBeInTheDocument()
+    expect(screen.getByText('hello@mithril-forge.site')).toBeInTheDocument()
   })
 })

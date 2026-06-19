@@ -64,7 +64,7 @@ export function ImprintPage() {
               <Mail className="text-forge-gold-dim mt-1 shrink-0" size={18} />
               <div>
                 <p className="font-heading text-forge-parchment-light tracking-wide uppercase text-sm mb-1">Contact</p>
-                <p>bk@itws.de</p>
+                <p>hello@mithril-forge.site</p>
               </div>
             </div>
           </div>

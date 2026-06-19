@@ -44,9 +44,9 @@ describe('PrivacyPolicyPage', () => {
       </MemoryRouter>
     )
 
-    const emailLinks = screen.getAllByText('bk@itws.de')
+    const emailLinks = screen.getAllByText('hello@mithril-forge.site')
     expect(emailLinks.length).toBeGreaterThan(0)
-    expect(emailLinks[0].closest('a')).toHaveAttribute('href', 'mailto:bk@itws.de')
+    expect(emailLinks[0].closest('a')).toHaveAttribute('href', 'mailto:hello@mithril-forge.site')
   })
 
   it('mentions PostHog', () => {
