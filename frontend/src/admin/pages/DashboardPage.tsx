@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Users, UserCheck, UserX } from 'lucide-react'
 import {
   Area,
@@ -24,30 +24,35 @@ export function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    let cancelled = false
-    const load = async () => {
-      try {
-        const response = await fetch('/api/admin/users/stats', {
-          credentials: 'include',
-        })
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const data = (await response.json()) as Stats
-        if (!cancelled) {
-          setStats(data)
-          posthog.capture('admin_dashboard_viewed', { user_count: data.total })
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load stats')
+    const captureRef = useRef(false)
+
+    useEffect(() => {
+      let cancelled = false
+      const load = async () => {
+        try {
+          const response = await fetch('/api/admin/users/stats', {
+            credentials: 'include',
+          })
+          if (!response.ok) throw new Error(`HTTP ${response.status}`)
+          const data = (await response.json()) as Stats
+          if (!cancelled) {
+            setStats(data)
+            if (!captureRef.current) {
+              posthog.capture('admin_dashboard_viewed', { user_count: data.total })
+              captureRef.current = true
+            }
+          }
+        } catch (err) {
+          if (!cancelled) {
+            setError(err instanceof Error ? err.message : 'Failed to load stats')
+          }
         }
       }
-    }
-    load()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+      load()
+      return () => {
+        cancelled = true
+      }
+    }, [])
 
   if (error) {
     return (

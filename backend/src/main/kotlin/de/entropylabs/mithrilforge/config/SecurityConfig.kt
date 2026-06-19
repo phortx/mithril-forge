@@ -18,7 +18,7 @@ class SecurityConfig {
     ): SecurityFilterChain {
         http
             .cors { } // Enable CORS globally
-            .csrf { it.disable() } // For now, disable CSRF for API endpoints
+            .csrf { it.disable() } // TODO: Re-enable CSRF for /api/admin/** or switch to Bearer token before adding write endpoints
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
                 auth
