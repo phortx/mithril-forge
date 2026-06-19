@@ -153,6 +153,45 @@ class AdminUsersControllerTest {
             }.andExpect { status { isForbidden() } }
     }
 
+    @Test
+    fun `list caps size at 100`() {
+        val admin = userRepository.create("admin@example.com", "password123")
+        promoteToAdmin(admin)
+        val token = tokenService.generateSessionToken(admin.id.value)
+
+        mockMvc
+            .get("/api/admin/users?size=10000") {
+                cookie(Cookie("session_token", token))
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.size") { value(100) }
+            }
+    }
+
+    @Test
+    fun `list rejects negative page with 400`() {
+        val admin = userRepository.create("admin@example.com", "password123")
+        promoteToAdmin(admin)
+        val token = tokenService.generateSessionToken(admin.id.value)
+
+        mockMvc
+            .get("/api/admin/users?page=-1") {
+                cookie(Cookie("session_token", token))
+            }.andExpect { status { isBadRequest() } }
+    }
+
+    @Test
+    fun `list rejects zero size with 400`() {
+        val admin = userRepository.create("admin@example.com", "password123")
+        promoteToAdmin(admin)
+        val token = tokenService.generateSessionToken(admin.id.value)
+
+        mockMvc
+            .get("/api/admin/users?size=0") {
+                cookie(Cookie("session_token", token))
+            }.andExpect { status { isBadRequest() } }
+    }
+
     private fun promoteToAdmin(user: User) {
         Users.update({ Users.id eq user.id }) {
             it[role] = "ROLE_ADMIN"

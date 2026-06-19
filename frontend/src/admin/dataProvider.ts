@@ -5,7 +5,6 @@ import type {
   DataProvider,
   DeleteOneParams,
   GetListParams,
-  GetManyParams,
   GetOneParams,
   UpdateParams,
 } from '@refinedev/core'
@@ -55,17 +54,6 @@ export const adminDataProvider: DataProvider = {
     params: GetOneParams,
   ): Promise<{ data: TData }> => {
     const data = await request<TData>(`/api/admin/${params.resource}/${params.id}`)
-    return { data }
-  },
-
-  getMany: async <TData extends BaseRecord = BaseRecord>(
-    params: GetManyParams,
-  ): Promise<{ data: TData[] }> => {
-    const data = await Promise.all(
-      params.ids.map((id) =>
-        request<TData>(`/api/admin/${params.resource}/${id}`),
-      ),
-    )
     return { data }
   },
 

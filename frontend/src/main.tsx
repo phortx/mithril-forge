@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
@@ -14,6 +14,7 @@ import { LoginPage } from './components/LoginPage.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage.tsx'
 import { AdminApp, AdminGuardLazy } from './admin/Lazy.tsx'
+import { Loader } from './admin/components/Loader.tsx'
 
 posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY || '', {
   api_host: '/t', // Use the internal Spring Boot reverse proxy to bypass uBlock CNAME uncloaking
@@ -35,9 +36,11 @@ createRoot(document.getElementById('root')!).render(
         <Route
           path="/admin/*"
           element={
-            <AdminGuardLazy>
-              <AdminApp />
-            </AdminGuardLazy>
+            <Suspense fallback={<Loader />}>
+              <AdminGuardLazy>
+                <AdminApp />
+              </AdminGuardLazy>
+            </Suspense>
           }
         />
         <Route path="/*" element={<App />} />

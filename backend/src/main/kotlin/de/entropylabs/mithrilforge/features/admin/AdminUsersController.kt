@@ -1,10 +1,12 @@
 package de.entropylabs.mithrilforge.features.admin
 
 import de.entropylabs.mithrilforge.features.users.UserRepository
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDate
 
 data class UserStatsResponse(
@@ -50,25 +52,32 @@ class AdminUsersController(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
     ): Map<String, Any> {
-        val users = userRepository.findAll()
-        val from = (page * size).coerceAtMost(users.size)
-        val to = (from + size).coerceAtMost(users.size)
+        if (page < 0 || size < 1) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "page must be >= 0 and size must be >= 1")
+        }
+        val cappedSize = size.coerceAtMost(MAX_PAGE_SIZE)
+        val offset = page.toLong() * cappedSize.toLong()
+        val total = userRepository.countAll()
         val data =
-            users.subList(from, to).map { user ->
+            userRepository.pagedSummaries(limit = cappedSize, offset = offset).map { row ->
                 UserSummary(
-                    id = user.id.value.toString(),
-                    email = user.email,
-                    isEmailVerified = user.isEmailVerified,
-                    isActive = user.isActive,
-                    role = user.role,
-                    createdAt = user.createdAt.toString(),
+                    id = row.id,
+                    email = row.email,
+                    isEmailVerified = row.isEmailVerified,
+                    isActive = row.isActive,
+                    role = row.role,
+                    createdAt = row.createdAt,
                 )
             }
         return mapOf(
             "data" to data,
-            "total" to users.size,
+            "total" to total,
             "page" to page,
-            "size" to size,
+            "size" to cappedSize,
         )
+    }
+
+    companion object {
+        private const val MAX_PAGE_SIZE = 100
     }
 }
