@@ -19,6 +19,9 @@ class UserRepository {
     fun findByEmail(email: String): User? = User.find { Users.email eq email }.firstOrNull()
 
     @Transactional
+    fun findAll(): List<User> = User.all().toList()
+
+    @Transactional
     fun create(
         email: String,
         password: String,
