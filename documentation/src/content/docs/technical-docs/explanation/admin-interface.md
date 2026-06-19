@@ -19,10 +19,32 @@ Instead, we opted for a frontend-driven admin approach:
 
 ## Integration Details
 
-- **Location:** The admin interface is built as a separate route structure (typically under `/admin`) within the existing React SPA.
-- **Authentication:** Access to the admin routes requires elevated privileges (Admin Role), verified via our standard authentication mechanism.
-- **API Communication:** Data providers in Refine are configured to talk to specific `/api/admin/*` endpoints.
+- **Location:** The admin interface lives at `/admin/*` inside the existing React SPA. The route is mounted lazily so the Refine/Recharts bundles are not loaded for regular DM or Player sessions.
+- **Authentication:** Access requires the `ROLE_ADMIN` role. See [Roles and Admin access](roles-and-admin) for how to grant or revoke it.
+- **API Communication:** A custom `fetch`-based `adminDataProvider` talks to the Spring Boot endpoints under `/api/admin/*`. Cookies (`session_token`) are sent automatically with `credentials: 'include'`.
+
+## MVP Dashboard
+
+The current scope of `/admin` is intentionally narrow:
+
+- **KPI cards**: total registered users, verified count (with percentage), unverified count.
+- **Growth chart**: registrations per day for the last 30 days, zero-filled for days without signups.
+
+Both visuals are powered by the same endpoint:
+
+```
+GET /api/admin/users/stats
+```
+
+The endpoint also exposes `GET /api/admin/users` with simple page/size pagination, ready for a future users table.
+
+## Backend filter chain
+
+`SecurityConfig` requires `hasRole("ADMIN")` for `/api/admin/**`. Authentication itself is driven by the `session_token` cookie — a small `SessionTokenAuthFilter` decodes the JWT, loads the user, and sets the role on the Spring `SecurityContext`.
 
 ## Future Development
 
-_Note: The admin interface is currently planned and the actual implementation will follow._
+- Users table with edit/disable/delete actions
+- Audit log of admin actions
+- Bulk invitations
+- Additional resources (e.g. sessions, support tickets)

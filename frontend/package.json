@@ -16,12 +16,14 @@
     "test:e2e:install": "bun --bun playwright install chromium --with-deps"
   },
   "dependencies": {
+    "@refinedev/core": "^5.0.12",
     "lucide-react": "^1.17.0",
     "posthog-js": "^1.386.6",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.16.0",
+    "recharts": "^3.8.1",
     "usehooks-ts": "^3.1.1",
     "vanilla-cookieconsent": "^3.1.0"
   },
