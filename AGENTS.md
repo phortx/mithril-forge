@@ -1,10 +1,11 @@
 # Agent Guidelines
 
-Mithril Forge is a browser-based D&D encounter tracker designed for the tabletop. It manages initiative, HP, and conditions across two screens: a DM view (full control, stats) and a Player view (TV screen, limited info). No accounts, no installation, with active encounter state instantly synchronized locally via the browser.
+Mithril Forge is a browser-based D&D encounter tracker designed for the tabletop. It manages initiative, HP, and conditions across two screens: a DM view (full control, stats) and a Player view (TV screen, limited info). User management enables persistent storage of encounters, characters, and settings. No installation, with active encounter state instantly synchronized locally via the browser.
 
 ## Tech Stack
 
 - **React 19 / TypeScript 5 / Vite 8** - Frontend UI and component framework
+- **Refine** - Admin Interface framework
 - **Bun 1.3.13** - Frontend package manager and test runner
 - **Tailwind CSS v4** - Styling
 - **lucide-react** - Icons
@@ -82,4 +83,5 @@ Never commit code that fails these checks.
   - [Open5e Integration](documentation/src/content/docs/technical-docs/explanation/open5e-integration.md)
   - [Testing Strategy](documentation/src/content/docs/technical-docs/explanation/testing-strategy.md)
   - [Auth, Cookies & Security](documentation/src/content/docs/technical-docs/explanation/tracking-and-cookies.md)
+  - [Admin Interface (Refine)](documentation/src/content/docs/technical-docs/explanation/admin-interface.md)
 - [Development Setup](documentation/src/content/docs/technical-docs/how-to/development-setup.md)
