@@ -48,7 +48,7 @@ docker compose exec postgres psql -U myuser -d mydatabase \
 1. Open the project on Railway.
 2. Open the Postgres service → **Data** → **Query**.
 3. Paste the SQL above, replace the email.
-4. Run once. The change is immediate; the affected user can refresh `/admin` after reloading the page (the existing session already carries the new role because `AdminDashboardRepository` reads roles fresh from the DB on every request).
+4. Run once. The change is immediate; the affected user can refresh `/admin` after reloading the page (the existing session already carries the new role because `SessionTokenAuthFilter` reads roles fresh from the DB on every request).
 
 ## How to revoke admin access
 

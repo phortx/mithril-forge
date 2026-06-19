@@ -30,6 +30,13 @@ data class UserSummary(
     val createdAt: String,
 )
 
+data class UserListResponse(
+    val data: List<UserSummary>,
+    val total: Long,
+    val page: Int,
+    val size: Int,
+)
+
 @RestController
 @RequestMapping("/api/admin/users")
 class AdminUsersController(
@@ -54,7 +61,7 @@ class AdminUsersController(
     fun list(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
-    ): Map<String, Any> {
+    ): UserListResponse {
         if (page < 0 || size < 1) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "page must be >= 0 and size must be >= 1")
         }
@@ -72,11 +79,11 @@ class AdminUsersController(
                     createdAt = row.createdAt,
                 )
             }
-        return mapOf(
-            "data" to data,
-            "total" to total,
-            "page" to page,
-            "size" to cappedSize,
+        return UserListResponse(
+            data = data,
+            total = total,
+            page = page,
+            size = cappedSize,
         )
     }
 

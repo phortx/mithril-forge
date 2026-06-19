@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import { Loader } from './components/Loader'
 
 type Status = 'pending' | 'authorized' | 'unauthorized'
 
@@ -27,13 +28,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
   }, [])
 
   if (status === 'pending') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-forge-darkest text-forge-parchment">
-        <div className="font-heading tracking-widest text-forge-tan uppercase text-sm">
-          Loading…
-        </div>
-      </div>
-    )
+    return <Loader />
   }
 
   if (status === 'unauthorized') {

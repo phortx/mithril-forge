@@ -13,7 +13,8 @@ import { SignUpPage } from './components/SignUpPage.tsx'
 import { LoginPage } from './components/LoginPage.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage.tsx'
-import { AdminApp, AdminGuardLazy } from './admin/Lazy.tsx'
+import { AdminApp } from './admin/Lazy.tsx'
+import { AdminGuard } from './admin/AdminGuard.tsx'
 import { Loader } from './admin/components/Loader.tsx'
 
 posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY || '', {
@@ -37,9 +38,9 @@ createRoot(document.getElementById('root')!).render(
           path="/admin/*"
           element={
             <Suspense fallback={<Loader />}>
-              <AdminGuardLazy>
+              <AdminGuard>
                 <AdminApp />
-              </AdminGuardLazy>
+              </AdminGuard>
             </Suspense>
           }
         />
