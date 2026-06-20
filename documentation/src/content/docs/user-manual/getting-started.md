@@ -7,7 +7,7 @@ sidebar:
 
 Mithril Forge is hosted online and runs entirely in your browser. You don't need to install any software, create an account, or pay a subscription.
 
-**Launch the app:** Go to [Mithril Forge](https://mithril-forge.up.railway.app).
+**Launch the app:** Go to [Mithril Forge](https://www.mithril-forge.site).
 
 Because the system uses your browser's local storage to sync data, everything is fast and private. The encounter state updates instantly across tabs without waiting on a server.
 

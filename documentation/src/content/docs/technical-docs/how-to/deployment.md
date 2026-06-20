@@ -11,7 +11,7 @@ Set these variables for production:
 
 **Core application**
 
-- `APPLICATION_URL`: The public domain (like `mithril-forge.up.railway.app`). The app uses this for absolute links and emails.
+- `APPLICATION_URL`: The public domain (like `www.mithril-forge.site`). The app uses this for absolute links and emails.
 - `SECRET`: A random string for session signing.
 
 **Frontend and tracking (build time)**
