@@ -15,10 +15,15 @@ class SecurityConfig {
     fun filterChain(
         http: HttpSecurity,
         sessionTokenAuthFilter: SessionTokenAuthFilter,
+        originCheckFilter: OriginCheckFilter,
     ): SecurityFilterChain {
         http
             .cors { } // Enable CORS globally
-            .csrf { it.disable() } // TODO: Re-enable CSRF for /api/admin/** or switch to Bearer token before adding write endpoints
+            // CSRF is intentionally disabled: the session cookie uses SameSite=Strict,
+            // which blocks cross-site cookie submission on all authenticated state-changing
+            // endpoints. Unauthenticated writes (login/signup) are covered by OriginCheckFilter.
+            // See documentation/src/content/docs/technical-docs/explanation/tracking-and-cookies.md.
+            .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
                 auth
@@ -39,6 +44,7 @@ class SecurityConfig {
             }.httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(sessionTokenAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(originCheckFilter, SessionTokenAuthFilter::class.java)
 
         return http.build()
     }
