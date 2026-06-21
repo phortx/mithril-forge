@@ -50,9 +50,10 @@ class OriginCheckFilterTest {
 
     @Test
     fun `falls back to Referer with port`() {
-        val req = postRequest("/api/users/confirm").apply {
-            addHeader("Referer", "http://localhost:5173/users/confirm?token=abc")
-        }
+        val req =
+            postRequest("/api/users/confirm").apply {
+                addHeader("Referer", "http://localhost:5173/users/confirm?token=abc")
+            }
         assertEquals(HttpServletResponse.SC_OK, runFilter(req).status)
     }
 
@@ -102,8 +103,10 @@ class OriginCheckFilterTest {
 }
 
 private object NoopFilterChain : FilterChain {
-    override fun doFilter(request: ServletRequest?, response: ServletResponse?) {
+    override fun doFilter(
+        request: ServletRequest?,
+        response: ServletResponse?,
+    ) {
         // Tests only care about response status set by the filter itself.
     }
 }
-

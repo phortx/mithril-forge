@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.springframework.test.util.ReflectionTestUtils
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 class TokenServiceTest {
@@ -61,5 +62,31 @@ class TokenServiceTest {
         assertThrows<JWTVerificationException> {
             differentTokenService.verifyToken(token)
         }
+    }
+
+    @Test
+    fun `generateSessionToken should embed a 7-day expiry claim`() {
+        val userId = UUID.randomUUID()
+        val before = Instant.now().plus(7, ChronoUnit.DAYS).minus(1, ChronoUnit.MINUTES)
+
+        val token = tokenService.generateSessionToken(userId)
+
+        val decoded = tokenService.verifyToken(token)
+        val after = Instant.now().plus(7, ChronoUnit.DAYS).plus(1, ChronoUnit.MINUTES)
+        assertNotNull(decoded.expiresAt)
+        val expiresAt = decoded.expiresAt.toInstant()
+        assertTrue(expiresAt.isAfter(before))
+        assertTrue(expiresAt.isBefore(after))
+    }
+
+    @Test
+    fun `generateSessionToken should produce a verifiable token`() {
+        val userId = UUID.randomUUID()
+
+        val token = tokenService.generateSessionToken(userId)
+
+        val decoded = tokenService.verifyToken(token)
+        assertEquals("mithril-forge", decoded.issuer)
+        assertEquals(userId.toString(), decoded.subject)
     }
 }

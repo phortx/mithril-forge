@@ -43,5 +43,6 @@ class TokenService(
             .create()
             .withIssuer(issuer)
             .withSubject(userId.toString())
+            .withExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS))
             .sign(algorithm)
 }
